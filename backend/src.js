@@ -4,7 +4,7 @@ import cors from 'cors'
 import helmet from 'helmet'
 import pg from 'pg'
 import { z } from 'zod'
-import { createHmac, timingSafeEqual } from 'node:crypto'
+import { createHmac, createHash, timingSafeEqual } from 'node:crypto'
 import { readFile } from 'node:fs/promises'
 import { existsSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
@@ -51,7 +51,7 @@ app.use(helmet({
   contentSecurityPolicy: { directives: {
     defaultSrc: ["'self'"], scriptSrc: ["'self'"], styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
     fontSrc: ['https://fonts.gstatic.com'], imgSrc: ["'self'", 'data:', 'https:'], mediaSrc: ["'self'", 'https:'],
-    frameSrc: ['https://maps.google.com', 'https://www.google.com'], connectSrc: ["'self'"],
+    frameSrc: ['https://maps.google.com', 'https://www.google.com'], connectSrc: ["'self'", 'https://api.cloudinary.com'],
   } },
 }))
 app.use(compression())
@@ -210,6 +210,19 @@ app.put('/api/admin/settings', isAdmin, asyncRoute(async (req, res) => {
   bust()
   res.json({ ok: true })
 }))
+app.get('/api/admin/cloudinary-sign', isAdmin, (req, res) => {
+  const cloudName = process.env.CLOUDINARY_CLOUD_NAME
+  const apiKey = process.env.CLOUDINARY_API_KEY
+  const apiSecret = process.env.CLOUDINARY_API_SECRET
+  if (!cloudName || !apiKey || !apiSecret) {
+    return res.status(503).json({ error: 'Cloudinary credentials are not configured in backend/.env' })
+  }
+  const timestamp = Math.round(Date.now() / 1000)
+  const folder = 'the-chennai-kitchen'
+  const paramsToSign = `folder=${folder}&timestamp=${timestamp}${apiSecret}`
+  const signature = createHash('sha1').update(paramsToSign).digest('hex')
+  res.json({ cloudName, apiKey, timestamp, folder, signature })
+})
 const dist = fileURLToPath(new URL('../frontend/dist', import.meta.url))
 if (existsSync(dist)) {
   app.use(express.static(dist, { maxAge: '7d', setHeaders: (res, file) => { if (file.endsWith('index.html')) res.setHeader('Cache-Control', 'no-cache') } }))

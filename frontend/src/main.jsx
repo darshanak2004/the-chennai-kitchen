@@ -156,6 +156,7 @@ function App() {
   const [adminTab, setAdminTab] = useState('gallery')
   const [newMedia, setNewMedia] = useState({ title: '', image_url: '', category: 'From the kitchen', media_type: 'image' })
   const [heroForm, setHeroForm] = useState({ title: '', media_url: '', media_type: 'image' })
+  const [uploading, setUploading] = useState(false)
   const [adminNotice, setAdminNotice] = useState('')
   const [reservations, setReservations] = useState([])
   const [heroStage, setHeroStage] = useState(0)
@@ -228,6 +229,33 @@ function App() {
     catch (err) { setAdminError(err.message) }
   }
   useEffect(() => { if (token && adminOpen) refreshAdmin().catch(() => { setToken(''); sessionStorage.removeItem('tck_admin_token') }) }, [token, adminOpen])
+  const uploadFile = async (file) => {
+    setUploading(true)
+    setAdminNotice(`Uploading ${file.name} to Cloudinary...`)
+    try {
+      const sign = await api('/admin/cloudinary-sign', { token })
+      const data = new FormData()
+      data.append('file', file)
+      data.append('api_key', sign.apiKey)
+      data.append('timestamp', sign.timestamp)
+      data.append('folder', sign.folder)
+      data.append('signature', sign.signature)
+
+      const res = await fetch(`https://api.cloudinary.com/v1_1/${sign.cloudName}/auto/upload`, {
+        method: 'POST',
+        body: data,
+      })
+      const result = await res.json()
+      if (!res.ok) throw new Error(result.error?.message || 'Upload to Cloudinary failed.')
+      setAdminNotice('Upload successful! Form filled automatically.')
+      return { url: result.secure_url, mediaType: result.resource_type === 'video' ? 'video' : 'image' }
+    } catch (err) {
+      setAdminNotice(`Upload error: ${err.message}`)
+      throw err
+    } finally {
+      setUploading(false)
+    }
+  }
   const addGallery = async e => { e.preventDefault(); try { await api('/admin/gallery', { method: 'POST', token, body: JSON.stringify(newMedia) }); setNewMedia({ title: '', image_url: '', category: 'From the kitchen', media_type: 'image' }); setAdminNotice('Gallery item added.'); await refreshAdmin() } catch (err) { setAdminNotice(err.message) } }
   const addHero = async e => { e.preventDefault(); try { await api('/admin/hero-media', { method: 'POST', token, body: JSON.stringify(heroForm) }); setHeroForm({ title: '', media_url: '', media_type: 'image' }); setAdminNotice('Home media added.'); await refreshAdmin() } catch (err) { setAdminNotice(err.message) } }
   const removeItem = async (kind, id) => { try { await api(`/admin/${kind}/${id}`, { method: 'DELETE', token }); setAdminNotice(kind === 'reservations' ? 'Booking removed.' : 'Item removed. Its URL record has been deleted from the database.'); await refreshAdmin() } catch (err) { setAdminNotice(err.message) } }
@@ -293,8 +321,38 @@ function App() {
     {offerOpen && <div className="offer-backdrop" onClick={() => setOfferOpen(false)}><div className="poster-pop" role="dialog" aria-modal="true" aria-label="Grand opening offer: buy 1 biryani, get 1 free" onClick={e => e.stopPropagation()}><button className="poster-close" onClick={() => setOfferOpen(false)} aria-label="Close offer"><X size={20}/></button><img src={POSTER} alt="The Chennai Kitchen grand opening on 15 November 2026. Offer days 15 to 18 November: buy 1 biryani, get 1 free."/></div></div>}
     {lightbox >= 0 && gallery[lightbox] && <div className="lightbox" role="dialog" aria-modal="true" onClick={e => { if (e.target === e.currentTarget) setLightbox(-1) }}><button className="lb-close" onClick={() => setLightbox(-1)} aria-label="Close"><X size={22}/></button><button className="lb-nav lb-prev" onClick={() => stepLightbox(-1)} aria-label="Previous"><ArrowRight size={22}/></button>{gallery[lightbox].media_type === 'video' ? <video key={lightbox} src={gallery[lightbox].image_url} controls autoPlay loop playsInline/> : <img key={lightbox} src={gallery[lightbox].image_url} alt={gallery[lightbox].title}/>}<button className="lb-nav lb-next" onClick={() => stepLightbox(1)} aria-label="Next"><ArrowRight size={22}/></button><p><span>{gallery[lightbox].category}</span>{gallery[lightbox].title}<em>{lightbox + 1} / {gallery.length}</em></p></div>}
     {adminOpen && <div className="modal-backdrop" onClick={e => { if (e.target === e.currentTarget) closeAdmin() }}><section className="admin-modal"><button className="modal-close" onClick={() => closeAdmin()} aria-label="Close"><X size={18}/></button>{!token ? <div className="admin-login"><span className="eyebrow dark"><span></span> THE BACK OF HOUSE</span><h2>Admin sign in</h2><p>Manage the photos and videos visitors see on your site.</p><form onSubmit={loginAdmin}><label>Admin password<input type="password" value={adminPassword} onChange={e => setAdminPassword(e.target.value)} required autoFocus/></label><button className="gold-button">Sign in <ArrowRight size={16}/></button>{adminError && <p className="form-message">{adminError}</p>}</form></div> : <div className="admin-dashboard"><div className="admin-top"><div><span className="eyebrow dark"><span></span> THE BACK OF HOUSE</span><h2>Content studio</h2></div><button className="signout" onClick={() => { setToken(''); sessionStorage.removeItem('tck_admin_token') }}>Sign out</button></div><div className="admin-tabs"><button className={adminTab === 'gallery' ? 'active' : ''} onClick={() => setAdminTab('gallery')}>Gallery</button><button className={adminTab === 'home' ? 'active' : ''} onClick={() => setAdminTab('home')}>Home media</button><button className={adminTab === 'bookings' ? 'active' : ''} onClick={() => setAdminTab('bookings')}>Bookings{reservations.length ? ` (${reservations.length})` : ''}</button><button className={adminTab === 'settings' ? 'active' : ''} onClick={() => setAdminTab('settings')}>Contact</button></div>{adminNotice && <p className="admin-notice">{adminNotice}</p>}
-      {adminTab === 'gallery' && <><form className="admin-add-form" onSubmit={addGallery}><strong>Add a gallery photo or video</strong><input value={newMedia.title} onChange={e => setNewMedia({ ...newMedia, title: e.target.value })} placeholder="Title" required/><input type="url" value={newMedia.image_url} onChange={e => setNewMedia({ ...newMedia, image_url: e.target.value })} placeholder="Public image or video URL" required/><div><select value={newMedia.media_type} onChange={e => setNewMedia({ ...newMedia, media_type: e.target.value })}><option value="image">Image</option><option value="video">Video</option></select><input value={newMedia.category} onChange={e => setNewMedia({ ...newMedia, category: e.target.value })} placeholder="Category"/><button className="gold-button">Add item <Plus size={15}/></button></div></form><div className="admin-items">{gallery.map(item => <article key={item.id}>{item.media_type === 'video' ? <div className="video-thumb">VIDEO</div> : <img src={item.image_url} alt=""/>}<span><strong>{item.title}</strong><small>{item.category || 'Gallery'} · {item.media_type || 'image'}</small></span><button onClick={() => removeItem('gallery', item.id)} aria-label={`Delete ${item.title}`}><X size={17}/></button></article>)}</div></>}
-      {adminTab === 'home' && <><form className="admin-add-form" onSubmit={addHero}><strong>Add home section media</strong><input value={heroForm.title} onChange={e => setHeroForm({ ...heroForm, title: e.target.value })} placeholder="Short title" required/><input type="url" value={heroForm.media_url} onChange={e => setHeroForm({ ...heroForm, media_url: e.target.value })} placeholder="Public image or video URL" required/><div><select value={heroForm.media_type} onChange={e => setHeroForm({ ...heroForm, media_type: e.target.value })}><option value="image">Image</option><option value="video">Video</option></select><button className="gold-button">Add to home <Plus size={15}/></button></div></form><p className="admin-help">Media is stored by URL, so image files stay on your chosen host. Removing an item deletes its URL record from Neon.</p><div className="admin-items">{heroMedia.map(item => <article key={item.id}>{item.media_type === 'video' ? <div className="video-thumb">VIDEO</div> : <img src={item.media_url} alt=""/>}<span><strong>{item.title}</strong><small>Home section · {item.media_type}</small></span><button onClick={() => removeItem('hero-media', item.id)} aria-label={`Delete ${item.title}`}><X size={17}/></button></article>)}</div></>}
+      {adminTab === 'gallery' && <><form className="admin-add-form" onSubmit={addGallery}><strong>Add a gallery photo or video</strong>
+        <div className="admin-upload-zone">
+          <label className={`admin-file-label ${uploading ? 'uploading' : ''}`}>
+            <input type="file" accept="image/*,video/*" style={{ display: 'none' }} disabled={uploading} onChange={async e => {
+              const file = e.target.files?.[0]
+              if (!file) return
+              try {
+                const { url, mediaType } = await uploadFile(file)
+                setNewMedia(m => ({ ...m, image_url: url, media_type: mediaType, title: m.title || file.name.replace(/\.[^/.]+$/, '') }))
+              } catch {}
+            }} />
+            <span>{uploading ? '⏳ Uploading...' : '📁 Upload photo / video'}</span>
+          </label>
+          <span className="admin-upload-hint">or paste URL below</span>
+        </div>
+        <input value={newMedia.title} onChange={e => setNewMedia({ ...newMedia, title: e.target.value })} placeholder="Title" required/><input type="url" value={newMedia.image_url} onChange={e => setNewMedia({ ...newMedia, image_url: e.target.value })} placeholder="Public image or video URL (auto-filled on upload)" required/><div><select value={newMedia.media_type} onChange={e => setNewMedia({ ...newMedia, media_type: e.target.value })}><option value="image">Image</option><option value="video">Video</option></select><input value={newMedia.category} onChange={e => setNewMedia({ ...newMedia, category: e.target.value })} placeholder="Category"/><button className="gold-button" disabled={uploading}>Add item <Plus size={15}/></button></div></form><div className="admin-items">{gallery.map(item => <article key={item.id}>{item.media_type === 'video' ? <div className="video-thumb">VIDEO</div> : <img src={item.image_url} alt=""/>}<span><strong>{item.title}</strong><small>{item.category || 'Gallery'} · {item.media_type || 'image'}</small></span><button onClick={() => removeItem('gallery', item.id)} aria-label={`Delete ${item.title}`}><X size={17}/></button></article>)}</div></>}
+      {adminTab === 'home' && <><form className="admin-add-form" onSubmit={addHero}><strong>Add home section media</strong>
+        <div className="admin-upload-zone">
+          <label className={`admin-file-label ${uploading ? 'uploading' : ''}`}>
+            <input type="file" accept="image/*,video/*" style={{ display: 'none' }} disabled={uploading} onChange={async e => {
+              const file = e.target.files?.[0]
+              if (!file) return
+              try {
+                const { url, mediaType } = await uploadFile(file)
+                setHeroForm(m => ({ ...m, media_url: url, media_type: mediaType, title: m.title || file.name.replace(/\.[^/.]+$/, '') }))
+              } catch {}
+            }} />
+            <span>{uploading ? '⏳ Uploading...' : '📁 Upload photo / video'}</span>
+          </label>
+          <span className="admin-upload-hint">or paste URL below</span>
+        </div>
+        <input value={heroForm.title} onChange={e => setHeroForm({ ...heroForm, title: e.target.value })} placeholder="Short title" required/><input type="url" value={heroForm.media_url} onChange={e => setHeroForm({ ...heroForm, media_url: e.target.value })} placeholder="Public image or video URL (auto-filled on upload)" required/><div><select value={heroForm.media_type} onChange={e => setHeroForm({ ...heroForm, media_type: e.target.value })}><option value="image">Image</option><option value="video">Video</option></select><button className="gold-button" disabled={uploading}>Add to home <Plus size={15}/></button></div></form><p className="admin-help">Media is uploaded to your Cloudinary storage and saved to your Neon database.</p><div className="admin-items">{heroMedia.map(item => <article key={item.id}>{item.media_type === 'video' ? <div className="video-thumb">VIDEO</div> : <img src={item.media_url} alt=""/>}<span><strong>{item.title}</strong><small>Home section · {item.media_type}</small></span><button onClick={() => removeItem('hero-media', item.id)} aria-label={`Delete ${item.title}`}><X size={17}/></button></article>)}</div></>}
       {adminTab === 'bookings' && <div className="admin-items bookings">{reservations.length ? reservations.map(b => <article key={b.id}><span><strong>{b.name} · {b.members} {b.members === 1 ? 'guest' : 'guests'}</strong><small>{b.date} at {b.time}{b.note ? ` · ${b.note}` : ''}</small></span><button onClick={() => removeItem('reservations', b.id)} aria-label={`Delete booking for ${b.name}`}><X size={17}/></button></article>) : <p className="admin-help">No reservations yet. New requests appear here as soon as guests send them.</p>}</div>}
       {adminTab === 'settings' && <form className="admin-add-form settings-form" onSubmit={savePhone}><strong>WhatsApp contact</strong><p>Use the full country code and number without spaces, for example 919876543210.</p><label>WhatsApp number<input value={phone} onChange={e => setPhone(e.target.value)} placeholder="919876543210"/></label><button className="gold-button">Save number <Check size={15}/></button></form>}</div>}</section></div>}
   </>

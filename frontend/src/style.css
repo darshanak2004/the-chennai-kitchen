@@ -90,3 +90,8 @@
 .poster-close:hover{transform:rotate(90deg) scale(1.08);background:var(--gold)}
 .visit-details small a{color:inherit;text-decoration:underline}
 @media(max-width:680px){.poster-close{top:8px;right:8px}.offer-msg strong{font-size:1.2em}}
+.admin-upload-zone{display:flex;align-items:center;gap:10px;margin:4px 0 6px;flex-wrap:wrap}
+.admin-file-label{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:8px 14px;background:#32161c;color:#f5eee7;font-size:11px;font-weight:600;border:1px dashed var(--gold);cursor:pointer;transition:all .2s;border-radius:3px}
+.admin-file-label:hover{background:var(--crimson);border-color:var(--gold2);transform:translateY(-1px)}
+.admin-file-label.uploading{opacity:.7;cursor:wait}
+.admin-upload-hint{font-size:10px;color:#78685f;font-style:italic}
