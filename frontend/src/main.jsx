@@ -13,8 +13,8 @@ const initialGallery = [
 const HASH = !!window.__HASH_ROUTER
 const ADDRESS = 'Bus stop, Madras Thiruvallur High Rd, OT, Ambattur, Chennai, Tamil Nadu 600058'
 const POSTER = '/poster.jpg'
-const PAGES = ['home', 'about', 'gallery', 'contact', 'admin']
-const TITLES = { home: 'A taste of home', about: 'About us', gallery: 'Gallery', contact: 'Reserve a table & contact', admin: 'Admin' }
+const PAGES = ['home', 'about', 'menu', 'gallery', 'contact', 'admin']
+const TITLES = { home: 'A taste of home', about: 'About us', menu: 'Our Menu & Specials', gallery: 'Gallery', contact: 'Reserve a table & contact', admin: 'Admin' }
 const routeOf = () => { const p = HASH ? window.location.hash.slice(1) : window.location.pathname.replace(/^\/|\/$/g, ''); return PAGES.includes(p) ? p : 'home' }
 function useRoute() {
   const [route, setRoute] = useState(routeOf)
@@ -87,6 +87,9 @@ const reviews = [
     comment: 'Celebrated our family get-together here. The ambience is warm and cozy with tasteful South Indian touches, and the food arrived piping hot. Everyone from grandparents to grandchildren loved it!',
   },
 ]
+
+const TIME_SLOTS = ['12:00 PM', '12:30 PM', '1:00 PM', '1:30 PM', '2:00 PM', '7:00 PM', '7:30 PM', '8:00 PM', '8:30 PM', '9:00 PM', '9:30 PM']
+const GUEST_OPTIONS = ['1', '2', '3', '4', '5', '6', '8', '10', '12+']
 
 const PRESS_MENTIONS = [
   { quote: 'The most authentic dum biryani in Chennai', source: 'The Hindu Metroplus' },
@@ -770,7 +773,13 @@ function App() {
   const [heroStage, setHeroStage] = useState(0)
   const [lightbox, setLightbox] = useState(-1)
   const [offerOpen, setOfferOpen] = useState(false)
+  const [loading, setLoading] = useState(true)
   const reserveBtnRef = useRef(null)
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 1300)
+    return () => clearTimeout(timer)
+  }, [])
 
   useEffect(() => {
     const btn = reserveBtnRef.current
@@ -846,8 +855,8 @@ function App() {
     }).catch(() => {})
   }, [])
 
-  const goTo = id => { setMenuOpen(false); go({ home: 'home', story: 'about', gallery: 'gallery', reserve: 'contact', visit: 'home' }[id] || 'home') }
-  const jumpTo = id => { if (page === 'home') document.getElementById({ story: 'story', gallery: 'gallery', reserve: 'reserve' }[id])?.scrollIntoView({ behavior: 'smooth' }); else goTo(id) }
+  const goTo = id => { setMenuOpen(false); go({ home: 'home', story: 'about', menu: 'menu', gallery: 'gallery', reserve: 'contact', visit: 'home' }[id] || 'home') }
+  const jumpTo = id => { if (page === 'home') document.getElementById({ story: 'story', menu: 'menu', gallery: 'gallery', reserve: 'reserve' }[id])?.scrollIntoView({ behavior: 'smooth' }); else goTo(id) }
   const whatsappUrl = (message = 'Hello The Chennai Kitchen! I have a question.') => phone ? `https://wa.me/${phone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}` : `https://wa.me/?text=${encodeURIComponent(message)}`
   const updateForm = e => setForm({ ...form, [e.target.name]: e.target.value })
 
@@ -968,12 +977,57 @@ function App() {
         </div>
         <div className="about-cards reveal">{[[Utensils, 'Cooked on dum', 'Rice and meat sealed in the pot and left to slow-cook until every grain carries the masala.'], [Clock3, 'Made fresh daily', 'Spices are ground and marinades prepared each morning, so nothing sits around.'], [Check, 'Biryani and beyond', 'From dum biryani to South Indian favourites and Indo-Chinese plates, all under one roof.']].map(([Icon, t, d]) => <article key={t}><Icon size={22}/><h3>{t}</h3><p>{d}</p></article>)}</div><div className="intro-bottom"><span>FROM OUR KITCHEN, WITH LOVE</span><span>13° 04' N — CHENNAI</span></div></section>
   )
-  const foodSection = (
-      <section className="food-section" id="gallery"><div className="section-heading reveal"><div><span className="eyebrow dark"><span></span> SOMETHING GOOD IS COOKING</span><h2>A few of our<br/><em>favourite things.</em></h2></div><p>Big-hearted plates, familiar favourites, and a few reasons to stay for one more bite.</p></div>
+  const menuSection = (
+      <section className="menu-section" id="menu">
+        <div className="menu-section-header reveal">
+          <span className="eyebrow dark"><span></span> OUR CULINARY REPERTOIRE</span>
+          <h2>Signature Dishes &<br/><em>House Specials.</em></h2>
+          <p>Crafted with slow patience, hand-ground country spices, and pure golden ghee. Explore our signature creations and today’s kitchen favorites.</p>
+        </div>
         <HorizontalSpecials gallery={gallery} onSelect={setLightbox} />
         <MenuShowcase items={SIGNATURE_DISHES} onReserve={() => jumpTo('reserve')} />
-        <div className="food-grid">{gallery.map((item, i) => <article className={`food-card food-card-${i + 1} reveal`} style={{ '--d': `${i * 80}ms` }} key={item.id} role="button" tabIndex={0} aria-label={`View ${item.title}`} onClick={() => setLightbox(i)} onKeyDown={e => e.key === 'Enter' && setLightbox(i)}>{item.media_type === 'video' ? <video src={item.image_url} aria-label={item.title} muted autoPlay loop playsInline preload="metadata"/> : <img src={item.image_url} alt={item.title} loading="lazy" onError={e => { e.currentTarget.style.opacity = 0 }}/>}<div className="food-overlay"></div><div className="food-card-caption"><span>{item.category || 'From our kitchen'}</span><h3>{item.title}</h3></div><span className="food-index">{String(i + 1).padStart(2, '0')}</span></article>)}</div>
-        <div className="food-foot"><span>MADE TO BE PASSED AROUND</span><button className="outline-button" onClick={() => jumpTo('reserve')}>Come hungry <ArrowRight size={16}/></button></div>
+        <div className="food-foot">
+          <span>FRESHLY COOKED TO ORDER</span>
+          <button className="outline-button" onClick={() => jumpTo('reserve')}>Save your table <ArrowRight size={16}/></button>
+        </div>
+      </section>
+  )
+  const gallerySection = (
+      <section className="gallery-showcase-section" id="gallery">
+        <div className="gallery-showcase-header reveal">
+          <span className="eyebrow"><span></span> VISUAL CHRONICLES</span>
+          <h2>Behind the flames,<br/><em>at the table.</em></h2>
+          <p>A visual glimpse into our kitchen craft — hand-layered dum biryanis, hot iron skillets, and shared feasts.</p>
+        </div>
+        <div className="food-grid">
+          {gallery.map((item, i) => (
+            <article
+              className={`food-card food-card-${i + 1} reveal`}
+              style={{ '--d': `${i * 80}ms` }}
+              key={item.id}
+              role="button"
+              tabIndex={0}
+              aria-label={`View ${item.title}`}
+              onClick={() => setLightbox(i)}
+              onKeyDown={e => e.key === 'Enter' && setLightbox(i)}
+            >
+              {item.media_type === 'video' ? (
+                <video src={item.image_url} aria-label={item.title} muted autoPlay loop playsInline preload="metadata"/>
+              ) : (
+                <img src={item.image_url} alt={item.title} loading="lazy" onError={e => { e.currentTarget.style.opacity = 0 }}/>
+              )}
+              <div className="food-overlay"></div>
+              <div className="food-card-caption">
+                <span>{item.category || 'From our kitchen'}</span>
+                <h3>{item.title}</h3>
+              </div>
+              <span className="food-index">{String(i + 1).padStart(2, '0')}</span>
+            </article>
+          ))}
+        </div>
+        <div className="gallery-showcase-footer">
+          <span>“EVERY DISH HAS A STORY. EVERY TABLE HAS A MEMORY.”</span>
+        </div>
       </section>
   )
   const quoteSection = (
@@ -1010,9 +1064,120 @@ function App() {
     </section>
   )
   const reserveSection = (
-      <section className="reserve-section" id="reserve"><div className="reserve-photo reveal"><img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1300&q=85" alt="Warm restaurant dining room" loading="lazy"/><div className="photo-label"><span>THE GOOD SEATS</span><span>ARE WAITING</span></div></div><div className="reserve-content reveal"><span className="eyebrow"><span></span> PULL UP A CHAIR</span><h2>Save a place<br/><em>for you.</em></h2><p className="reserve-intro">Tell us when you’re coming. We’ll set the table and be ready with something delicious.</p>
-          <form className="booking-form" onSubmit={submitBooking}><label>Your name<input name="name" value={form.name} onChange={updateForm} placeholder="What should we call you?" required maxLength="100"/></label><div className="form-row"><label>Date<input type="date" name="date" value={form.date} onChange={updateForm} min={new Date().toISOString().slice(0, 10)} required/></label><label>Time<select name="time" value={form.time} onChange={updateForm} required><option value="">Choose a time</option>{['12:00 PM','12:30 PM','1:00 PM','1:30 PM','2:00 PM','7:00 PM','7:30 PM','8:00 PM','8:30 PM','9:00 PM','9:30 PM'].map(t => <option key={t}>{t}</option>)}</select></label></div><div className="form-row"><label>Number of guests<select name="members" value={form.members} onChange={updateForm}>{Array.from({length: 12}, (_, i) => <option key={i + 1} value={i + 1}>{i + 1} {i ? 'guests' : 'guest'}</option>)}</select></label><label>Special note <span className="optional">(optional)</span><input name="note" value={form.note} onChange={updateForm} placeholder="A birthday, a little extra spice…" maxLength="500"/></label></div><button className="gold-button submit-button" type="submit" disabled={bookingState === 'sending'}>{bookingState === 'sending' ? 'Sending…' : 'Request your table'}<ArrowRight size={17}/></button>{bookingState === 'sent' && <p className="form-message success"><Check size={15}/> Reservation saved. Finish sending your request in WhatsApp.</p>}{bookingState === 'offline' && <p className="form-message">WhatsApp is ready. Connect the backend to save reservations.</p>}{bookingState === 'error' && <p className="form-message">We couldn’t save your request, but you can still send it on WhatsApp.</p>}</form>
-          <p className="reserve-whatsapp"><span className="wa-small"><WaIcon/></span> Your request opens in WhatsApp so our team can confirm your table.</p></div></section>
+      <section className="reserve-section" id="reserve">
+        <div className="reserve-photo reveal">
+          <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1300&q=85" alt="Warm restaurant dining room" loading="lazy"/>
+          <div className="photo-label"><span>THE GOOD SEATS</span><span>ARE WAITING</span></div>
+        </div>
+        <div className="reserve-content reveal">
+          <span className="eyebrow"><span></span> PULL UP A CHAIR</span>
+          <h2>Save a place<br/><em>for you.</em></h2>
+          <p className="reserve-intro">Tell us when you’re coming. We’ll set the table and be ready with something delicious.</p>
+
+          {bookingState === 'sent' ? (
+            <div className="booking-success-wrap">
+              <div className="confetti-container" aria-hidden="true">
+                {Array.from({ length: 28 }).map((_, i) => (
+                  <span
+                    key={i}
+                    className="confetti-piece"
+                    style={{
+                      left: `${(i * 3.5 + Math.random() * 2)}%`,
+                      backgroundColor: ['#dfb968', '#982018', '#16875b', '#f5eee7', '#efce88'][i % 5],
+                      animationDelay: `${i * 0.08}s`,
+                      animationDuration: `${2.2 + (i % 3) * 0.4}s`
+                    }}
+                  />
+                ))}
+              </div>
+              <div className="stamp-container">
+                <div className="table-stamp">
+                  <span className="stamp-stars">★ ★ ★</span>
+                  <span className="stamp-text">TABLE BOOKED</span>
+                  <span className="stamp-brand">The Chennai Kitchen</span>
+                  <span className="stamp-status">CONFIRMED</span>
+                </div>
+              </div>
+              <h3>We’re ready for you, {form.name || 'friend'}!</h3>
+              <p className="success-summary">
+                A table for <strong>{form.members} {form.members === '1' ? 'guest' : 'guests'}</strong> has been saved for <strong>{form.date}</strong> at <strong>{form.time}</strong>.
+              </p>
+              <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                <a className="gold-button" href={whatsappUrl(`Hello The Chennai Kitchen! My booking for ${form.name} on ${form.date} at ${form.time} is placed.`)} target="_blank" rel="noreferrer">
+                  Open in WhatsApp <ArrowUpRight size={16}/>
+                </a>
+                <button className="outline-button" onClick={() => { setBookingState(''); setForm({ name: '', date: '', time: '', members: '2', note: '' }) }}>
+                  Book another table
+                </button>
+              </div>
+            </div>
+          ) : (
+            <form className="booking-form" onSubmit={submitBooking}>
+              <label>Your name
+                <input name="name" value={form.name} onChange={updateForm} placeholder="What should we call you?" required maxLength="100"/>
+              </label>
+
+              <div className="form-row">
+                <label>Date
+                  <input type="date" name="date" value={form.date} onChange={updateForm} min={new Date().toISOString().slice(0, 10)} required/>
+                </label>
+              </div>
+
+              <div className="booking-picker-group">
+                <span className="booking-picker-label"><Clock3 size={13}/> Choose preferred time slot</span>
+                <div className="time-slots-grid">
+                  {TIME_SLOTS.map(t => {
+                    const isSelected = form.time === t
+                    return (
+                      <button
+                        key={t}
+                        type="button"
+                        className={`time-slot-chip ${isSelected ? 'selected' : ''}`}
+                        onClick={() => setForm({ ...form, time: t })}
+                      >
+                        {isSelected && <Check className="chip-check" size={13} strokeWidth={3} />}
+                        <span>{t}</span>
+                      </button>
+                    )
+                  })}
+                </div>
+                {!form.time && <small style={{ color: '#d9a38f', fontSize: '10px' }}>* Please pick a slot above</small>}
+              </div>
+
+              <div className="booking-picker-group">
+                <span className="booking-picker-label">Number of guests</span>
+                <div className="guest-chips-row">
+                  {GUEST_OPTIONS.map(g => {
+                    const isSelected = form.members === g
+                    return (
+                      <button
+                        key={g}
+                        type="button"
+                        className={`guest-chip ${isSelected ? 'selected' : ''}`}
+                        onClick={() => setForm({ ...form, members: g })}
+                      >
+                        {g}
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+
+              <label>Special note <span className="optional">(optional)</span>
+                <input name="note" value={form.note} onChange={updateForm} placeholder="A birthday, window seat, extra spicy…" maxLength="500"/>
+              </label>
+
+              <button className="gold-button submit-button" type="submit" disabled={bookingState === 'sending' || !form.time}>
+                {bookingState === 'sending' ? 'Sending…' : 'Request your table'}<ArrowRight size={17}/>
+              </button>
+              {bookingState === 'offline' && <p className="form-message">WhatsApp is ready. Connect the backend to save reservations.</p>}
+              {bookingState === 'error' && <p className="form-message">We couldn’t save your request, but you can still send it on WhatsApp.</p>}
+            </form>
+          )}
+
+          <p className="reserve-whatsapp"><span className="wa-small"><WaIcon/></span> Your request opens in WhatsApp so our team can confirm your table.</p>
+        </div>
+      </section>
   )
   const socialSection = (
       <section className="social-section"><div className="reveal"><span className="eyebrow dark"><span></span> FIND US ONLINE</span><h2>Follow along,<br/><em>say hello.</em></h2></div><div className="social-row reveal">{socials.map(s => <a key={s.name} href={s.url} target="_blank" rel="noreferrer"><s.Icon size={20}/><span>{s.name}</span></a>)}</div></section>
@@ -1021,19 +1186,34 @@ function App() {
       <section className="faq-section"><div className="faq-heading reveal"><span className="eyebrow"><span></span> GOOD TO KNOW</span><h2>A few little<br/><em>things you asked.</em></h2></div><div className="faq-list reveal">{faqs.map(([q, a], i) => <div className={`faq-item ${faqOpen === i ? 'expanded' : ''}`} key={q}><button onClick={() => setFaqOpen(faqOpen === i ? -1 : i)} aria-expanded={faqOpen === i}><span>{q}</span>{faqOpen === i ? <Minus size={17}/> : <Plus size={17}/>}</button><div className="faq-answer"><p>{a}</p></div></div>)}</div></section>
   )
   return <>
+    <div className={`site-loading-screen ${!loading ? 'fade-out' : ''}`} aria-hidden={!loading}>
+      <div className="loader-center">
+        <div className="loader-plate-wrap">
+          <svg className="loader-plate-svg" viewBox="0 0 100 100">
+            <circle className="plate-base" cx="50" cy="50" r="42" />
+            <circle className="plate-glow" cx="50" cy="50" r="42" />
+          </svg>
+          <img className="loader-logo" src="/logo.jpg" alt="The Chennai Kitchen" />
+        </div>
+        <h2 className="loader-brand">The Chennai Kitchenn</h2>
+        <div className="loader-bar-wrap"><div className="loader-bar-fill"></div></div>
+        <span className="loader-hint">PREPARING THE DUM & SPICES</span>
+      </div>
+    </div>
     <div className="scroll-progress" aria-hidden="true"></div>
     <div className="site-top-wrap">
       <div className="announcement offer-bar"><button className="offer-msg" onClick={() => setOfferOpen(true)} aria-label="View the opening offer poster"><i>Grand opening · 15 Nov</i><strong>Buy 1 biryani, get 1 free</strong><span>Offer days 15 – 18 November 2026</span></button></div>
       <header className="site-header"><a className="brand" href={HASH ? '#home' : '/'} onClick={e => { e.preventDefault(); goTo('home') }} aria-label="The Chennai Kitchen home"><img className="brand-logo" src="/logo.jpg" alt="The Chennai Kitchen — Authentic non-veg cuisine"/><span className="brand-text">The Chennai Kitchenn</span></a>
-        <nav className={menuOpen ? 'main-nav open' : 'main-nav'}>{[['home', 'Home'], ['about', 'About'], ['gallery', 'Gallery'], ['contact', 'Contact']].map(([r, label]) => <button key={r} className={page === r ? 'active' : ''} onClick={() => goTo(r === 'about' ? 'story' : r === 'contact' ? 'reserve' : r)}>{label}</button>)}</nav>
+        <nav className={menuOpen ? 'main-nav open' : 'main-nav'}>{[['home', 'Home'], ['about', 'About'], ['menu', 'Menu'], ['gallery', 'Gallery'], ['contact', 'Contact']].map(([r, label]) => <button key={r} className={page === r ? 'active' : ''} onClick={() => goTo(r === 'about' ? 'story' : r === 'contact' ? 'reserve' : r)}>{label}</button>)}</nav>
         <button ref={reserveBtnRef} className="header-reserve" onClick={() => goTo('reserve')}>Book a table <ArrowUpRight size={15}/></button><button className="mobile-menu" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">{menuOpen ? <X/> : <Menu/>}</button>
       </header>
     </div>
 
     <main key={page} className="page page-transition">
-      {page === 'home' && <>{heroSection}{visitSection}{marqueeSection}{introSection}{foodSection}{quoteSection}{reviewsSection}{reserveSection}{faqSection}</>}
+      {page === 'home' && <>{heroSection}{visitSection}{marqueeSection}{introSection}{menuSection}{gallerySection}{quoteSection}{reviewsSection}{reserveSection}{faqSection}</>}
       {page === 'about' && <>{introSection}{marqueeSection}{quoteSection}{reviewsSection}</>}
-      {page === 'gallery' && <>{foodSection}</>}
+      {page === 'menu' && <>{menuSection}</>}
+      {page === 'gallery' && <>{gallerySection}</>}
       {page === 'contact' && <>{reserveSection}{socialSection}{faqSection}</>}
     </main>
 
