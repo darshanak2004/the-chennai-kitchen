@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { createRoot } from 'react-dom/client'
-import { ArrowDown, ArrowRight, ArrowUpRight, CalendarDays, Check, ChevronDown, Clock3, Facebook, Instagram, MapPin, Menu, Phone, Minus, Plus, Star, Utensils, X, Youtube } from 'lucide-react'
+import { ArrowDown, ArrowRight, ArrowUpRight, Award, CalendarDays, Check, ChefHat, ChevronDown, ChevronLeft, Clock3, Facebook, Instagram, MapPin, Menu, Phone, Minus, Plus, Sparkles, Star, Utensils, X, Youtube } from 'lucide-react'
 import './style.css'
 
 const initialGallery = [
@@ -87,6 +87,246 @@ const reviews = [
     comment: 'Celebrated our family get-together here. The ambience is warm and cozy with tasteful South Indian touches, and the food arrived piping hot. Everyone from grandparents to grandchildren loved it!',
   },
 ]
+
+const PRESS_MENTIONS = [
+  { quote: 'The most authentic dum biryani in Chennai', source: 'The Hindu Metroplus' },
+  { quote: 'Flakiest golden parottas with rich aromatic salna', source: 'Chennai Food Guide' },
+  { quote: 'A celebration of genuine South Indian slow-cooking', source: 'Times Food Review' },
+  { quote: 'Unmatched warmth and hospitality — a true family favorite', source: 'Madras Food Journal' },
+  { quote: 'Every grain of basmati carries the fragrance of whole spices', source: 'Vikatan Gastronomy' },
+]
+
+const SIGNATURE_DISHES = [
+  {
+    id: 'm1',
+    name: 'Royal Dum Chicken Biryani',
+    price: '₹280',
+    category: 'Biryani & Mains',
+    desc: 'Long-grain aged basmati layered with tender chicken, whole spices, and caramelized shallots, slow-simmered on low woodfire.',
+    badge: 'House Special',
+    image: 'https://images.unsplash.com/photo-1633945274405-b6c8069047b0?auto=format&fit=crop&w=700&q=80'
+  },
+  {
+    id: 'm2',
+    name: 'Mutton Chukka Varuval',
+    price: '₹360',
+    category: 'Starters & Chukka',
+    desc: 'Tender baby mutton pan-roasted dry in freshly ground black pepper, shallots, curry leaves, and country ghee.',
+    badge: 'Chef’s Pick',
+    image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=700&q=80'
+  },
+  {
+    id: 'm3',
+    name: 'Chettinad Pepper Chicken',
+    price: '₹260',
+    category: 'Starters & Chukka',
+    desc: 'Country-style chicken tossed in roasted Kalpasi stone flower, fennel seeds, and crushed pepper corns.',
+    badge: 'Signature',
+    image: 'https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?auto=format&fit=crop&w=700&q=80'
+  },
+  {
+    id: 'm4',
+    name: 'Madras Crispy Fish Fry',
+    price: '₹310',
+    category: 'Starters & Chukka',
+    desc: 'Fresh sea fish marinated in hand-crushed garlic, Kashmiri chilli, and lemon juice, tawa-fried crisp on order.',
+    badge: 'Coastal Special',
+    image: 'https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&w=700&q=80'
+  },
+  {
+    id: 'm5',
+    name: 'Malabar Flaky Coin Parotta',
+    price: '₹55',
+    category: 'Breads & Desserts',
+    desc: 'Golden, multi-layered spiral bread hand-beaten and cooked crisp on a cast-iron skillet with rich mutton salna.',
+    badge: 'Must Try',
+    image: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=700&q=80'
+  },
+  {
+    id: 'm6',
+    name: 'Chilled Elaneer Payasam',
+    price: '₹140',
+    category: 'Breads & Desserts',
+    desc: 'Sweet tender coconut pulp infused into chilled reduced milk, scented with green cardamom and toasted pistachios.',
+    badge: 'Sweet Finish',
+    image: 'https://images.unsplash.com/photo-1579954115545-a95591f28bfc?auto=format&fit=crop&w=700&q=80'
+  }
+]
+
+function StatCounter({ end, label, prefix = '', suffix = '' }) {
+  const [count, setCount] = useState(0)
+  const ref = useRef(null)
+  const started = useRef(false)
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const io = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !started.current) {
+        started.current = true
+        const duration = 1800
+        const startTime = performance.now()
+        const step = now => {
+          const progress = Math.min((now - startTime) / duration, 1)
+          const ease = 1 - Math.pow(1 - progress, 3)
+          setCount(Math.floor(ease * end))
+          if (progress < 1) requestAnimationFrame(step)
+          else setCount(end)
+        }
+        requestAnimationFrame(step)
+      }
+    }, { threshold: 0.25 })
+    io.observe(el)
+    return () => io.disconnect()
+  }, [end])
+
+  return (
+    <div className="stat-counter-card reveal" ref={ref}>
+      <div className="stat-counter-number">
+        {prefix}{count}{suffix}
+      </div>
+      <div className="stat-counter-label">{label}</div>
+    </div>
+  )
+}
+
+function PressMarquee() {
+  return (
+    <div className="press-marquee-wrap" aria-label="Press and critic mentions">
+      <div className="press-marquee-track">
+        {[...PRESS_MENTIONS, ...PRESS_MENTIONS, ...PRESS_MENTIONS].map((m, i) => (
+          <span key={i} className="press-mention-item">
+            <Star className="press-star" size={13} fill="currentColor" stroke="none" />
+            <em>“{m.quote}”</em>
+            <strong>— {m.source}</strong>
+          </span>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function MenuShowcase({ items = SIGNATURE_DISHES, onReserve }) {
+  const [activeCat, setActiveCat] = useState('All')
+  const [hoveredDish, setHoveredDish] = useState(null)
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
+  const tabRefs = useRef({})
+  const [sliderStyle, setSliderStyle] = useState({ left: 0, width: 0 })
+
+  const categories = ['All', 'Biryani & Mains', 'Starters & Chukka', 'Breads & Desserts']
+
+  useEffect(() => {
+    const btn = tabRefs.current[activeCat]
+    if (btn) {
+      setSliderStyle({ left: btn.offsetLeft, width: btn.offsetWidth })
+    }
+  }, [activeCat])
+
+  const filtered = activeCat === 'All' ? items : items.filter(d => d.category === activeCat)
+
+  const handleMouseMove = e => {
+    setMousePos({ x: e.clientX, y: e.clientY })
+  }
+
+  return (
+    <div className="menu-showcase reveal" onMouseMove={handleMouseMove}>
+      <div className="menu-tabs-wrap">
+        {categories.map(cat => (
+          <button
+            key={cat}
+            ref={el => tabRefs.current[cat] = el}
+            className={`menu-tab-btn ${activeCat === cat ? 'active' : ''}`}
+            onClick={() => setActiveCat(cat)}
+          >
+            {cat}
+          </button>
+        ))}
+        <div
+          className="tab-slider-line"
+          style={{ transform: `translateX(${sliderStyle.left}px)`, width: `${sliderStyle.width}px` }}
+        />
+      </div>
+
+      <div className="menu-dish-list">
+        {filtered.map((dish, i) => (
+          <div
+            key={dish.id}
+            className="dish-row reveal in"
+            style={{ '--d': `${i * 60}ms` }}
+            onMouseEnter={() => setHoveredDish(dish)}
+            onMouseLeave={() => setHoveredDish(null)}
+            onClick={onReserve}
+          >
+            <div className="dish-row-info">
+              <div className="dish-row-title-row">
+                <h4 className="dish-row-name">{dish.name}</h4>
+                {dish.badge && <span className="dish-badge">{dish.badge}</span>}
+              </div>
+              <p className="dish-desc">{dish.desc}</p>
+            </div>
+            <span className="dish-price">{dish.price}</span>
+          </div>
+        ))}
+      </div>
+
+      {hoveredDish && (
+        <div
+          className="cursor-dish-preview"
+          style={{
+            left: `${mousePos.x + 18}px`,
+            top: `${mousePos.y - 70}px`
+          }}
+        >
+          <img src={hoveredDish.image} alt={hoveredDish.name} />
+          <div className="cursor-dish-caption">
+            <strong>{hoveredDish.name}</strong>
+            <span>{hoveredDish.price} · {hoveredDish.badge}</span>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+function HorizontalSpecials({ gallery, onSelect }) {
+  const trackRef = useRef(null)
+  const scroll = dir => {
+    if (trackRef.current) {
+      trackRef.current.scrollBy({ left: dir * 310, behavior: 'smooth' })
+    }
+  }
+  return (
+    <div className="horizontal-gallery-wrap reveal">
+      <div className="horizontal-gallery-header">
+        <span className="eyebrow dark"><span></span> SIGNATURE CREATIONS</span>
+        <div className="horizontal-gallery-controls">
+          <button onClick={() => scroll(-1)} aria-label="Previous dishes"><ChevronLeft size={18}/></button>
+          <button onClick={() => scroll(1)} aria-label="Next dishes"><ArrowRight size={18}/></button>
+        </div>
+      </div>
+      <div className="horizontal-gallery-track" ref={trackRef}>
+        {gallery.map((item, idx) => (
+          <div
+            key={item.id || idx}
+            className="horizontal-spec-card"
+            role="button"
+            tabIndex={0}
+            onClick={() => onSelect(idx)}
+          >
+            <div className="horizontal-spec-img-wrap">
+              <img src={item.image_url} alt={item.title} loading="lazy" />
+            </div>
+            <div className="horizontal-spec-content">
+              <span className="dish-badge">{item.category || 'Special'}</span>
+              <h4>{item.title}</h4>
+              <p>Made fresh each day using time-honoured slow-cooking traditions.</p>
+              <span className="horizontal-spec-price">From our kitchen</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
 
 async function api(path, options = {}) {
   const response = await fetch(`${import.meta.env.VITE_API_URL || ''}/api${path}`, { ...options, headers: { 'Content-Type': 'application/json', ...(options.token ? { Authorization: `Bearer ${options.token}` } : {}), ...options.headers } })
@@ -530,6 +770,32 @@ function App() {
   const [heroStage, setHeroStage] = useState(0)
   const [lightbox, setLightbox] = useState(-1)
   const [offerOpen, setOfferOpen] = useState(false)
+  const reserveBtnRef = useRef(null)
+
+  useEffect(() => {
+    const btn = reserveBtnRef.current
+    if (!btn) return
+    const onMove = e => {
+      const rect = btn.getBoundingClientRect()
+      const cx = rect.left + rect.width / 2
+      const cy = rect.top + rect.height / 2
+      const dist = Math.hypot(e.clientX - cx, e.clientY - cy)
+      if (dist < 75) {
+        const moveX = (e.clientX - cx) * 0.32
+        const moveY = (e.clientY - cy) * 0.32
+        btn.style.transform = `translate(${moveX}px, ${moveY}px)`
+      } else {
+        btn.style.transform = ''
+      }
+    }
+    const onLeave = () => { btn.style.transform = '' }
+    window.addEventListener('mousemove', onMove)
+    btn.addEventListener('mouseleave', onLeave)
+    return () => {
+      window.removeEventListener('mousemove', onMove)
+      btn.removeEventListener('mouseleave', onLeave)
+    }
+  }, [])
 
   useEffect(() => {
     if (routeOf() === 'admin') return
@@ -660,7 +926,7 @@ function App() {
   const heroSection = (
       <div className="hero-track" id="hero-track"><section className="hero" id="home">
         {currentMedia?.media_type === 'video' ? <video className="hero-image hero-video" src={heroUrl} autoPlay muted loop playsInline aria-label={currentMedia.title}/> : currentMedia ? <div className="hero-image" style={{ backgroundImage: `url("${heroUrl}")` }}></div> : <HeroSequence onStage={setHeroStage}/>}<div className="hero-vignette"></div><div className="hero-grain"></div>
-        <div className="hero-content" key={heroStage}><span className="eyebrow"><span></span> MADE SLOW. SHARED GENEROUSLY.</span><h1>{currentCopy.title}</h1><p>{currentCopy.text}</p><button className="gold-button" onClick={() => jumpTo('reserve')}>Reserve a table<ArrowRight size={17}/></button></div>
+        <div className="hero-content" key={heroStage}><span className="eyebrow"><span></span> MADE SLOW. SHARED GENEROUSLY.</span><h1 className="mask-headline"><span className="mask-line"><span className="mask-inner">{currentCopy.title}</span></span></h1><p>{currentCopy.text}</p><button className="gold-button" onClick={() => jumpTo('reserve')}>Reserve a table<ArrowRight size={17}/></button></div>
         <div className="hero-caption"><span>THE ART OF DUM</span></div>
         <button className="scroll-hint" onClick={() => jumpTo('story')}>SCROLL TO SAVOR <ArrowDown size={14}/></button>
         <div className="hero-note"><span className="note-line"></span><span>Cooked with patience,<br/>served with heart.</span></div>
@@ -669,11 +935,43 @@ function App() {
   const visitSection = (
       <section className="visit-section" id="visit"><div className="visit-copy reveal"><span className="eyebrow dark"><span></span> COME FIND YOUR CORNER</span><h2>There’s always<br/><em>room at our table.</em></h2><p>Bring your appetite, bring your people. We’ll be right here.</p><div className="visit-details"><span><MapPin size={17}/><span>Ambattur, Chennai<br/><small>{ADDRESS}</small></span></span><span><Clock3 size={17}/><span>Grand opening<br/><small>Sunday, 15 November 2026</small></span></span><span><Phone size={17}/><span>Call us<br/><small><a href="tel:+919894464472">98944 64472</a> · <a href="tel:+919047470444">90474 70444</a></small></span></span></div><button className="text-link" onClick={() => window.open(`https://maps.google.com/?q=${encodeURIComponent(ADDRESS)}`, '_blank', 'noopener')}>Open in Google Maps <ArrowUpRight size={16}/></button></div><div className="map-wrap reveal"><iframe title="Map of The Chennai Kitchen, Ambattur" src={`https://maps.google.com/maps?q=${encodeURIComponent(ADDRESS)}&t=&z=16&ie=UTF8&iwloc=&output=embed`} loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe><span className="map-tag"><MapPin size={14}/> AMBATTUR, CHENNAI</span></div></section>
   )
+  const marqueeSection = <PressMarquee />
   const introSection = (
-      <section className="intro-section" id="story"><div className="intro-kicker"><span>01</span><i></i> A TABLE FOR EVERYONE</div><div className="intro-copy reveal"><h2>Good food brings<br/><em>us together.</em></h2><div className="intro-text"><p>At The Chennai Kitchen, we believe the best meals are never rushed. They begin with familiar spices, the slow perfume of a pot on dum, and the people you love gathered around the table.</p><p>Rooted in the flavours of South India and made for sharing, every plate carries a little warmth from our kitchen to yours.</p><button className="text-link" onClick={() => jumpTo('gallery')}>A peek into our kitchen <ArrowRight size={16}/></button></div></div><div className="about-cards reveal">{[[Utensils, 'Cooked on dum', 'Rice and meat sealed in the pot and left to slow-cook until every grain carries the masala.'], [Clock3, 'Made fresh daily', 'Spices are ground and marinades prepared each morning, so nothing sits around.'], [Check, 'Biryani and beyond', 'From dum biryani to South Indian favourites and Indo-Chinese plates, all under one roof.']].map(([Icon, t, d]) => <article key={t}><Icon size={22}/><h3>{t}</h3><p>{d}</p></article>)}</div><div className="intro-bottom"><span>FROM OUR KITCHEN, WITH LOVE</span><span>13° 04' N — CHENNAI</span></div></section>
+      <section className="intro-section" id="story"><div className="intro-kicker"><span>01</span><i></i> A TABLE FOR EVERYONE</div><div className="intro-copy reveal"><h2>Good food brings<br/><em>us together.</em></h2><div className="intro-text"><p>At The Chennai Kitchen, we believe the best meals are never rushed. They begin with familiar spices, the slow perfume of a pot on dum, and the people you love gathered around the table.</p><p>Rooted in the flavours of South India and made for sharing, every plate carries a little warmth from our kitchen to yours.</p><button className="text-link" onClick={() => jumpTo('gallery')}>A peek into our kitchen <ArrowRight size={16}/></button></div></div>
+        <div className="story-stats-grid">
+          <StatCounter end={15} label="Years of Heritage" suffix="+" />
+          <StatCounter end={200} label="Authentic Dishes" suffix="+" />
+          <StatCounter end={50} label="Happy Guests" suffix="k+" />
+          <StatCounter end={100} label="Dum & Woodfire" suffix="%" />
+        </div>
+        <div className="story-chapters-grid reveal">
+          <div className="story-chapters-visual">
+            <img src="https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=900&q=85" alt="Slow cooking at The Chennai Kitchen" />
+          </div>
+          <div className="story-chapters-list">
+            <article className="story-chapter-card">
+              <span className="story-chapter-num">CHAPTER 01</span>
+              <h3>The Morning Roast</h3>
+              <p>Whole star anise, stone flower, cinnamon barks, and green cardamom are hand-roasted and ground at dawn to create our signature masala base.</p>
+            </article>
+            <article className="story-chapter-card">
+              <span className="story-chapter-num">CHAPTER 02</span>
+              <h3>The Clay Dum Seal</h3>
+              <p>Fragrant seeraga samba rice and marinated tender meat are layered in heavy copper handis, sealed with fresh wheat dough, and simmered on gentle charcoal embers.</p>
+            </article>
+            <article className="story-chapter-card">
+              <span className="story-chapter-num">CHAPTER 03</span>
+              <h3>The Shared Feast</h3>
+              <p>Every handi is broken open right before serving, sending a cloud of fragrant spice steam across the room, poured onto clean banana leaves for family and friends.</p>
+            </article>
+          </div>
+        </div>
+        <div className="about-cards reveal">{[[Utensils, 'Cooked on dum', 'Rice and meat sealed in the pot and left to slow-cook until every grain carries the masala.'], [Clock3, 'Made fresh daily', 'Spices are ground and marinades prepared each morning, so nothing sits around.'], [Check, 'Biryani and beyond', 'From dum biryani to South Indian favourites and Indo-Chinese plates, all under one roof.']].map(([Icon, t, d]) => <article key={t}><Icon size={22}/><h3>{t}</h3><p>{d}</p></article>)}</div><div className="intro-bottom"><span>FROM OUR KITCHEN, WITH LOVE</span><span>13° 04' N — CHENNAI</span></div></section>
   )
   const foodSection = (
       <section className="food-section" id="gallery"><div className="section-heading reveal"><div><span className="eyebrow dark"><span></span> SOMETHING GOOD IS COOKING</span><h2>A few of our<br/><em>favourite things.</em></h2></div><p>Big-hearted plates, familiar favourites, and a few reasons to stay for one more bite.</p></div>
+        <HorizontalSpecials gallery={gallery} onSelect={setLightbox} />
+        <MenuShowcase items={SIGNATURE_DISHES} onReserve={() => jumpTo('reserve')} />
         <div className="food-grid">{gallery.map((item, i) => <article className={`food-card food-card-${i + 1} reveal`} style={{ '--d': `${i * 80}ms` }} key={item.id} role="button" tabIndex={0} aria-label={`View ${item.title}`} onClick={() => setLightbox(i)} onKeyDown={e => e.key === 'Enter' && setLightbox(i)}>{item.media_type === 'video' ? <video src={item.image_url} aria-label={item.title} muted autoPlay loop playsInline preload="metadata"/> : <img src={item.image_url} alt={item.title} loading="lazy" onError={e => { e.currentTarget.style.opacity = 0 }}/>}<div className="food-overlay"></div><div className="food-card-caption"><span>{item.category || 'From our kitchen'}</span><h3>{item.title}</h3></div><span className="food-index">{String(i + 1).padStart(2, '0')}</span></article>)}</div>
         <div className="food-foot"><span>MADE TO BE PASSED AROUND</span><button className="outline-button" onClick={() => jumpTo('reserve')}>Come hungry <ArrowRight size={16}/></button></div>
       </section>
@@ -728,13 +1026,13 @@ function App() {
       <div className="announcement offer-bar"><button className="offer-msg" onClick={() => setOfferOpen(true)} aria-label="View the opening offer poster"><i>Grand opening · 15 Nov</i><strong>Buy 1 biryani, get 1 free</strong><span>Offer days 15 – 18 November 2026</span></button></div>
       <header className="site-header"><a className="brand" href={HASH ? '#home' : '/'} onClick={e => { e.preventDefault(); goTo('home') }} aria-label="The Chennai Kitchen home"><img className="brand-logo" src="/logo.jpg" alt="The Chennai Kitchen — Authentic non-veg cuisine"/><span className="brand-text">The Chennai Kitchenn</span></a>
         <nav className={menuOpen ? 'main-nav open' : 'main-nav'}>{[['home', 'Home'], ['about', 'About'], ['gallery', 'Gallery'], ['contact', 'Contact']].map(([r, label]) => <button key={r} className={page === r ? 'active' : ''} onClick={() => goTo(r === 'about' ? 'story' : r === 'contact' ? 'reserve' : r)}>{label}</button>)}</nav>
-        <button className="header-reserve" onClick={() => goTo('reserve')}>Book a table <ArrowUpRight size={15}/></button><button className="mobile-menu" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">{menuOpen ? <X/> : <Menu/>}</button>
+        <button ref={reserveBtnRef} className="header-reserve" onClick={() => goTo('reserve')}>Book a table <ArrowUpRight size={15}/></button><button className="mobile-menu" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">{menuOpen ? <X/> : <Menu/>}</button>
       </header>
     </div>
 
-    <main key={page} className="page">
-      {page === 'home' && <>{heroSection}{visitSection}{introSection}{foodSection}{quoteSection}{reviewsSection}{reserveSection}{faqSection}</>}
-      {page === 'about' && <>{introSection}{quoteSection}{reviewsSection}</>}
+    <main key={page} className="page page-transition">
+      {page === 'home' && <>{heroSection}{visitSection}{marqueeSection}{introSection}{foodSection}{quoteSection}{reviewsSection}{reserveSection}{faqSection}</>}
+      {page === 'about' && <>{introSection}{marqueeSection}{quoteSection}{reviewsSection}</>}
       {page === 'gallery' && <>{foodSection}</>}
       {page === 'contact' && <>{reserveSection}{socialSection}{faqSection}</>}
     </main>
