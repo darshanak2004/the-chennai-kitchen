@@ -679,7 +679,7 @@ function App() {
       </section>
   )
   const quoteSection = (
-      <section className="quote-band reveal"><div className="quote-decoration">“</div><p>The secret ingredient is always<br/><em>one more person at the table.</em></p><span>— OUR KIND OF RECIPE</span></section>
+      <section className="quote-band"><div className="quote-decoration">“</div><p className="reveal">The secret ingredient is always<br/><em>one more person at the table.</em></p><span className="reveal">— OUR KIND OF RECIPE</span></section>
   )
   const reviewsSection = (
     <section className="reviews-section" id="reviews">
