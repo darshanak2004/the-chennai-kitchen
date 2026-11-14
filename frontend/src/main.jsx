@@ -724,11 +724,13 @@ function App() {
   )
   return <>
     <div className="scroll-progress" aria-hidden="true"></div>
-    <div className="announcement offer-bar"><button className="offer-msg" onClick={() => setOfferOpen(true)} aria-label="View the opening offer poster"><i>Grand opening · 15 Nov</i><strong>Buy 1 biryani, get 1 free</strong><span>Offer days 15 – 18 November 2026</span></button></div>
-    <header className="site-header"><a className="brand" href={HASH ? '#home' : '/'} onClick={e => { e.preventDefault(); goTo('home') }} aria-label="The Chennai Kitchen home"><img className="brand-logo" src="/logo.jpg" alt="The Chennai Kitchen — Authentic non-veg cuisine"/><span className="brand-text">The Chennai Kitchenn</span></a>
-      <nav className={menuOpen ? 'main-nav open' : 'main-nav'}>{[['home', 'Home'], ['about', 'About'], ['gallery', 'Gallery'], ['contact', 'Contact']].map(([r, label]) => <button key={r} className={page === r ? 'active' : ''} onClick={() => goTo(r === 'about' ? 'story' : r === 'contact' ? 'reserve' : r)}>{label}</button>)}</nav>
-      <button className="header-reserve" onClick={() => goTo('reserve')}>Book a table <ArrowUpRight size={15}/></button><button className="mobile-menu" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">{menuOpen ? <X/> : <Menu/>}</button>
-    </header>
+    <div className="site-top-wrap">
+      <div className="announcement offer-bar"><button className="offer-msg" onClick={() => setOfferOpen(true)} aria-label="View the opening offer poster"><i>Grand opening · 15 Nov</i><strong>Buy 1 biryani, get 1 free</strong><span>Offer days 15 – 18 November 2026</span></button></div>
+      <header className="site-header"><a className="brand" href={HASH ? '#home' : '/'} onClick={e => { e.preventDefault(); goTo('home') }} aria-label="The Chennai Kitchen home"><img className="brand-logo" src="/logo.jpg" alt="The Chennai Kitchen — Authentic non-veg cuisine"/><span className="brand-text">The Chennai Kitchenn</span></a>
+        <nav className={menuOpen ? 'main-nav open' : 'main-nav'}>{[['home', 'Home'], ['about', 'About'], ['gallery', 'Gallery'], ['contact', 'Contact']].map(([r, label]) => <button key={r} className={page === r ? 'active' : ''} onClick={() => goTo(r === 'about' ? 'story' : r === 'contact' ? 'reserve' : r)}>{label}</button>)}</nav>
+        <button className="header-reserve" onClick={() => goTo('reserve')}>Book a table <ArrowUpRight size={15}/></button><button className="mobile-menu" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">{menuOpen ? <X/> : <Menu/>}</button>
+      </header>
+    </div>
 
     <main key={page} className="page">
       {page === 'home' && <>{heroSection}{visitSection}{introSection}{foodSection}{quoteSection}{reviewsSection}{reserveSection}{faqSection}</>}
