@@ -807,10 +807,10 @@ function App() {
   }, [])
 
   useEffect(() => {
-    if (routeOf() === 'admin') return
-    const timer = setTimeout(() => setOfferOpen(true), 400)
+    if (routeOf() === 'admin' || loading) return
+    const timer = setTimeout(() => setOfferOpen(true), 2000)
     return () => clearTimeout(timer)
-  }, [])
+  }, [loading])
   useEffect(() => {
     if (!offerOpen) return
     const onKey = e => { if (e.key === 'Escape') setOfferOpen(false) }
