@@ -349,18 +349,16 @@ function HeroSequence({ onStage }) {
     const images = Array.from({ length: 95 }, (_, index) => {
       const image = new Image()
       image.src = window.__HERO ? window.__HERO[index] : `/hero/${String(index).padStart(3, '0')}.jpg`
-      image.onload = draw
+      image.onload = () => {
+        if (index === 5 || index === Math.round(current)) draw()
+      }
       return image
     })
-    let current = 12
-    let target = 12
+    let current = 5
+    let target = 5
     let animation = 0
     let pixelRatio = 1
     let stage = 0
-    let isUserScrolling = false
-    let scrollTimeout = null
-    let autoPlayDirection = 1
-    const autoPlaySpeed = 0.28
 
     function resize() {
       pixelRatio = Math.min(window.devicePixelRatio || 1, 2)
@@ -373,7 +371,7 @@ function HeroSequence({ onStage }) {
       const width = canvas.width
       const height = canvas.height
       if (!width || !height) return
-      const preferred = Math.round(current)
+      const preferred = Math.max(0, Math.min(94, Math.round(current)))
       let image = images[preferred]
       if (!image?.complete || !image.naturalWidth) {
         for (let distance = 1; distance < images.length; distance++) {
@@ -394,51 +392,34 @@ function HeroSequence({ onStage }) {
       context.drawImage(image, x, y, drawWidth, drawHeight)
     }
     function animate() {
-      if (!isUserScrolling) {
-        current += autoPlaySpeed * autoPlayDirection
-        if (current >= 86) {
-          autoPlayDirection = -1
-          current = 86
-        } else if (current <= 10) {
-          autoPlayDirection = 1
-          current = 10
-        }
-        target = current
-        const next = Math.min(3, Math.floor(((current - 10) / 76) * 4))
-        if (next !== stage) { stage = next; onStage?.(next) }
-      } else {
-        current += (target - current) * 0.14
-        if (Math.abs(target - current) < 0.02) current = target
-      }
+      current += (target - current) * 0.2
+      if (Math.abs(target - current) < 0.03) current = target
       draw()
-      animation = requestAnimationFrame(animate)
+      animation = Math.abs(target - current) < 0.03 ? 0 : requestAnimationFrame(animate)
     }
     function updateTarget() {
-      isUserScrolling = true
-      clearTimeout(scrollTimeout)
-      scrollTimeout = setTimeout(() => {
-        isUserScrolling = false
-      }, 900)
-
       const track = document.getElementById('hero-track')
       if (!track) return
+      const rect = track.getBoundingClientRect()
+      const scrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop
+      const trackTop = rect.top + scrollY
       const range = track.offsetHeight - window.innerHeight
-      const progress = range > 0 ? Math.max(0, Math.min(1, (window.scrollY - track.offsetTop) / range)) : 0
-      target = 10 + progress * 76
-      const next = Math.min(3, Math.floor(progress * 4))
+      const progress = range > 0 ? Math.max(0, Math.min(1, (scrollY - trackTop) / range)) : 0
+      target = 5 + progress * 88
+      const next = Math.min(3, Math.floor(progress * 3.99))
       if (next !== stage) { stage = next; onStage?.(next) }
+      if (!animation) animation = requestAnimationFrame(animate)
     }
 
     window.addEventListener('scroll', updateTarget, { passive: true })
     window.addEventListener('resize', resize)
     resize()
     updateTarget()
-    animation = requestAnimationFrame(animate)
+    draw()
     return () => {
       window.removeEventListener('scroll', updateTarget)
       window.removeEventListener('resize', resize)
-      clearTimeout(scrollTimeout)
-      cancelAnimationFrame(animation)
+      if (animation) cancelAnimationFrame(animation)
     }
   }, [])
 
