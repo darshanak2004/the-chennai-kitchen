@@ -156,3 +156,44 @@
   .admin-page-card{padding:20px 16px}
   .admin-full-login{margin:30px 16px;padding:30px 20px}
 }
+
+/* Enhanced Interactive Animations */
+.gold-button{position:relative;overflow:hidden;box-shadow:0 4px 14px rgba(223,185,104,.2);transition:background .25s,transform .25s,box-shadow .25s}
+.gold-button:hover{background:var(--gold2);transform:translateY(-2px);box-shadow:0 10px 26px rgba(223,185,104,.38)}
+.gold-button::after{content:'';position:absolute;top:0;left:-100%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.32),transparent);transform:skewX(-25deg);pointer-events:none}
+.gold-button:hover::after{left:160%;transition:left .75s ease-in-out}
+
+.header-reserve{position:relative;overflow:hidden;transition:all .25s}
+.header-reserve:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(223,185,104,.25)}
+
+.scroll-hint svg{animation:hint-bounce 2s ease-in-out infinite}
+@keyframes hint-bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+
+.quote-band::before{animation:spin-circles 70s linear infinite}
+.quote-band::after{animation:spin-circles-rev 85s linear infinite}
+@keyframes spin-circles{from{transform:translateY(-50%) rotate(0deg)}to{transform:translateY(-50%) rotate(360deg)}}
+@keyframes spin-circles-rev{from{transform:translateY(-50%) rotate(360deg)}to{transform:translateY(-50%) rotate(0deg)}}
+
+.eyebrow>span{transition:width .7s cubic-bezier(.16,1,.3,1) .15s;width:12px}
+.reveal.in .eyebrow>span,.hero-content .eyebrow>span{width:28px}
+
+.faq-item>button svg{transition:transform .3s cubic-bezier(.16,1,.3,1),color .2s}
+.faq-item.expanded>button svg{transform:rotate(180deg);color:var(--crimson)}
+
+.food-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at center,rgba(255,255,255,.1),transparent 70%);opacity:0;transition:opacity .5s ease;pointer-events:none;z-index:1}
+.food-card:hover::before{opacity:1}
+.food-card-caption h3{transition:transform .35s cubic-bezier(.16,1,.3,1)}
+.food-card:hover .food-card-caption h3{transform:translateY(-4px)}
+
+.whatsapp-float{animation:float-wa 3.8s ease-in-out infinite}
+@keyframes float-wa{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.whatsapp-float:hover{animation:none;transform:translateY(-4px) scale(1.05);box-shadow:0 12px 30px rgba(20,132,88,.45)}
+
+.booking-form input,.booking-form select{transition:border-color .3s,box-shadow .3s,background .3s}
+.booking-form input:focus,.booking-form select:focus{border-color:var(--gold);box-shadow:0 2px 10px rgba(223,185,104,.15)}
+
+.review-card{transition:transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s,border-color .35s}
+.review-card:hover{transform:translateY(-7px);box-shadow:0 22px 50px rgba(58,28,36,.14);border-color:var(--crimson)}
+
+.map-tag:hover svg{animation:pin-bounce .6s ease infinite alternate}
+@keyframes pin-bounce{to{transform:translateY(-4px)}}
