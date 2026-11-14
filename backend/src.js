@@ -243,6 +243,16 @@ const start = async () => {
   }
   app.listen(port, () => console.log(`The Chennai Kitchen API listening on port ${port}`))
 }
-start()
-process.on('unhandledRejection', err => console.error('Unhandled rejection:', err?.message || err))
-process.on('SIGTERM', async () => { await pool?.end(); process.exit(0) })
+
+// Only start the HTTP server when run directly (local dev), not when imported by Vercel serverless
+const isMain = process.argv[1] === fileURLToPath(import.meta.url)
+if (isMain) {
+  start()
+  process.on('unhandledRejection', err => console.error('Unhandled rejection:', err?.message || err))
+  process.on('SIGTERM', async () => { await pool?.end(); process.exit(0) })
+} else {
+  // Serverless: initialise DB once on cold start (best-effort)
+  if (pool) initializeDb().catch(err => console.error('DB init error:', err.message))
+}
+
+export default app
