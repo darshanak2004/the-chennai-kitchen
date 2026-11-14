@@ -162,10 +162,8 @@ function App() {
   const [lightbox, setLightbox] = useState(-1)
   const [offerOpen, setOfferOpen] = useState(false)
   useEffect(() => {
-    let seen = false
-    try { seen = localStorage.getItem('tck_offer_seen') === '1' } catch {}
-    if (seen || routeOf() === 'admin') return
-    const timer = setTimeout(() => { setOfferOpen(true); try { localStorage.setItem('tck_offer_seen', '1') } catch {} }, 300)
+    if (routeOf() === 'admin') return
+    const timer = setTimeout(() => setOfferOpen(true), 400)
     return () => clearTimeout(timer)
   }, [])
   useEffect(() => {
