@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { createRoot } from 'react-dom/client'
-import { ArrowDown, ArrowRight, ArrowUpRight, CalendarDays, Check, ChevronDown, Clock3, Facebook, Instagram, MapPin, Menu, Phone, Minus, Plus, Utensils, X, Youtube } from 'lucide-react'
+import { ArrowDown, ArrowRight, ArrowUpRight, CalendarDays, Check, ChevronDown, Clock3, Facebook, Instagram, MapPin, Menu, Phone, Minus, Plus, Star, Utensils, X, Youtube } from 'lucide-react'
 import './style.css'
 
 const initialGallery = [
@@ -48,6 +48,44 @@ const faqs = [
   ['Can you accommodate dietary requirements?', 'We’re happy to help. Add your dietary needs in the special notes when you reserve, or speak with our team before ordering.'],
   ['Do you have vegetarian options?', 'Yes. Our menu includes vegetarian favourites alongside our biryanis and house specials. Ask our team about today’s selection.'],
   ['Can I contact you on WhatsApp?', 'Absolutely. Tap the green WhatsApp button to start a conversation with our team.'],
+]
+const reviews = [
+  {
+    id: 'r1',
+    name: 'Kavitha Ramachandran',
+    location: 'Ambattur, Chennai',
+    rating: 5,
+    dish: 'Dum Chicken Biryani',
+    date: '3 days ago',
+    comment: 'The fragrance as soon as the dum handi opened was unreal! Perfectly cooked basmati rice where every single grain carries the aroma of whole spices. Tasted just like a festive wedding feast at home.',
+  },
+  {
+    id: 'r2',
+    name: 'Suresh Kumar & Family',
+    location: 'Anna Nagar',
+    rating: 5,
+    dish: 'Golden Parotta & Salna',
+    date: '1 week ago',
+    comment: 'Hands down the flakiest parotta in Chennai. We ordered the special chicken biryani and parotta with mutton gravy. The staff was incredibly welcoming and attentive to our kids.',
+  },
+  {
+    id: 'r3',
+    name: 'Dr. Vigneshwaran M.',
+    location: 'Mogappair West',
+    rating: 5,
+    dish: 'Mutton Chukka & House Biryani',
+    date: '2 weeks ago',
+    comment: 'Authentic flavours cooked with authentic patience — no artificial colours or heavy greasy masalas. The mutton was fork-tender. The Chennai Kitchen has easily become our weekend regular.',
+  },
+  {
+    id: 'r4',
+    name: 'Priyanka & Arvind',
+    location: 'Kilpauk, Chennai',
+    rating: 5,
+    dish: 'Special Non-Veg Platter',
+    date: 'A month ago',
+    comment: 'Celebrated our family get-together here. The ambience is warm and cozy with tasteful South Indian touches, and the food arrived piping hot. Everyone from grandparents to grandchildren loved it!',
+  },
 ]
 
 async function api(path, options = {}) {
@@ -139,6 +177,342 @@ function HeroSequence({ onStage }) {
   return <canvas className="hero-canvas" ref={canvasRef} aria-label="Biryani being served, from the supplied hero sequence" role="img" />
 }
 
+function AdminPage({
+  go,
+  token,
+  setToken,
+  phone,
+  setPhone,
+  gallery,
+  heroMedia,
+  reservations,
+  refreshAdmin,
+  uploadFile,
+  uploading,
+  adminNotice,
+  setAdminNotice,
+}) {
+  const [adminPassword, setAdminPassword] = useState('')
+  const [adminError, setAdminError] = useState('')
+  const [adminTab, setAdminTab] = useState('gallery')
+  const [newMedia, setNewMedia] = useState({ title: '', image_url: '', category: 'From the kitchen', media_type: 'image' })
+  const [heroForm, setHeroForm] = useState({ title: '', media_url: '', media_type: 'image' })
+
+  const loginAdmin = async e => {
+    e.preventDefault(); setAdminError('')
+    try {
+      const data = await api('/admin/login', { method: 'POST', body: JSON.stringify({ password: adminPassword }) })
+      setToken(data.token); sessionStorage.setItem('tck_admin_token', data.token)
+      setAdminPassword('')
+      await refreshAdmin()
+    } catch (err) { setAdminError(err.message) }
+  }
+
+  const signOut = () => {
+    setToken(''); sessionStorage.removeItem('tck_admin_token')
+  }
+
+  const addGallery = async e => {
+    e.preventDefault()
+    try {
+      await api('/admin/gallery', { method: 'POST', token, body: JSON.stringify(newMedia) })
+      setNewMedia({ title: '', image_url: '', category: 'From the kitchen', media_type: 'image' })
+      setAdminNotice('Gallery item added.')
+      await refreshAdmin()
+    } catch (err) { setAdminNotice(err.message) }
+  }
+
+  const addHero = async e => {
+    e.preventDefault()
+    try {
+      await api('/admin/hero-media', { method: 'POST', token, body: JSON.stringify(heroForm) })
+      setHeroForm({ title: '', media_url: '', media_type: 'image' })
+      setAdminNotice('Home media added.')
+      await refreshAdmin()
+    } catch (err) { setAdminNotice(err.message) }
+  }
+
+  const removeItem = async (kind, id) => {
+    try {
+      await api(`/admin/${kind}/${id}`, { method: 'DELETE', token })
+      setAdminNotice(kind === 'reservations' ? 'Booking removed.' : 'Item removed from database.')
+      await refreshAdmin()
+    } catch (err) { setAdminNotice(err.message) }
+  }
+
+  const savePhone = async e => {
+    e.preventDefault()
+    try {
+      await api('/admin/settings', { method: 'PUT', token, body: JSON.stringify({ whatsappPhone: phone }) })
+      setAdminNotice('WhatsApp number saved.')
+    } catch (err) { setAdminNotice(err.message) }
+  }
+
+  return (
+    <div className="admin-page">
+      <header className="admin-page-header">
+        <a className="brand" href="/" onClick={e => { e.preventDefault(); go('home') }} aria-label="The Chennai Kitchen home">
+          <img className="brand-logo" src="/logo.jpg" alt="The Chennai Kitchen — Authentic non-veg cuisine" />
+          <span className="brand-text">The Chennai Kitchenn <i>Admin Studio</i></span>
+        </a>
+        <nav className="admin-page-nav">
+          <button className="back-btn" onClick={() => go('home')}>← Back to website</button>
+          {token && <button className="signout-btn" onClick={signOut}>Sign out</button>}
+        </nav>
+      </header>
+
+      <main className="admin-page-main">
+        {!token ? (
+          <div className="admin-full-login">
+            <span className="eyebrow"><span></span> THE BACK OF HOUSE</span>
+            <h1>Admin sign in</h1>
+            <p>Sign in to manage gallery photos, videos, home hero media, and reservations.</p>
+            <form onSubmit={loginAdmin}>
+              <label>
+                Admin password
+                <input
+                  type="password"
+                  value={adminPassword}
+                  onChange={e => setAdminPassword(e.target.value)}
+                  placeholder="Enter password"
+                  required
+                  autoFocus
+                />
+              </label>
+              <button className="gold-button" type="submit">Sign in to Admin <ArrowRight size={16} /></button>
+              {adminError && <p className="form-message">{adminError}</p>}
+            </form>
+          </div>
+        ) : (
+          <div className="admin-dashboard-full">
+            <div className="admin-stats-row">
+              <div className="admin-stat-card">
+                <span>Gallery Items</span>
+                <strong>{gallery.length}</strong>
+              </div>
+              <div className="admin-stat-card">
+                <span>Home Media</span>
+                <strong>{heroMedia.length}</strong>
+              </div>
+              <div className="admin-stat-card">
+                <span>Bookings</span>
+                <strong>{reservations.length}</strong>
+              </div>
+              <div className="admin-stat-card">
+                <span>WhatsApp Contact</span>
+                <strong style={{ fontSize: '18px', marginTop: '10px' }}>+{phone.replace(/\D/g, '') || '919566577729'}</strong>
+              </div>
+            </div>
+
+            {adminNotice && <p className="admin-notice" style={{ borderRadius: '4px', marginBottom: '20px' }}>{adminNotice}</p>}
+
+            <div className="admin-page-card">
+              <div className="admin-page-tabs">
+                <button className={adminTab === 'gallery' ? 'active' : ''} onClick={() => setAdminTab('gallery')}>Gallery ({gallery.length})</button>
+                <button className={adminTab === 'home' ? 'active' : ''} onClick={() => setAdminTab('home')}>Home Media ({heroMedia.length})</button>
+                <button className={adminTab === 'bookings' ? 'active' : ''} onClick={() => setAdminTab('bookings')}>Bookings ({reservations.length})</button>
+                <button className={adminTab === 'settings' ? 'active' : ''} onClick={() => setAdminTab('settings')}>WhatsApp Settings</button>
+              </div>
+
+              {adminTab === 'gallery' && (
+                <>
+                  <form className="admin-add-form" onSubmit={addGallery}>
+                    <strong style={{ color: '#fff' }}>Add a gallery photo or video</strong>
+                    <div className="admin-upload-zone">
+                      <label className={`admin-file-label ${uploading ? 'uploading' : ''}`}>
+                        <input
+                          type="file"
+                          accept="image/*,video/*"
+                          style={{ display: 'none' }}
+                          disabled={uploading}
+                          onChange={async e => {
+                            const file = e.target.files?.[0]
+                            if (!file) return
+                            try {
+                              const { url, mediaType } = await uploadFile(file)
+                              setNewMedia(m => ({ ...m, image_url: url, media_type: mediaType, title: m.title || file.name.replace(/\.[^/.]+$/, '') }))
+                            } catch {}
+                          }}
+                        />
+                        <span>{uploading ? '⏳ Uploading...' : '📁 Upload photo / video'}</span>
+                      </label>
+                      <span className="admin-upload-hint">Uploads directly to Cloudinary or paste public URL below</span>
+                    </div>
+                    <input
+                      style={{ color: '#fff', borderColor: '#ffffff26' }}
+                      value={newMedia.title}
+                      onChange={e => setNewMedia({ ...newMedia, title: e.target.value })}
+                      placeholder="Title"
+                      required
+                    />
+                    <input
+                      style={{ color: '#fff', borderColor: '#ffffff26' }}
+                      type="url"
+                      value={newMedia.image_url}
+                      onChange={e => setNewMedia({ ...newMedia, image_url: e.target.value })}
+                      placeholder="Public image or video URL (auto-filled on upload)"
+                      required
+                    />
+                    <div>
+                      <select
+                        style={{ color: '#fff', borderColor: '#ffffff26', background: '#1b0b0f' }}
+                        value={newMedia.media_type}
+                        onChange={e => setNewMedia({ ...newMedia, media_type: e.target.value })}
+                      >
+                        <option value="image">Image</option>
+                        <option value="video">Video</option>
+                      </select>
+                      <input
+                        style={{ color: '#fff', borderColor: '#ffffff26' }}
+                        value={newMedia.category}
+                        onChange={e => setNewMedia({ ...newMedia, category: e.target.value })}
+                        placeholder="Category"
+                      />
+                      <button className="gold-button" disabled={uploading}>Add item <Plus size={15} /></button>
+                    </div>
+                  </form>
+                  <div className="admin-full-grid">
+                    {gallery.map(item => (
+                      <article className="admin-full-card" key={item.id}>
+                        {item.media_type === 'video' ? <video src={item.image_url} controls muted preload="metadata" /> : <img src={item.image_url} alt="" loading="lazy" />}
+                        <div className="admin-card-body">
+                          <h4>{item.title}</h4>
+                          <small>{item.category || 'Gallery'} · {item.media_type || 'image'}</small>
+                        </div>
+                        <button className="admin-card-del" onClick={() => removeItem('gallery', item.id)} aria-label={`Delete ${item.title}`} title="Delete"><X size={16} /></button>
+                      </article>
+                    ))}
+                  </div>
+                </>
+              )}
+
+              {adminTab === 'home' && (
+                <>
+                  <form className="admin-add-form" onSubmit={addHero}>
+                    <strong style={{ color: '#fff' }}>Add home section media</strong>
+                    <div className="admin-upload-zone">
+                      <label className={`admin-file-label ${uploading ? 'uploading' : ''}`}>
+                        <input
+                          type="file"
+                          accept="image/*,video/*"
+                          style={{ display: 'none' }}
+                          disabled={uploading}
+                          onChange={async e => {
+                            const file = e.target.files?.[0]
+                            if (!file) return
+                            try {
+                              const { url, mediaType } = await uploadFile(file)
+                              setHeroForm(m => ({ ...m, media_url: url, media_type: mediaType, title: m.title || file.name.replace(/\.[^/.]+$/, '') }))
+                            } catch {}
+                          }}
+                        />
+                        <span>{uploading ? '⏳ Uploading...' : '📁 Upload photo / video'}</span>
+                      </label>
+                      <span className="admin-upload-hint">Uploads directly to Cloudinary or paste public URL below</span>
+                    </div>
+                    <input
+                      style={{ color: '#fff', borderColor: '#ffffff26' }}
+                      value={heroForm.title}
+                      onChange={e => setHeroForm({ ...heroForm, title: e.target.value })}
+                      placeholder="Short title"
+                      required
+                    />
+                    <input
+                      style={{ color: '#fff', borderColor: '#ffffff26' }}
+                      type="url"
+                      value={heroForm.media_url}
+                      onChange={e => setHeroForm({ ...heroForm, media_url: e.target.value })}
+                      placeholder="Public image or video URL (auto-filled on upload)"
+                      required
+                    />
+                    <div>
+                      <select
+                        style={{ color: '#fff', borderColor: '#ffffff26', background: '#1b0b0f' }}
+                        value={heroForm.media_type}
+                        onChange={e => setHeroForm({ ...heroForm, media_type: e.target.value })}
+                      >
+                        <option value="image">Image</option>
+                        <option value="video">Video</option>
+                      </select>
+                      <button className="gold-button" disabled={uploading}>Add to home <Plus size={15} /></button>
+                    </div>
+                  </form>
+                  <p className="admin-help" style={{ color: '#bca99f', marginTop: '12px' }}>Media is uploaded to your Cloudinary storage and saved to your Neon database.</p>
+                  <div className="admin-full-grid">
+                    {heroMedia.map(item => (
+                      <article className="admin-full-card" key={item.id}>
+                        {item.media_type === 'video' ? <video src={item.media_url} controls muted preload="metadata" /> : <img src={item.media_url} alt="" loading="lazy" />}
+                        <div className="admin-card-body">
+                          <h4>{item.title}</h4>
+                          <small>Home section · {item.media_type}</small>
+                        </div>
+                        <button className="admin-card-del" onClick={() => removeItem('hero-media', item.id)} aria-label={`Delete ${item.title}`} title="Delete"><X size={16} /></button>
+                      </article>
+                    ))}
+                  </div>
+                </>
+              )}
+
+              {adminTab === 'bookings' && (
+                <div>
+                  <strong style={{ color: '#fff', fontSize: '18px', display: 'block', marginBottom: '12px' }}>Guest Reservations ({reservations.length})</strong>
+                  {reservations.length ? (
+                    <div style={{ overflowX: 'auto' }}>
+                      <table className="admin-table">
+                        <thead>
+                          <tr>
+                            <th>Guest Name</th>
+                            <th>Date & Time</th>
+                            <th>Party Size</th>
+                            <th>Special Notes</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {reservations.map(b => (
+                            <tr key={b.id}>
+                              <td><strong>{b.name}</strong></td>
+                              <td>{b.date} at {b.time}</td>
+                              <td>{b.members} {b.members === 1 ? 'guest' : 'guests'}</td>
+                              <td>{b.note || '—'}</td>
+                              <td>
+                                <button className="del-btn" onClick={() => removeItem('reservations', b.id)}>Remove</button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  ) : (
+                    <p className="admin-help" style={{ color: '#bca99f', marginTop: '16px' }}>No reservations yet. New requests appear here as soon as guests send them.</p>
+                  )}
+                </div>
+              )}
+
+              {adminTab === 'settings' && (
+                <form className="admin-add-form settings-form" onSubmit={savePhone}>
+                  <strong style={{ color: '#fff' }}>WhatsApp Contact</strong>
+                  <p style={{ color: '#bca99f' }}>Use the full country code and number without spaces, for example 919876543210.</p>
+                  <label style={{ color: '#e8d9cd' }}>
+                    WhatsApp number
+                    <input
+                      style={{ color: '#fff', borderColor: '#ffffff26' }}
+                      value={phone}
+                      onChange={e => setPhone(e.target.value)}
+                      placeholder="919566577729"
+                    />
+                  </label>
+                  <button className="gold-button" style={{ marginTop: '12px' }}>Save number <Check size={15} /></button>
+                </form>
+              )}
+            </div>
+          </div>
+        )}
+      </main>
+    </div>
+  )
+}
+
 function App() {
   const [gallery, setGallery] = useState(initialGallery)
   const [heroMedia, setHeroMedia] = useState([])
@@ -149,19 +523,14 @@ function App() {
   const [faqOpen, setFaqOpen] = useState(-1)
   const [form, setForm] = useState({ name: '', date: '', time: '', members: '2', note: '' })
   const [bookingState, setBookingState] = useState('')
-  const [adminOpen, setAdminOpen] = useState(false)
   const [token, setToken] = useState(sessionStorage.getItem('tck_admin_token') || '')
-  const [adminPassword, setAdminPassword] = useState('')
-  const [adminError, setAdminError] = useState('')
-  const [adminTab, setAdminTab] = useState('gallery')
-  const [newMedia, setNewMedia] = useState({ title: '', image_url: '', category: 'From the kitchen', media_type: 'image' })
-  const [heroForm, setHeroForm] = useState({ title: '', media_url: '', media_type: 'image' })
   const [uploading, setUploading] = useState(false)
   const [adminNotice, setAdminNotice] = useState('')
   const [reservations, setReservations] = useState([])
   const [heroStage, setHeroStage] = useState(0)
   const [lightbox, setLightbox] = useState(-1)
   const [offerOpen, setOfferOpen] = useState(false)
+
   useEffect(() => {
     if (routeOf() === 'admin') return
     const timer = setTimeout(() => setOfferOpen(true), 400)
@@ -183,13 +552,18 @@ function App() {
     onScroll(); window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
+
   useEffect(() => {
     const io = new IntersectionObserver(entries => entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target) } }), { threshold: 0.12 })
     document.querySelectorAll('.reveal:not(.in)').forEach(el => io.observe(el))
     return () => io.disconnect()
   }, [gallery, page])
-  useEffect(() => { setAdminOpen(route === 'admin'); document.title = `The Chennai Kitchenn — ${TITLES[route]}`; if (page === 'home') setHeroStage(0) }, [route])
-  const closeAdmin = () => { setAdminOpen(false); if (route === 'admin') go('home') }
+
+  useEffect(() => {
+    document.title = `The Chennai Kitchenn — ${TITLES[route] || 'Authentic Cuisine'}`
+    if (page === 'home') setHeroStage(0)
+  }, [route])
+
   const stepLightbox = d => setLightbox(i => (i + d + gallery.length) % gallery.length)
   useEffect(() => {
     if (lightbox < 0) return
@@ -205,30 +579,32 @@ function App() {
       if (data.whatsappPhone) setPhone(data.whatsappPhone)
     }).catch(() => {})
   }, [])
+
   const goTo = id => { setMenuOpen(false); go({ home: 'home', story: 'about', gallery: 'gallery', reserve: 'contact', visit: 'home' }[id] || 'home') }
   const jumpTo = id => { if (page === 'home') document.getElementById({ story: 'story', gallery: 'gallery', reserve: 'reserve' }[id])?.scrollIntoView({ behavior: 'smooth' }); else goTo(id) }
   const whatsappUrl = (message = 'Hello The Chennai Kitchen! I have a question.') => phone ? `https://wa.me/${phone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}` : `https://wa.me/?text=${encodeURIComponent(message)}`
   const updateForm = e => setForm({ ...form, [e.target.name]: e.target.value })
+
   const submitBooking = async e => {
     e.preventDefault(); setBookingState('sending')
     const message = `Hello The Chennai Kitchen! I'd like to reserve a table.\n\nName: ${form.name}\nDate: ${form.date}\nTime: ${form.time}\nGuests: ${form.members}${form.note ? `\nSpecial note: ${form.note}` : ''}`
-    const wa = window.open('', '_blank') // opened inside the click so phones do not block it
+    const wa = window.open('', '_blank')
     try {
       await api('/reservations', { method: 'POST', body: JSON.stringify(form) })
       setBookingState('sent')
     } catch (err) { setBookingState(err.message === 'Failed to fetch' ? 'offline' : 'error') }
     if (wa) { wa.opener = null; wa.location.href = whatsappUrl(message) } else window.location.href = whatsappUrl(message)
   }
+
   const refreshAdmin = async () => {
     const [data, bookings] = await Promise.all([api('/admin/content', { token }), api('/admin/reservations', { token })])
     setGallery(data.gallery); setHeroMedia(data.heroMedia); setPhone(data.whatsappPhone || ''); setReservations(bookings.reservations || [])
   }
-  const loginAdmin = async e => {
-    e.preventDefault(); setAdminError('')
-    try { const data = await api('/admin/login', { method: 'POST', body: JSON.stringify({ password: adminPassword }) }); setToken(data.token); sessionStorage.setItem('tck_admin_token', data.token); setAdminPassword(''); await refreshAdmin() }
-    catch (err) { setAdminError(err.message) }
-  }
-  useEffect(() => { if (token && adminOpen) refreshAdmin().catch(() => { setToken(''); sessionStorage.removeItem('tck_admin_token') }) }, [token, adminOpen])
+
+  useEffect(() => {
+    if (token && route === 'admin') refreshAdmin().catch(() => { setToken(''); sessionStorage.removeItem('tck_admin_token') })
+  }, [token, route])
+
   const uploadFile = async (file) => {
     setUploading(true)
     setAdminNotice(`Uploading ${file.name} to Cloudinary...`)
@@ -256,10 +632,27 @@ function App() {
       setUploading(false)
     }
   }
-  const addGallery = async e => { e.preventDefault(); try { await api('/admin/gallery', { method: 'POST', token, body: JSON.stringify(newMedia) }); setNewMedia({ title: '', image_url: '', category: 'From the kitchen', media_type: 'image' }); setAdminNotice('Gallery item added.'); await refreshAdmin() } catch (err) { setAdminNotice(err.message) } }
-  const addHero = async e => { e.preventDefault(); try { await api('/admin/hero-media', { method: 'POST', token, body: JSON.stringify(heroForm) }); setHeroForm({ title: '', media_url: '', media_type: 'image' }); setAdminNotice('Home media added.'); await refreshAdmin() } catch (err) { setAdminNotice(err.message) } }
-  const removeItem = async (kind, id) => { try { await api(`/admin/${kind}/${id}`, { method: 'DELETE', token }); setAdminNotice(kind === 'reservations' ? 'Booking removed.' : 'Item removed. Its URL record has been deleted from the database.'); await refreshAdmin() } catch (err) { setAdminNotice(err.message) } }
-  const savePhone = async e => { e.preventDefault(); try { await api('/admin/settings', { method: 'PUT', token, body: JSON.stringify({ whatsappPhone: phone }) }); setAdminNotice('WhatsApp number saved.') } catch (err) { setAdminNotice(err.message) } }
+
+  if (route === 'admin') {
+    return (
+      <AdminPage
+        go={go}
+        token={token}
+        setToken={setToken}
+        phone={phone}
+        setPhone={setPhone}
+        gallery={gallery}
+        heroMedia={heroMedia}
+        reservations={reservations}
+        refreshAdmin={refreshAdmin}
+        uploadFile={uploadFile}
+        uploading={uploading}
+        adminNotice={adminNotice}
+        setAdminNotice={setAdminNotice}
+      />
+    )
+  }
+
   const currentCopy = heroStages[heroStage]
   const currentMedia = heroMedia[0]
   const heroUrl = currentMedia?.media_url
@@ -288,6 +681,36 @@ function App() {
   const quoteSection = (
       <section className="quote-band reveal"><div className="quote-decoration">“</div><p>The secret ingredient is always<br/><em>one more person at the table.</em></p><span>— OUR KIND OF RECIPE</span></section>
   )
+  const reviewsSection = (
+    <section className="reviews-section" id="reviews">
+      <div className="section-heading reveal">
+        <div>
+          <span className="eyebrow dark"><span></span> WORDS FROM OUR GUESTS</span>
+          <h2>Loved by those<br/><em>who pulled up a chair.</em></h2>
+        </div>
+        <p>Real stories, generous plates, and the kind of feedback that keeps our kitchen firing each morning.</p>
+      </div>
+      <div className="reviews-grid">
+        {reviews.map((r, i) => (
+          <article className="review-card reveal" style={{ '--d': `${i * 90}ms` }} key={r.id}>
+            <div className="review-stars" aria-label={`${r.rating} out of 5 stars`}>
+              {Array.from({ length: r.rating }).map((_, s) => (
+                <Star key={s} size={15} fill="currentColor" stroke="none" />
+              ))}
+            </div>
+            <p className="review-comment">“{r.comment}”</p>
+            <div className="review-meta">
+              <div className="review-author">
+                <strong>{r.name}</strong>
+                <span>{r.location} · <small>{r.date}</small></span>
+              </div>
+              <span className="review-dish">{r.dish}</span>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  )
   const reserveSection = (
       <section className="reserve-section" id="reserve"><div className="reserve-photo reveal"><img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1300&q=85" alt="Warm restaurant dining room" loading="lazy"/><div className="photo-label"><span>THE GOOD SEATS</span><span>ARE WAITING</span></div></div><div className="reserve-content reveal"><span className="eyebrow"><span></span> PULL UP A CHAIR</span><h2>Save a place<br/><em>for you.</em></h2><p className="reserve-intro">Tell us when you’re coming. We’ll set the table and be ready with something delicious.</p>
           <form className="booking-form" onSubmit={submitBooking}><label>Your name<input name="name" value={form.name} onChange={updateForm} placeholder="What should we call you?" required maxLength="100"/></label><div className="form-row"><label>Date<input type="date" name="date" value={form.date} onChange={updateForm} min={new Date().toISOString().slice(0, 10)} required/></label><label>Time<select name="time" value={form.time} onChange={updateForm} required><option value="">Choose a time</option>{['12:00 PM','12:30 PM','1:00 PM','1:30 PM','2:00 PM','7:00 PM','7:30 PM','8:00 PM','8:30 PM','9:00 PM','9:30 PM'].map(t => <option key={t}>{t}</option>)}</select></label></div><div className="form-row"><label>Number of guests<select name="members" value={form.members} onChange={updateForm}>{Array.from({length: 12}, (_, i) => <option key={i + 1} value={i + 1}>{i + 1} {i ? 'guests' : 'guest'}</option>)}</select></label><label>Special note <span className="optional">(optional)</span><input name="note" value={form.note} onChange={updateForm} placeholder="A birthday, a little extra spice…" maxLength="500"/></label></div><button className="gold-button submit-button" type="submit" disabled={bookingState === 'sending'}>{bookingState === 'sending' ? 'Sending…' : 'Request your table'}<ArrowRight size={17}/></button>{bookingState === 'sent' && <p className="form-message success"><Check size={15}/> Reservation saved. Finish sending your request in WhatsApp.</p>}{bookingState === 'offline' && <p className="form-message">WhatsApp is ready. Connect the backend to save reservations.</p>}{bookingState === 'error' && <p className="form-message">We couldn’t save your request, but you can still send it on WhatsApp.</p>}</form>
@@ -297,7 +720,7 @@ function App() {
       <section className="social-section"><div className="reveal"><span className="eyebrow dark"><span></span> FIND US ONLINE</span><h2>Follow along,<br/><em>say hello.</em></h2></div><div className="social-row reveal">{socials.map(s => <a key={s.name} href={s.url} target="_blank" rel="noreferrer"><s.Icon size={20}/><span>{s.name}</span></a>)}</div></section>
   )
   const faqSection = (
-      <section className="faq-section"><div className="faq-heading reveal"><span className="eyebrow"><span></span> GOOD TO KNOW</span><h2>A few little<br/><em>things you asked.</em></h2></div><div className="faq-list">{faqs.map(([q, a], i) => <div className={`faq-item reveal ${faqOpen === i ? 'expanded' : ''}`} style={{ '--d': `${i * 70}ms` }} key={q}><button onClick={() => setFaqOpen(faqOpen === i ? -1 : i)}><span>{q}</span>{faqOpen === i ? <Minus size={17}/> : <Plus size={17}/>}</button><div className="faq-answer"><p>{a}</p></div></div>)}</div></section>
+      <section className="faq-section"><div className="faq-heading reveal"><span className="eyebrow"><span></span> GOOD TO KNOW</span><h2>A few little<br/><em>things you asked.</em></h2></div><div className="faq-list reveal">{faqs.map(([q, a], i) => <div className={`faq-item ${faqOpen === i ? 'expanded' : ''}`} key={q}><button onClick={() => setFaqOpen(faqOpen === i ? -1 : i)} aria-expanded={faqOpen === i}><span>{q}</span>{faqOpen === i ? <Minus size={17}/> : <Plus size={17}/>}</button><div className="faq-answer"><p>{a}</p></div></div>)}</div></section>
   )
   return <>
     <div className="scroll-progress" aria-hidden="true"></div>
@@ -308,8 +731,8 @@ function App() {
     </header>
 
     <main key={page} className="page">
-      {page === 'home' && <>{heroSection}{visitSection}{introSection}{foodSection}{quoteSection}{reserveSection}{faqSection}</>}
-      {page === 'about' && <>{introSection}{quoteSection}</>}
+      {page === 'home' && <>{heroSection}{visitSection}{introSection}{foodSection}{quoteSection}{reviewsSection}{reserveSection}{faqSection}</>}
+      {page === 'about' && <>{introSection}{quoteSection}{reviewsSection}</>}
       {page === 'gallery' && <>{foodSection}</>}
       {page === 'contact' && <>{reserveSection}{socialSection}{faqSection}</>}
     </main>
@@ -320,41 +743,6 @@ function App() {
 
     {offerOpen && <div className="offer-backdrop" onClick={() => setOfferOpen(false)}><div className="poster-pop" role="dialog" aria-modal="true" aria-label="Grand opening offer: buy 1 biryani, get 1 free" onClick={e => e.stopPropagation()}><button className="poster-close" onClick={() => setOfferOpen(false)} aria-label="Close offer"><X size={20}/></button><img src={POSTER} alt="The Chennai Kitchen grand opening on 15 November 2026. Offer days 15 to 18 November: buy 1 biryani, get 1 free."/></div></div>}
     {lightbox >= 0 && gallery[lightbox] && <div className="lightbox" role="dialog" aria-modal="true" onClick={e => { if (e.target === e.currentTarget) setLightbox(-1) }}><button className="lb-close" onClick={() => setLightbox(-1)} aria-label="Close"><X size={22}/></button><button className="lb-nav lb-prev" onClick={() => stepLightbox(-1)} aria-label="Previous"><ArrowRight size={22}/></button>{gallery[lightbox].media_type === 'video' ? <video key={lightbox} src={gallery[lightbox].image_url} controls autoPlay loop playsInline/> : <img key={lightbox} src={gallery[lightbox].image_url} alt={gallery[lightbox].title}/>}<button className="lb-nav lb-next" onClick={() => stepLightbox(1)} aria-label="Next"><ArrowRight size={22}/></button><p><span>{gallery[lightbox].category}</span>{gallery[lightbox].title}<em>{lightbox + 1} / {gallery.length}</em></p></div>}
-    {adminOpen && <div className="modal-backdrop" onClick={e => { if (e.target === e.currentTarget) closeAdmin() }}><section className="admin-modal"><button className="modal-close" onClick={() => closeAdmin()} aria-label="Close"><X size={18}/></button>{!token ? <div className="admin-login"><span className="eyebrow dark"><span></span> THE BACK OF HOUSE</span><h2>Admin sign in</h2><p>Manage the photos and videos visitors see on your site.</p><form onSubmit={loginAdmin}><label>Admin password<input type="password" value={adminPassword} onChange={e => setAdminPassword(e.target.value)} required autoFocus/></label><button className="gold-button">Sign in <ArrowRight size={16}/></button>{adminError && <p className="form-message">{adminError}</p>}</form></div> : <div className="admin-dashboard"><div className="admin-top"><div><span className="eyebrow dark"><span></span> THE BACK OF HOUSE</span><h2>Content studio</h2></div><button className="signout" onClick={() => { setToken(''); sessionStorage.removeItem('tck_admin_token') }}>Sign out</button></div><div className="admin-tabs"><button className={adminTab === 'gallery' ? 'active' : ''} onClick={() => setAdminTab('gallery')}>Gallery</button><button className={adminTab === 'home' ? 'active' : ''} onClick={() => setAdminTab('home')}>Home media</button><button className={adminTab === 'bookings' ? 'active' : ''} onClick={() => setAdminTab('bookings')}>Bookings{reservations.length ? ` (${reservations.length})` : ''}</button><button className={adminTab === 'settings' ? 'active' : ''} onClick={() => setAdminTab('settings')}>Contact</button></div>{adminNotice && <p className="admin-notice">{adminNotice}</p>}
-      {adminTab === 'gallery' && <><form className="admin-add-form" onSubmit={addGallery}><strong>Add a gallery photo or video</strong>
-        <div className="admin-upload-zone">
-          <label className={`admin-file-label ${uploading ? 'uploading' : ''}`}>
-            <input type="file" accept="image/*,video/*" style={{ display: 'none' }} disabled={uploading} onChange={async e => {
-              const file = e.target.files?.[0]
-              if (!file) return
-              try {
-                const { url, mediaType } = await uploadFile(file)
-                setNewMedia(m => ({ ...m, image_url: url, media_type: mediaType, title: m.title || file.name.replace(/\.[^/.]+$/, '') }))
-              } catch {}
-            }} />
-            <span>{uploading ? '⏳ Uploading...' : '📁 Upload photo / video'}</span>
-          </label>
-          <span className="admin-upload-hint">or paste URL below</span>
-        </div>
-        <input value={newMedia.title} onChange={e => setNewMedia({ ...newMedia, title: e.target.value })} placeholder="Title" required/><input type="url" value={newMedia.image_url} onChange={e => setNewMedia({ ...newMedia, image_url: e.target.value })} placeholder="Public image or video URL (auto-filled on upload)" required/><div><select value={newMedia.media_type} onChange={e => setNewMedia({ ...newMedia, media_type: e.target.value })}><option value="image">Image</option><option value="video">Video</option></select><input value={newMedia.category} onChange={e => setNewMedia({ ...newMedia, category: e.target.value })} placeholder="Category"/><button className="gold-button" disabled={uploading}>Add item <Plus size={15}/></button></div></form><div className="admin-items">{gallery.map(item => <article key={item.id}>{item.media_type === 'video' ? <div className="video-thumb">VIDEO</div> : <img src={item.image_url} alt=""/>}<span><strong>{item.title}</strong><small>{item.category || 'Gallery'} · {item.media_type || 'image'}</small></span><button onClick={() => removeItem('gallery', item.id)} aria-label={`Delete ${item.title}`}><X size={17}/></button></article>)}</div></>}
-      {adminTab === 'home' && <><form className="admin-add-form" onSubmit={addHero}><strong>Add home section media</strong>
-        <div className="admin-upload-zone">
-          <label className={`admin-file-label ${uploading ? 'uploading' : ''}`}>
-            <input type="file" accept="image/*,video/*" style={{ display: 'none' }} disabled={uploading} onChange={async e => {
-              const file = e.target.files?.[0]
-              if (!file) return
-              try {
-                const { url, mediaType } = await uploadFile(file)
-                setHeroForm(m => ({ ...m, media_url: url, media_type: mediaType, title: m.title || file.name.replace(/\.[^/.]+$/, '') }))
-              } catch {}
-            }} />
-            <span>{uploading ? '⏳ Uploading...' : '📁 Upload photo / video'}</span>
-          </label>
-          <span className="admin-upload-hint">or paste URL below</span>
-        </div>
-        <input value={heroForm.title} onChange={e => setHeroForm({ ...heroForm, title: e.target.value })} placeholder="Short title" required/><input type="url" value={heroForm.media_url} onChange={e => setHeroForm({ ...heroForm, media_url: e.target.value })} placeholder="Public image or video URL (auto-filled on upload)" required/><div><select value={heroForm.media_type} onChange={e => setHeroForm({ ...heroForm, media_type: e.target.value })}><option value="image">Image</option><option value="video">Video</option></select><button className="gold-button" disabled={uploading}>Add to home <Plus size={15}/></button></div></form><p className="admin-help">Media is uploaded to your Cloudinary storage and saved to your Neon database.</p><div className="admin-items">{heroMedia.map(item => <article key={item.id}>{item.media_type === 'video' ? <div className="video-thumb">VIDEO</div> : <img src={item.media_url} alt=""/>}<span><strong>{item.title}</strong><small>Home section · {item.media_type}</small></span><button onClick={() => removeItem('hero-media', item.id)} aria-label={`Delete ${item.title}`}><X size={17}/></button></article>)}</div></>}
-      {adminTab === 'bookings' && <div className="admin-items bookings">{reservations.length ? reservations.map(b => <article key={b.id}><span><strong>{b.name} · {b.members} {b.members === 1 ? 'guest' : 'guests'}</strong><small>{b.date} at {b.time}{b.note ? ` · ${b.note}` : ''}</small></span><button onClick={() => removeItem('reservations', b.id)} aria-label={`Delete booking for ${b.name}`}><X size={17}/></button></article>) : <p className="admin-help">No reservations yet. New requests appear here as soon as guests send them.</p>}</div>}
-      {adminTab === 'settings' && <form className="admin-add-form settings-form" onSubmit={savePhone}><strong>WhatsApp contact</strong><p>Use the full country code and number without spaces, for example 919876543210.</p><label>WhatsApp number<input value={phone} onChange={e => setPhone(e.target.value)} placeholder="919876543210"/></label><button className="gold-button">Save number <Check size={15}/></button></form>}</div>}</section></div>}
   </>
 }
 
