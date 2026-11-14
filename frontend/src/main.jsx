@@ -808,7 +808,7 @@ function App() {
 
   useEffect(() => {
     if (routeOf() === 'admin' || loading) return
-    const timer = setTimeout(() => setOfferOpen(true), 2000)
+    const timer = setTimeout(() => setOfferOpen(true), 750)
     return () => clearTimeout(timer)
   }, [loading])
   useEffect(() => {
