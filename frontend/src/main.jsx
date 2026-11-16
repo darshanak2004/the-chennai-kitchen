@@ -314,13 +314,12 @@ function PressMarquee() {
 }
 
 function MenuShowcase({ items = SIGNATURE_DISHES, onReserve }) {
-  const [activeCat, setActiveCat] = useState('All')
+  const categories = ['Biryani', 'Tandoori', 'Starters', 'Gravy', 'Soup', 'Breads', 'Chinese', 'Juice']
+  const [activeCat, setActiveCat] = useState('Biryani')
   const [hoveredDish, setHoveredDish] = useState(null)
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
   const tabRefs = useRef({})
   const [sliderStyle, setSliderStyle] = useState({ left: 0, width: 0 })
-
-  const categories = ['All', 'Biryani', 'Tandoori', 'Starters', 'Gravy', 'Soup', 'Breads', 'Chinese', 'Juice']
 
   useEffect(() => {
     const btn = tabRefs.current[activeCat]
@@ -330,7 +329,7 @@ function MenuShowcase({ items = SIGNATURE_DISHES, onReserve }) {
     }
   }, [activeCat])
 
-  const filtered = activeCat === 'All' ? items : items.filter(d => d.category === activeCat)
+  const filtered = items.filter(d => d.category === activeCat)
 
   const handleMouseMove = e => {
     setMousePos({ x: e.clientX, y: e.clientY })
@@ -1060,12 +1059,28 @@ function App() {
   )
   const marqueeSection = <PressMarquee />
   const introSection = (
-      <section className="intro-section" id="story"><div className="intro-kicker"><span>01</span><i></i> A TABLE FOR EVERYONE</div><div className="intro-copy reveal"><h2>Good food brings<br/><em>us together.</em></h2><div className="intro-text"><p>At The Chennai Kitchen, we believe the best meals are never rushed. They begin with familiar spices, the slow perfume of a pot on dum, and the people you love gathered around the table.</p><p>Rooted in the flavours of South India and made for sharing, every plate carries a little warmth from our kitchen to yours.</p><button className="text-link" onClick={() => jumpTo('gallery')}>A peek into our kitchen <ArrowRight size={16}/></button></div></div>
-        <div className="story-stats-grid">
-          <StatCounter end={15} label="Years of Heritage" suffix="+" />
-          <StatCounter end={200} label="Authentic Dishes" suffix="+" />
-          <StatCounter end={50} label="Happy Guests" suffix="k+" />
-          <StatCounter end={100} label="Dum & Woodfire" suffix="%" />
+      <section className="intro-section" id="story"><div className="intro-copy reveal"><h2>Good food brings<br/><em>us together.</em></h2><div className="intro-text"><p>At The Chennai Kitchen, we believe the best meals are never rushed. They begin with familiar spices, the slow perfume of a pot on dum, and the people you love gathered around the table.</p><p>Rooted in the flavours of South India and made for sharing, every plate carries a little warmth from our kitchen to yours.</p><button className="text-link" onClick={() => jumpTo('gallery')}>A peek into our kitchen <ArrowRight size={16}/></button></div></div>
+        <div className="branch-hallmarks-grid reveal">
+          <div className="hallmark-card">
+            <div className="hallmark-icon-wrap"><ChefHat size={22}/></div>
+            <strong>Authentic Woodfire Dum</strong>
+            <p>Sealed in heavy handis, slow-cooked on gentle charcoal embers for unmatched fragrance.</p>
+          </div>
+          <div className="hallmark-card">
+            <div className="hallmark-icon-wrap"><Award size={22}/></div>
+            <strong>Our Flagship Kitchen</strong>
+            <p>Our inaugural dining destination in Ambattur, bringing authentic South Indian feasts.</p>
+          </div>
+          <div className="hallmark-card">
+            <div className="hallmark-icon-wrap"><Sparkles size={22}/></div>
+            <strong>Pure Grains & Spices</strong>
+            <p>Aromatic Seeraga Samba & aged Basmati with hand-ground country spices.</p>
+          </div>
+          <div className="hallmark-card">
+            <div className="hallmark-icon-wrap"><Utensils size={22}/></div>
+            <strong>Made Fresh Daily</strong>
+            <p>Spices roasted and marinades prepared each morning with zero artificial colors.</p>
+          </div>
         </div>
         <div className="story-chapters-grid reveal">
           <div className="story-chapters-visual">
@@ -1089,14 +1104,13 @@ function App() {
             </article>
           </div>
         </div>
-        <div className="about-cards reveal">{[[Utensils, 'Cooked on dum', 'Rice and meat sealed in the pot and left to slow-cook until every grain carries the masala.'], [Clock3, 'Made fresh daily', 'Spices are ground and marinades prepared each morning, so nothing sits around.'], [Check, 'Biryani and beyond', 'From dum biryani to South Indian favourites and Indo-Chinese plates, all under one roof.']].map(([Icon, t, d]) => <article key={t}><Icon size={22}/><h3>{t}</h3><p>{d}</p></article>)}</div><div className="intro-bottom"><span>FROM OUR KITCHEN, WITH LOVE</span><span>13° 04' N — CHENNAI</span></div></section>
+        <div className="about-cards reveal">{[[Utensils, 'Cooked on dum', 'Rice and meat sealed in the pot and left to slow-cook until every grain carries the masala.'], [Clock3, 'Made fresh daily', 'Spices are ground and marinades prepared each morning, so nothing sits around.'], [Check, 'Biryani and beyond', 'From dum biryani to South Indian favourites and Indo-Chinese plates, all under one roof.']].map(([Icon, t, d]) => <article key={t}><Icon size={22}/><h3>{t}</h3><p>{d}</p></article>)}</div></section>
   )
   const menuSection = (
       <section className="menu-section" id="menu">
         <div className="menu-section-header reveal">
           <div className="menu-header-flex">
             <div>
-              <span className="eyebrow dark"><span></span> OUR CULINARY REPERTOIRE</span>
               <h2>Signature Dishes &<br/><em>House Specials.</em></h2>
               <p>Crafted with slow patience, hand-ground country spices, and pure golden ghee. Explore our signature creations from each category.</p>
             </div>
@@ -1340,7 +1354,37 @@ function App() {
       {page === 'contact' && <>{reserveSection}{socialSection}{faqSection}</>}
     </main>
 
-    <footer className="footer"><div className="footer-main"><a className="brand footer-brand" href={HASH ? '#home' : '/'} onClick={e => { e.preventDefault(); goTo('home') }} aria-label="The Chennai Kitchen home"><img className="brand-logo" src="/logo.jpg" alt="The Chennai Kitchen — Authentic non-veg cuisine"/></a><p>Familiar flavours.<br/>A seat saved for you.</p><div className="footer-links"><button onClick={() => go('admin')}>Admin sign in</button><a href={whatsappUrl()} target="_blank" rel="noreferrer">WhatsApp us <ArrowUpRight size={14}/></a><a href="tel:+919894464472">Call 98944 64472</a><a href="https://instagram.com" target="_blank" rel="noreferrer">Instagram <Instagram size={14}/></a></div></div><div className="footer-bottom"><span>© 2026 THE CHENNAI KITCHEN</span><span>MADE WITH A LITTLE EXTRA GHEE</span><a href="#top" onClick={e => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }) }}>BACK TO TOP ↑</a></div></footer>
+    <footer className="footer">
+      <div className="footer-main">
+        <div className="footer-brand-wrap">
+          <a className="footer-brand-link" href={HASH ? '#home' : '/'} onClick={e => { e.preventDefault(); goTo('home') }} aria-label="The Chennai Kitchen home">
+            <img className="footer-logo-img" src="/logo.jpg" alt="The Chennai Kitchen — Authentic non-veg cuisine"/>
+            <span className="footer-brand-name">The Chennai Kitchenn</span>
+          </a>
+          <p className="footer-tagline">Familiar flavours.<br/>A seat saved for you.</p>
+        </div>
+        <div className="footer-info-col">
+          <span className="footer-col-title">Visit Us</span>
+          <p className="footer-address-text">No.15, 1st Floor, Ambattur Industrial Estate,<br/>Bus Stand Complex, MTH Road, Chennai 600058</p>
+        </div>
+        <div className="footer-links-col">
+          <span className="footer-col-title">Connect</span>
+          <div className="footer-links">
+            <a href={whatsappUrl()} target="_blank" rel="noreferrer">WhatsApp us <ArrowUpRight size={14}/></a>
+            <a href="tel:+919894464472">Call 98944 64472</a>
+            <a href="https://instagram.com/thechennaikitchen" target="_blank" rel="noreferrer">Instagram <Instagram size={14}/></a>
+          </div>
+        </div>
+      </div>
+      <div className="footer-bottom">
+        <span>© 2026 THE CHENNAI KITCHEN</span>
+        <span>MADE WITH A LITTLE EXTRA GHEE</span>
+        <div className="footer-bottom-actions">
+          <button className="footer-admin-btn" onClick={() => go('admin')}>Admin sign in</button>
+          <a href="#top" onClick={e => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }) }}>BACK TO TOP ↑</a>
+        </div>
+      </div>
+    </footer>
 
     <a className="whatsapp-float" href={whatsappUrl()} target="_blank" rel="noreferrer" aria-label="Contact us on WhatsApp"><span className="wa-pulse"></span><WaIcon/><span>Chat with us</span></a>
 
