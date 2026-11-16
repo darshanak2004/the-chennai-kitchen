@@ -100,59 +100,164 @@ const PRESS_MENTIONS = [
 ]
 
 const SIGNATURE_DISHES = [
+  // 1. Biryani
   {
-    id: 'm1',
-    name: 'Royal Dum Chicken Biryani',
-    price: '₹280',
-    category: 'Biryani & Mains',
-    desc: 'Long-grain aged basmati layered with tender chicken, whole spices, and caramelized shallots, slow-simmered on low woodfire.',
+    id: 'b1',
+    name: 'Chicken Biriyani (Basmathi)',
+    price: '₹259',
+    category: 'Biryani',
+    desc: 'Traditional authentic chicken biriyani with tender chicken pieces layered with Basmati rice, fresh and aromatic seasonings.',
     badge: 'House Special',
+    image: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=700&q=80'
+  },
+  {
+    id: 'b2',
+    name: 'Mutton Biriyani (Jeeraka Samba)',
+    price: '₹329',
+    category: 'Biryani',
+    desc: 'Tender mutton pieces slow cooked with fragrant seeraga samba, aromatic whole spices.',
+    badge: 'Chef’s Special',
     image: 'https://images.unsplash.com/photo-1633945274405-b6c8069047b0?auto=format&fit=crop&w=700&q=80'
   },
+
+  // 2. Tandoori
   {
-    id: 'm2',
-    name: 'Mutton Chukka Varuval',
-    price: '₹360',
-    category: 'Starters & Chukka',
-    desc: 'Tender baby mutton pan-roasted dry in freshly ground black pepper, shallots, curry leaves, and country ghee.',
-    badge: 'Chef’s Pick',
-    image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=700&q=80'
+    id: 't1',
+    name: 'Spcl Grill Chicken',
+    price: '₹149 / ₹299 / ₹599',
+    category: 'Tandoori',
+    desc: 'Perfectly marinated chicken, seasoned with handpicked spices and grilled until tender, juicy and delicious.',
+    badge: 'Tender & Juicy',
+    image: 'https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?auto=format&fit=crop&w=700&q=80'
   },
   {
-    id: 'm3',
-    name: 'Chettinad Pepper Chicken',
-    price: '₹260',
-    category: 'Starters & Chukka',
-    desc: 'Country-style chicken tossed in roasted Kalpasi stone flower, fennel seeds, and crushed pepper corns.',
+    id: 't2',
+    name: 'Spcl BBQ Chicken',
+    price: '₹149 / ₹299 / ₹599',
+    category: 'Tandoori',
+    desc: 'Juicy chicken coated in a rich blend of spices, BBQ sauces, slow grilled to perfection for deliciously smoky and savoury taste.',
+    badge: 'Smoky BBQ',
+    image: 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?auto=format&fit=crop&w=700&q=80'
+  },
+
+  // 3. Starters
+  {
+    id: 's1',
+    name: 'Chicken 65 Boneless',
+    price: '₹229',
+    category: 'Starters',
+    desc: 'Golden fried chicken bites bursting with spicy goodness, marinated in a house special blend of herbs and aromatic seasonings.',
+    badge: 'Crispy & Spicy',
+    image: 'https://images.unsplash.com/photo-1610057099443-fde8c4d50f91?auto=format&fit=crop&w=700&q=80'
+  },
+  {
+    id: 's2',
+    name: 'Mutton Chukka',
+    price: '₹250',
+    category: 'Starters',
+    desc: 'Tender Mutton pieces slow roasted with freshly ground black pepper, shallots, curry leaves and aromatic spices for an authentic South Indian flavour.',
     badge: 'Signature',
+    image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=700&q=80'
+  },
+
+  // 4. Gravy
+  {
+    id: 'g1',
+    name: 'Butter Chicken',
+    price: '₹179',
+    category: 'Gravy',
+    desc: 'Tender chicken pieces simmered in a rich, creamy tomato sauce gravy, enriched with butter, fresh cream and delicate blend of signature spices.',
+    badge: 'Rich & Creamy',
     image: 'https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?auto=format&fit=crop&w=700&q=80'
   },
   {
-    id: 'm4',
-    name: 'Madras Crispy Fish Fry',
-    price: '₹310',
-    category: 'Starters & Chukka',
-    desc: 'Fresh sea fish marinated in hand-crushed garlic, Kashmiri chilli, and lemon juice, tawa-fried crisp on order.',
-    badge: 'Coastal Special',
-    image: 'https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&w=700&q=80'
+    id: 'g2',
+    name: 'Mutton Roagan Josh',
+    price: '₹190',
+    category: 'Gravy',
+    desc: 'A juicy mutton chunks cooked to perfection in a vibrant red gravy infused with Kashmiri chillies.',
+    badge: 'Royal Gravy',
+    image: 'https://images.unsplash.com/photo-1545247181-516773cae7be?auto=format&fit=crop&w=700&q=80'
+  },
+
+  // 5. Soup
+  {
+    id: 'sp1',
+    name: 'Mutton Nalli Soup',
+    price: '₹149',
+    category: 'Soup',
+    desc: 'The richness of mutton marrow meets the warmth of crushed pepper and aromatic spices in this traditional delicacy.',
+    badge: 'Bone Marrow',
+    image: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=700&q=80'
   },
   {
-    id: 'm5',
-    name: 'Malabar Flaky Coin Parotta',
-    price: '₹55',
-    category: 'Breads & Desserts',
-    desc: 'Golden, multi-layered spiral bread hand-beaten and cooked crisp on a cast-iron skillet with rich mutton salna.',
-    badge: 'Must Try',
+    id: 'sp2',
+    name: 'Chicken Soup',
+    price: '₹139',
+    category: 'Soup',
+    desc: 'Delicately cooked chicken in a nourishing, spice-infused broth, finished with fresh herbs and a touch of pepper.',
+    badge: 'Nourishing',
+    image: 'https://images.unsplash.com/photo-1604152135912-04a022e23696?auto=format&fit=crop&w=700&q=80'
+  },
+
+  // 6. Breads
+  {
+    id: 'br1',
+    name: 'Butter Naan',
+    price: '₹59',
+    category: 'Breads',
+    desc: 'Fresh from the tandoor, this fluffy naan with melted butter for a rich.',
+    badge: 'Tandoor Fresh',
     image: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=700&q=80'
   },
   {
-    id: 'm6',
-    name: 'Chilled Elaneer Payasam',
-    price: '₹140',
-    category: 'Breads & Desserts',
-    desc: 'Sweet tender coconut pulp infused into chilled reduced milk, scented with green cardamom and toasted pistachios.',
-    badge: 'Sweet Finish',
-    image: 'https://images.unsplash.com/photo-1579954115545-a95591f28bfc?auto=format&fit=crop&w=700&q=80'
+    id: 'br2',
+    name: 'Garlic Naan',
+    price: '₹49',
+    category: 'Breads',
+    desc: 'Freshly baked naan layered with fragrant garlic and herbs, delivering a beautiful blend of smoky aroma and savoury flavour.',
+    badge: 'Aromatic',
+    image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=700&q=80'
+  },
+
+  // 7. Chinese
+  {
+    id: 'ch1',
+    name: 'Chicken Fried Rice',
+    price: '₹189',
+    category: 'Chinese',
+    desc: 'Tender chicken and perfectly cooked rice come together with crunchy vegetables, spring onions and signature sauces.',
+    badge: 'Wok Tossed',
+    image: 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=700&q=80'
+  },
+  {
+    id: 'ch2',
+    name: 'Schezwan Chicken Fried Rice',
+    price: '₹199',
+    category: 'Chinese',
+    desc: 'Long-grain rice tossed with flavourful chicken, fresh spring onions, crushed garlic and spicy Schezwan sauce for an Indo-Chinese taste.',
+    badge: 'Spicy Wok',
+    image: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=700&q=80'
+  },
+
+  // 8. Juice
+  {
+    id: 'jc1',
+    name: 'Green Mint Mojito',
+    price: '₹89',
+    category: 'Juice',
+    desc: 'Freshly crushed mint and lime infused with a hint of sweetness, topped with chilled soda for a refreshing finish.',
+    badge: 'Fresh Fizz',
+    image: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=700&q=80'
+  },
+  {
+    id: 'jc2',
+    name: 'Sunset Cooler',
+    price: '₹99',
+    category: 'Juice',
+    desc: 'Sweet, tangy and beautifully layered, this vibrant cooler brings together fruity flavours and refreshing citrus notes.',
+    badge: 'Signature Mocktail',
+    image: 'https://images.unsplash.com/photo-1536935338788-846bb9981813?auto=format&fit=crop&w=700&q=80'
   }
 ]
 
@@ -215,12 +320,13 @@ function MenuShowcase({ items = SIGNATURE_DISHES, onReserve }) {
   const tabRefs = useRef({})
   const [sliderStyle, setSliderStyle] = useState({ left: 0, width: 0 })
 
-  const categories = ['All', 'Biryani & Mains', 'Starters & Chukka', 'Breads & Desserts']
+  const categories = ['All', 'Biryani', 'Tandoori', 'Starters', 'Gravy', 'Soup', 'Breads', 'Chinese', 'Juice']
 
   useEffect(() => {
     const btn = tabRefs.current[activeCat]
     if (btn) {
       setSliderStyle({ left: btn.offsetLeft, width: btn.offsetWidth })
+      btn.scrollIntoView?.({ behavior: 'smooth', block: 'nearest', inline: 'center' })
     }
   }, [activeCat])
 
@@ -780,6 +886,8 @@ function App() {
   const [lightbox, setLightbox] = useState(-1)
   const [offerOpen, setOfferOpen] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [menuCardOpen, setMenuCardOpen] = useState(false)
+  const [menuCardPage, setMenuCardPage] = useState(0)
   const reserveBtnRef = useRef(null)
 
   useEffect(() => {
@@ -986,9 +1094,18 @@ function App() {
   const menuSection = (
       <section className="menu-section" id="menu">
         <div className="menu-section-header reveal">
-          <span className="eyebrow dark"><span></span> OUR CULINARY REPERTOIRE</span>
-          <h2>Signature Dishes &<br/><em>House Specials.</em></h2>
-          <p>Crafted with slow patience, hand-ground country spices, and pure golden ghee. Explore our signature creations and today’s kitchen favorites.</p>
+          <div className="menu-header-flex">
+            <div>
+              <span className="eyebrow dark"><span></span> OUR CULINARY REPERTOIRE</span>
+              <h2>Signature Dishes &<br/><em>House Specials.</em></h2>
+              <p>Crafted with slow patience, hand-ground country spices, and pure golden ghee. Explore our signature creations from each category.</p>
+            </div>
+            <button className="menu-card-btn" onClick={() => setMenuCardOpen(true)} aria-label="Open full printed menu card">
+              <Utensils size={15}/>
+              <span>View Full Menu Card</span>
+              <ArrowUpRight size={14}/>
+            </button>
+          </div>
         </div>
         <HorizontalSpecials gallery={gallery} onSelect={setLightbox} />
         <MenuShowcase items={SIGNATURE_DISHES} onReserve={() => jumpTo('reserve')} />
@@ -1229,6 +1346,24 @@ function App() {
 
     {offerOpen && <div className="offer-backdrop" onClick={() => setOfferOpen(false)}><div className="poster-pop" role="dialog" aria-modal="true" aria-label="Grand opening offer: buy 1 biryani, get 1 free" onClick={e => e.stopPropagation()}><button className="poster-close" onClick={() => setOfferOpen(false)} aria-label="Close offer"><X size={20}/></button><img src={POSTER} alt="The Chennai Kitchen grand opening on 15 November 2026. Offer days 15 to 18 November: buy 1 biryani, get 1 free."/></div></div>}
     {lightbox >= 0 && gallery[lightbox] && <div className="lightbox" role="dialog" aria-modal="true" onClick={e => { if (e.target === e.currentTarget) setLightbox(-1) }}><button className="lb-close" onClick={() => setLightbox(-1)} aria-label="Close"><X size={22}/></button><button className="lb-nav lb-prev" onClick={() => stepLightbox(-1)} aria-label="Previous"><ArrowRight size={22}/></button>{gallery[lightbox].media_type === 'video' ? <video key={lightbox} src={gallery[lightbox].image_url} controls autoPlay loop playsInline/> : <img key={lightbox} src={gallery[lightbox].image_url} alt={gallery[lightbox].title}/>}<button className="lb-nav lb-next" onClick={() => stepLightbox(1)} aria-label="Next"><ArrowRight size={22}/></button><p><span>{gallery[lightbox].category}</span>{gallery[lightbox].title}<em>{lightbox + 1} / {gallery.length}</em></p></div>}
+    {menuCardOpen && (
+      <div className="offer-backdrop" onClick={() => setMenuCardOpen(false)}>
+        <div className="menu-card-pop" role="dialog" aria-modal="true" aria-label="The Chennai Kitchen Full Menu Card" onClick={e => e.stopPropagation()}>
+          <button className="poster-close" onClick={() => setMenuCardOpen(false)} aria-label="Close menu card"><X size={20}/></button>
+          <div className="menu-card-pages-nav">
+            <button className={menuCardPage === 0 ? 'active' : ''} onClick={() => setMenuCardPage(0)}>
+              Side 1: Biryani · Tandoori · Starters · Gravy · Soup · Breads
+            </button>
+            <button className={menuCardPage === 1 ? 'active' : ''} onClick={() => setMenuCardPage(1)}>
+              Side 2: Chinese · Juice · Ice Cream
+            </button>
+          </div>
+          <div className="menu-card-img-container">
+            <img src={menuCardPage === 0 ? '/menu-page1.jpg' : '/menu-page2.jpg'} alt={`The Chennai Kitchen Complete Menu Card Side ${menuCardPage + 1}`} />
+          </div>
+        </div>
+      </div>
+    )}
   </>
 }
 
