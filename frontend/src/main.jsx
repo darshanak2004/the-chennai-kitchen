@@ -1,14 +1,16 @@
-﻿import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import { ArrowDown, ArrowRight, ArrowUpRight, Award, CalendarDays, Check, ChefHat, ChevronDown, ChevronLeft, Clock3, Facebook, Instagram, MapPin, Menu, Phone, Minus, Plus, Sparkles, Star, Utensils, X, Youtube } from 'lucide-react'
 import './style.css'
 
 const initialGallery = [
-  { id: 'g1', title: 'House special chicken biryani', image_url: 'https://images.unsplash.com/photo-1633945274405-b6c8069047b0?auto=format&fit=crop&w=1300&q=85', category: 'Biryani' },
-  { id: 'g2', title: 'A table set for sharing', image_url: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=1100&q=85', category: 'From the kitchen' },
-  { id: 'g3', title: 'Golden, flaky parotta', image_url: 'https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?auto=format&fit=crop&w=1100&q=85', category: 'South Indian' },
-  { id: 'g4', title: 'Slow-cooked, full of flavour', image_url: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=1100&q=85', category: 'From the kitchen' },
-  { id: 'g5', title: 'A little something sweet', image_url: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=1100&q=85', category: 'Something sweet' },
+  { id: 'g1', title: 'Mutton Biriyani (Jeeraka Samba)', image_url: '/dish-mutton-biriyani.jpg', category: 'Biryani' },
+  { id: 'g2', title: 'Curry Leaf Chicken', image_url: '/dish-curry-leaf-chicken.jpg', category: 'Starters' },
+  { id: 'g3', title: 'Chicken Pallipalayam', image_url: '/dish-chicken-pallipalayam.jpg', category: 'Starters' },
+  { id: 'g4', title: 'Mutton Kola Urundai', image_url: '/dish-mutton-kola-urundai.jpg', category: 'Starters' },
+  { id: 'g5', title: 'Mutton Fat Curry', image_url: '/dish-mutton-fat-curry.jpg', category: 'Gravy' },
+  { id: 'g6', title: 'Green Mint Mojito', image_url: '/dish-green-mint-mojito.jpg', category: 'Juice' },
+  { id: 'g7', title: 'Sunset', image_url: '/dish-sunset.jpg', category: 'Juice' },
 ]
 const HASH = !!window.__HASH_ROUTER
 const ADDRESS = 'Bus stop, Madras Thiruvallur High Rd, OT, Ambattur, Chennai, Tamil Nadu 600058'
