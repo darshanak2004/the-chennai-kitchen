@@ -1286,7 +1286,7 @@ function App() {
   )
   const marqueeSection = <PressMarquee />
   const introSection = (
-      <section className="intro-section" id="story"><div className="intro-copy reveal"><h2>Good food brings<br/><em>us together.</em></h2><div className="intro-text"><p>At The Chennai Kitchen, we believe the best meals are never rushed. They begin with familiar spices, the slow perfume of a pot on dum, and the people you love gathered around the table.</p><p>Rooted in the flavours of South India and made for sharing, every plate carries a little warmth from our kitchen to yours.</p><button className="text-link" onClick={() => jumpTo('gallery')}>A peek into our kitchen <ArrowRight size={16}/></button></div></div>
+      <section className="intro-section" id="story"><div className="intro-copy reveal"><h2>Good food brings<br/><em>us together.</em></h2><div className="intro-text"><p>At The Chennai Kitchen, we believe the best meals are never rushed. They begin with familiar spices, the slow perfume of a pot on dum, and the people you love gathered around the table.</p><p>Rooted in the flavours of South India and made for sharing, every plate carries a little warmth from our kitchen to yours.</p><button className="text-link" onClick={() => jumpTo('menu')}>Explore our signature menu <ArrowRight size={16}/></button></div></div>
         <div className="branch-hallmarks-grid reveal">
           <div className="hallmark-card">
             <div className="hallmark-icon-wrap"><ChefHat size={22}/></div>
@@ -1309,6 +1309,10 @@ function App() {
             <p>Spices roasted and marinades prepared each morning with zero artificial colors.</p>
           </div>
         </div>
+      </section>
+  )
+  const storyChaptersSection = (
+      <section className="intro-section" style={{ paddingTop: '0' }}>
         <div className="story-chapters-grid reveal">
           <div className="story-chapters-visual">
             <img src="/dish-mutton-biriyani.jpg" alt="Mutton Biriyani — The Chennai Kitchen" />
@@ -1331,7 +1335,7 @@ function App() {
             </article>
           </div>
         </div>
-        <div className="about-cards reveal">{[[Utensils, 'Cooked on dum', 'Rice and meat sealed in the pot and left to slow-cook until every grain carries the masala.'], [Clock3, 'Made fresh daily', 'Spices are ground and marinades prepared each morning, so nothing sits around.'], [Check, 'Biryani and beyond', 'From dum biryani to South Indian favourites and Indo-Chinese plates, all under one roof.']].map(([Icon, t, d]) => <article key={t}><Icon size={22}/><h3>{t}</h3><p>{d}</p></article>)}</div></section>
+      </section>
   )
   const menuSection = (
       <section className="menu-section" id="menu">
@@ -1574,11 +1578,11 @@ function App() {
     </div>
 
     <main key={page} className="page page-transition">
-      {page === 'home' && <>{heroSection}{visitSection}{marqueeSection}{introSection}{menuSection}{gallerySection}{quoteSection}{reviewsSection}{reserveSection}{faqSection}</>}
-      {page === 'about' && <>{introSection}{marqueeSection}{quoteSection}{reviewsSection}</>}
+      {page === 'home' && <>{heroSection}{introSection}{menuSection}{gallerySection}{reviewsSection}{visitSection}{reserveSection}</>}
+      {page === 'about' && <>{introSection}{storyChaptersSection}{quoteSection}{reviewsSection}</>}
       {page === 'menu' && <>{menuSection}</>}
       {page === 'gallery' && <>{gallerySection}</>}
-      {page === 'contact' && <>{reserveSection}{socialSection}{faqSection}</>}
+      {page === 'contact' && <>{visitSection}{reserveSection}{socialSection}{faqSection}</>}
     </main>
 
     <footer className="footer">
