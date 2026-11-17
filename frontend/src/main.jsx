@@ -1578,7 +1578,7 @@ function App() {
     </div>
 
     <main key={page} className="page page-transition">
-      {page === 'home' && <>{heroSection}{introSection}{menuSection}{gallerySection}{reviewsSection}{visitSection}{reserveSection}</>}
+      {page === 'home' && <>{heroSection}{visitSection}{introSection}{menuSection}{gallerySection}{reviewsSection}{reserveSection}</>}
       {page === 'about' && <>{introSection}{storyChaptersSection}{quoteSection}{reviewsSection}</>}
       {page === 'menu' && <>{menuSection}</>}
       {page === 'gallery' && <>{gallerySection}</>}
