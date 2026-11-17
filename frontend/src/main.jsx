@@ -44,6 +44,74 @@ const heroStages = [
   { title: <>Fragrance<br/>first.</>, text: 'Lift the lid and the whole room knows. Slow-cooked, smoky and still steaming.' },
   { title: <>Your table<br/>is waiting.</>, text: 'Tables for two to twelve. Reserve in under a minute and we will set it for you.' },
 ]
+const StarAniseGraphic = ({ size = 44, className = '' }) => (
+  <svg width={size} height={size} viewBox="0 0 100 100" fill="none" className={className} aria-hidden="true">
+    <defs>
+      <radialGradient id="aniseCenter" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stopColor="#efce88" />
+        <stop offset="60%" stopColor="#982018" />
+        <stop offset="100%" stopColor="#30070e" />
+      </radialGradient>
+      <linearGradient id="anisePetal" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stopColor="#dfb968" />
+        <stop offset="35%" stopColor="#982018" />
+        <stop offset="100%" stopColor="#3c0a13" />
+      </linearGradient>
+    </defs>
+    <g transform="translate(50,50)">
+      {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => (
+        <g key={i} transform={`rotate(${angle})`}>
+          <path d="M0,0 C-7,-16 -11,-30 0,-44 C11,-30 7,-16 0,0 Z" fill="url(#anisePetal)" stroke="#dfb968" strokeWidth="0.8" />
+          <ellipse cx="0" cy="-28" rx="3" ry="5" fill="#fce5b2" opacity="0.9" />
+          <circle cx="0" cy="-28" r="1.5" fill="#521320" />
+        </g>
+      ))}
+      <circle cx="0" cy="0" r="8" fill="url(#aniseCenter)" stroke="#dfb968" strokeWidth="1.2" />
+    </g>
+  </svg>
+)
+const CardamomGraphic = ({ size = 30, className = '' }) => (
+  <svg width={size} height={size * 1.25} viewBox="0 0 40 50" fill="none" className={className} aria-hidden="true">
+    <defs>
+      <linearGradient id="cardamomGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#efce88" />
+        <stop offset="40%" stopColor="#7e1a29" />
+        <stop offset="100%" stopColor="#2e0810" />
+      </linearGradient>
+    </defs>
+    <path d="M20,3 C7,15 6,35 20,47 C34,35 33,15 20,3 Z" fill="url(#cardamomGrad)" stroke="#dfb968" strokeWidth="1" />
+    <path d="M20,5 Q13,25 20,45" stroke="#efce88" strokeWidth="0.8" strokeDasharray="1.5 2" fill="none" opacity="0.8" />
+    <path d="M20,5 Q27,25 20,45" stroke="#efce88" strokeWidth="0.8" strokeDasharray="1.5 2" fill="none" opacity="0.8" />
+    <circle cx="20" cy="2" r="1.5" fill="#dfb968" />
+  </svg>
+)
+const CloveGraphic = ({ size = 26, className = '' }) => (
+  <svg width={size} height={size * 1.3} viewBox="0 0 30 40" fill="none" className={className} aria-hidden="true">
+    <defs>
+      <linearGradient id="cloveGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#dfb968" />
+        <stop offset="35%" stopColor="#8a1828" />
+        <stop offset="100%" stopColor="#25050c" />
+      </linearGradient>
+    </defs>
+    <circle cx="15" cy="11" r="6" fill="#efce88" />
+    <path d="M10,13 Q15,16 20,13" stroke="#521320" strokeWidth="1" fill="none" />
+    <path d="M12,15 L10,36 C13,38 17,38 20,36 L18,15 Z" fill="url(#cloveGrad)" stroke="#dfb968" strokeWidth="0.8" />
+  </svg>
+)
+const CurryLeafGraphic = ({ size = 36, className = '' }) => (
+  <svg width={size} height={size * 0.7} viewBox="0 0 60 40" fill="none" className={className} aria-hidden="true">
+    <defs>
+      <linearGradient id="leafGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+        <stop offset="0%" stopColor="#1e5238" />
+        <stop offset="50%" stopColor="#7a1c2a" />
+        <stop offset="100%" stopColor="#dfb968" />
+      </linearGradient>
+    </defs>
+    <path d="M4,36 C16,28 36,20 56,4 C48,20 34,32 8,38 Z" fill="url(#leafGrad)" stroke="#dfb968" strokeWidth="0.8" />
+    <path d="M6,35 Q30,22 54,5" stroke="#efce88" strokeWidth="0.8" fill="none" opacity="0.7" />
+  </svg>
+)
 const WaIcon = () => <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
 const faqs = [
   ['Do I need to book a table?', 'Walk-ins are always welcome, but a reservation helps us have your table ready. Use the form above for parties of up to twelve.'],
@@ -1282,7 +1350,68 @@ function App() {
       </section></div>
   )
   const visitSection = (
-      <section className="visit-section" id="visit"><div className="visit-copy reveal"><span className="eyebrow dark"><span></span> COME FIND YOUR CORNER</span><h2>There’s always<br/><em>room at our table.</em></h2><p>Bring your appetite, bring your people. We’ll be right here.</p><div className="visit-details"><span><MapPin size={17}/><span>Ambattur, Chennai<br/><small>{ADDRESS}</small></span></span><span><Clock3 size={17}/><span>Grand opening<br/><small>Sunday, 15 November 2026</small></span></span><span><Phone size={17}/><span>Call us<br/><small><a href="tel:+919894464472">98944 64472</a> · <a href="tel:+919047470444">90474 70444</a></small></span></span></div><button className="text-link" onClick={() => window.open(`https://maps.google.com/?q=${encodeURIComponent(ADDRESS)}`, '_blank', 'noopener')}>Open in Google Maps <ArrowUpRight size={16}/></button></div><div className="map-wrap reveal"><iframe title="Map of The Chennai Kitchen, Ambattur" src={`https://maps.google.com/maps?q=${encodeURIComponent(ADDRESS)}&t=&z=16&ie=UTF8&iwloc=&output=embed`} loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe><span className="map-tag"><MapPin size={14}/> AMBATTUR, CHENNAI</span></div></section>
+      <section className="visit-section" id="visit">
+        <div className="visit-copy reveal">
+          <span className="eyebrow dark"><span></span> COME FIND YOUR CORNER</span>
+          <h2>There’s always<br/><em>room at our table.</em></h2>
+          <p>Bring your appetite, bring your people. Hand-roasted country spices, authentic woodfire dum biryanis, and warm South Indian hospitality await you in Ambattur.</p>
+          <div className="visit-details">
+            <span><MapPin size={17}/><span>Ambattur, Chennai<br/><small>{ADDRESS}</small></span></span>
+            <span><Clock3 size={17}/><span>Grand opening<br/><small>Sunday, 15 November 2026</small></span></span>
+            <span><Phone size={17}/><span>Call us<br/><small><a href="tel:+919894464472">98944 64472</a> · <a href="tel:+919047470444">90474 70444</a></small></span></span>
+          </div>
+          <button className="text-link" onClick={() => window.open(`https://maps.google.com/?q=${encodeURIComponent(ADDRESS)}`, '_blank', 'noopener')}>
+            Open in Google Maps <ArrowUpRight size={16}/>
+          </button>
+        </div>
+        <div className="map-wrap reveal">
+          <iframe
+            title="Map of The Chennai Kitchen, Ambattur"
+            src={`https://maps.google.com/maps?q=${encodeURIComponent(ADDRESS)}&t=&z=16&ie=UTF8&iwloc=&output=embed`}
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+          ></iframe>
+          <div className="map-maroon-tint" aria-hidden="true"></div>
+
+          {/* Floating Spices Motif */}
+          <div className="map-spice-overlay" aria-hidden="true">
+            <div className="floating-spice spice-star-anise" title="Star Anise">
+              <StarAniseGraphic size={48} />
+              <span className="spice-label">Star Anise</span>
+            </div>
+            <div className="floating-spice spice-cardamom" title="Cardamom & Curry Leaf">
+              <CardamomGraphic size={26} />
+              <CurryLeafGraphic size={32} />
+              <span className="spice-label">Cardamom & Curry Leaf</span>
+            </div>
+            <div className="floating-spice spice-clove" title="Clove">
+              <CloveGraphic size={24} />
+              <span className="spice-label">Clove</span>
+            </div>
+          </div>
+
+          {/* Location & Navigation Overlay */}
+          <div className="map-bottom-bar">
+            <div className="map-spice-tag">
+              <span className="spice-pin-pulse"></span>
+              <MapPin size={14} className="spice-pin-icon" />
+              <div className="spice-tag-text">
+                <strong>The Chennai Kitchen</strong>
+                <small>Ambattur Flagship · Woodfire Dum & Spices</small>
+              </div>
+            </div>
+            <a
+              href={`https://maps.google.com/?q=${encodeURIComponent(ADDRESS)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="map-nav-btn"
+              aria-label="Get directions to The Chennai Kitchen in Google Maps"
+            >
+              <span>Get Directions</span> <ArrowUpRight size={13}/>
+            </a>
+          </div>
+        </div>
+      </section>
   )
   const marqueeSection = <PressMarquee />
   const introSection = (
