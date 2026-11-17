@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+﻿import React, { useEffect, useRef, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import { ArrowDown, ArrowRight, ArrowUpRight, Award, CalendarDays, Check, ChefHat, ChevronDown, ChevronLeft, Clock3, Facebook, Instagram, MapPin, Menu, Phone, Minus, Plus, Sparkles, Star, Utensils, X, Youtube } from 'lucide-react'
 import './style.css'
@@ -100,164 +100,389 @@ const PRESS_MENTIONS = [
 ]
 
 const SIGNATURE_DISHES = [
-  // 1. Biryani
+  // 1. Biryani — full menu
   {
     id: 'b1',
-    name: 'Chicken Biriyani (Basmathi)',
-    price: '₹259',
+    name: 'Plain Biriyani',
+    price: '\u20b9199',
     category: 'Biryani',
-    desc: 'Traditional authentic chicken biriyani with tender chicken pieces layered with Basmati rice, fresh and aromatic seasonings.',
-    badge: 'House Special',
+    desc: 'Premium flavourful long-grain rice or seeraga samba rice delicately seasoned with whole spices, herbs and rich Indian flavours.',
+    badge: 'Veg Option',
     image: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=700&q=80'
   },
   {
     id: 'b2',
-    name: 'Mutton Biriyani (Jeeraka Samba)',
-    price: '₹329',
+    name: 'Egg Biriyani',
+    price: '\u20b9229',
     category: 'Biryani',
-    desc: 'Tender mutton pieces slow cooked with fragrant seeraga samba, aromatic whole spices.',
-    badge: 'Chef’s Special',
+    desc: 'Classic flavourful biriyani rice paired with boiled eggs, infused with aromatic spices, served with perfectly cooked biriyani.',
+    badge: 'Classic',
+    image: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=700&q=80'
+  },
+  {
+    id: 'b3',
+    name: 'Chicken Biriyani (Basmathi)',
+    price: '\u20b9259',
+    category: 'Biryani',
+    desc: 'Traditional authentic chicken biriyani with tender chicken pieces layered with Basmati rice, fresh and aromatic seasonings.',
+    badge: 'House Special',
+    image: '/dish-mutton-biriyani.jpg'
+  },
+  {
+    id: 'b4',
+    name: 'Chilli 65 Biriyani',
+    price: '\u20b9259',
+    category: 'Biryani',
+    desc: 'Fragrant biriyani rice topped with crispy chicken 65, tossed in flavourful masala.',
+    badge: 'Spicy Fusion',
     image: 'https://images.unsplash.com/photo-1633945274405-b6c8069047b0?auto=format&fit=crop&w=700&q=80'
   },
+  {
+    id: 'b5',
+    name: 'Mutton Biriyani (Jeeraka Samba)',
+    price: '\u20b9329',
+    category: 'Biryani',
+    desc: 'Tender mutton pieces slow cooked with fragrant seeraga samba, aromatic whole spices.',
+    badge: "Chef's Special",
+    image: '/dish-mutton-biriyani.jpg'
+  },
 
-  // 2. Tandoori
+  // 2. Tandoori — full menu
   {
     id: 't1',
-    name: 'Spcl Grill Chicken',
-    price: '₹149 / ₹299 / ₹599',
+    name: 'Tandoori',
+    price: '\u20b9149 / \u20b9299 / \u20b9599',
     category: 'Tandoori',
-    desc: 'Perfectly marinated chicken, seasoned with handpicked spices and grilled until tender, juicy and delicious.',
-    badge: 'Tender & Juicy',
+    desc: 'Perfectly marinated chicken, roasted tandoori with aromatic spices for a deliciously smoky and flavourful finish.',
+    badge: 'Smoky & Spiced',
     image: 'https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?auto=format&fit=crop&w=700&q=80'
   },
   {
     id: 't2',
     name: 'Spcl BBQ Chicken',
-    price: '₹149 / ₹299 / ₹599',
+    price: '\u20b9149 / \u20b9299 / \u20b9599',
     category: 'Tandoori',
     desc: 'Juicy chicken coated in a rich blend of spices, BBQ sauces, slow grilled to perfection for deliciously smoky and savoury taste.',
     badge: 'Smoky BBQ',
     image: 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?auto=format&fit=crop&w=700&q=80'
   },
+  {
+    id: 't3',
+    name: 'Spcl Grill Chicken',
+    price: '\u20b9149 / \u20b9299 / \u20b9599',
+    category: 'Tandoori',
+    desc: 'Perfectly marinated chicken, seasoned with handpicked spices and grilled until tender, juicy and delicious.',
+    badge: 'Tender & Juicy',
+    image: 'https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?auto=format&fit=crop&w=700&q=80'
+  },
 
-  // 3. Starters
+  // 3. Starters — full menu
   {
     id: 's1',
-    name: 'Chicken 65 Boneless',
-    price: '₹229',
+    name: 'Chicken 65',
+    price: '\u20b9199',
     category: 'Starters',
-    desc: 'Golden fried chicken bites bursting with spicy goodness, marinated in a house special blend of herbs and aromatic seasonings.',
+    desc: 'Tender chicken pieces marinated in a blend of aromatic spices, ginger, garlic and herbs, deep fried to crispy perfection.',
     badge: 'Crispy & Spicy',
     image: 'https://images.unsplash.com/photo-1610057099443-fde8c4d50f91?auto=format&fit=crop&w=700&q=80'
   },
   {
     id: 's2',
-    name: 'Mutton Chukka',
-    price: '₹250',
+    name: 'Chicken 65 Boneless',
+    price: '\u20b9229',
     category: 'Starters',
-    desc: 'Tender Mutton pieces slow roasted with freshly ground black pepper, shallots, curry leaves and aromatic spices for an authentic South Indian flavour.',
+    desc: 'Golden fried chicken bites bursting with spicy goodness, marinated in a house special blend of herbs and aromatic seasonings.',
+    badge: 'Boneless',
+    image: 'https://images.unsplash.com/photo-1610057099443-fde8c4d50f91?auto=format&fit=crop&w=700&q=80'
+  },
+  {
+    id: 's3',
+    name: 'Chicken Lollipop',
+    price: '\u20b9199',
+    category: 'Starters',
+    desc: 'Tender chicken lollipops coated with the signature spicy marinade. Fried until crispy and finished with an aromatic flavour.',
+    badge: 'Crowd Pleaser',
+    image: 'https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?auto=format&fit=crop&w=700&q=80'
+  },
+  {
+    id: 's4',
+    name: 'Chicken Pallipalayam',
+    price: '\u20b9199',
+    category: 'Starters',
+    desc: 'Juicy chicken tossed in a traditional pallipalayam masala with roasted chillies and golden shallots.',
+    badge: 'South Indian',
+    image: '/dish-chicken-pallipalayam.jpg'
+  },
+  {
+    id: 's5',
+    name: 'Curry Leaf Chicken',
+    price: '\u20b9199',
+    category: 'Starters',
+    desc: 'Juicy chicken pan roasted with the rich blend of spices and freshly picked curry leaves, delivering an aromatic and flavourful experience.',
+    badge: 'Dry / Gravy',
+    image: '/dish-curry-leaf-chicken.jpg'
+  },
+  {
+    id: 's6',
+    name: 'Mutton Chukka',
+    price: '\u20b9250',
+    category: 'Starters',
+    desc: 'Tender mutton pieces slow roasted with freshly ground black pepper, shallots, curry leaves and aromatic spices for an authentic South Indian flavour.',
     badge: 'Signature',
     image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=700&q=80'
   },
+  {
+    id: 's7',
+    name: 'Mutton Kola Urundai',
+    price: '\u20b9229',
+    category: 'Starters',
+    desc: 'A traditional South Indian delicacy made with spiced minced mutton, fresh curry leaves and aromatic seasonings, fried until golden.',
+    badge: 'Traditional',
+    image: '/dish-mutton-kola-urundai.jpg'
+  },
 
-  // 4. Gravy
+  // 4. Gravy — full menu
   {
     id: 'g1',
     name: 'Butter Chicken',
-    price: '₹179',
+    price: '\u20b9179',
     category: 'Gravy',
-    desc: 'Tender chicken pieces simmered in a rich, creamy tomato sauce gravy, enriched with butter, fresh cream and delicate blend of signature spices.',
+    desc: 'Tender chicken pieces simmered in a rich, creamy tomato sauce gravy, enriched with butter, fresh cream and a delicate blend of signature spices.',
     badge: 'Rich & Creamy',
     image: 'https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?auto=format&fit=crop&w=700&q=80'
   },
   {
     id: 'g2',
-    name: 'Mutton Roagan Josh',
-    price: '₹190',
+    name: 'Lahuri Chicken',
+    price: '\u20b9179',
     category: 'Gravy',
-    desc: 'A juicy mutton chunks cooked to perfection in a vibrant red gravy infused with Kashmiri chillies.',
+    desc: 'Succulent chicken simmered in a flavourful masala, infused with freshly ground spices with the touch of richness.',
+    badge: 'Spiced Masala',
+    image: 'https://images.unsplash.com/photo-1545247181-516773cae7be?auto=format&fit=crop&w=700&q=80'
+  },
+  {
+    id: 'g3',
+    name: 'Mutton Roagan Josh',
+    price: '\u20b9190',
+    category: 'Gravy',
+    desc: 'Juicy mutton chunks cooked to perfection in a vibrant red gravy infused with Kashmiri chillies.',
     badge: 'Royal Gravy',
     image: 'https://images.unsplash.com/photo-1545247181-516773cae7be?auto=format&fit=crop&w=700&q=80'
   },
+  {
+    id: 'g4',
+    name: 'Mutton Fat Curry',
+    price: '\u20b9190',
+    category: 'Gravy',
+    desc: 'Rich and flavourful mutton curry prepared with tender mutton fat, traditional spices and aromatic herbs (Mutton Kolupu Kuzhambu).',
+    badge: 'House Special',
+    image: '/dish-mutton-fat-curry.jpg'
+  },
 
-  // 5. Soup
+  // 5. Soup — full menu
   {
     id: 'sp1',
-    name: 'Mutton Nalli Soup',
-    price: '₹149',
-    category: 'Soup',
-    desc: 'The richness of mutton marrow meets the warmth of crushed pepper and aromatic spices in this traditional delicacy.',
-    badge: 'Bone Marrow',
-    image: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=700&q=80'
-  },
-  {
-    id: 'sp2',
     name: 'Chicken Soup',
-    price: '₹139',
+    price: '\u20b9139',
     category: 'Soup',
     desc: 'Delicately cooked chicken in a nourishing, spice-infused broth, finished with fresh herbs and a touch of pepper.',
     badge: 'Nourishing',
     image: 'https://images.unsplash.com/photo-1604152135912-04a022e23696?auto=format&fit=crop&w=700&q=80'
   },
+  {
+    id: 'sp2',
+    name: 'Mutton Pepper Clear Soup',
+    price: '\u20b9149',
+    category: 'Soup',
+    desc: 'A clear mutton broth slow-simmered with tender mutton, freshly ground pepper and traditional spices.',
+    badge: 'Clear Broth',
+    image: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=700&q=80'
+  },
+  {
+    id: 'sp3',
+    name: 'Mutton Nalli Soup',
+    price: '\u20b9149',
+    category: 'Soup',
+    desc: 'The richness of mutton marrow meets the warmth of crushed pepper and aromatic spices in this traditional delicacy.',
+    badge: 'Bone Marrow',
+    image: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=700&q=80'
+  },
 
-  // 6. Breads
+  // 6. Breads — full menu
   {
     id: 'br1',
-    name: 'Butter Naan',
-    price: '₹59',
+    name: 'Naan',
+    price: '\u20b949',
     category: 'Breads',
-    desc: 'Fresh from the tandoor, this fluffy naan with melted butter for a rich.',
+    desc: 'Freshly prepared naan, tandoor-baked with a beautiful golden texture and a signature smoky aroma.',
     badge: 'Tandoor Fresh',
     image: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=700&q=80'
   },
   {
     id: 'br2',
+    name: 'Butter Naan',
+    price: '\u20b959',
+    category: 'Breads',
+    desc: 'Fresh from the tandoor, this fluffy naan with melted butter for a rich indulgence.',
+    badge: 'Buttery',
+    image: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=700&q=80'
+  },
+  {
+    id: 'br3',
     name: 'Garlic Naan',
-    price: '₹49',
+    price: '\u20b949',
     category: 'Breads',
     desc: 'Freshly baked naan layered with fragrant garlic and herbs, delivering a beautiful blend of smoky aroma and savoury flavour.',
     badge: 'Aromatic',
     image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=700&q=80'
   },
+  {
+    id: 'br4',
+    name: 'Roti',
+    price: '\u20b959',
+    category: 'Breads',
+    desc: 'Simple and freshly made, this classic Indian flatbread brings the comforting taste of tradition.',
+    badge: 'Classic',
+    image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=700&q=80'
+  },
+  {
+    id: 'br5',
+    name: 'Tandoori Roti',
+    price: '\u20b959',
+    category: 'Breads',
+    desc: 'Rolled from wholesome wheat and flame-baked in the tandoor, bringing authentic rustic flavours to every bite.',
+    badge: 'Flame Baked',
+    image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=700&q=80'
+  },
+  {
+    id: 'br6',
+    name: 'Chappathi',
+    price: '\u20b939',
+    category: 'Breads',
+    desc: 'Freshly kneaded whole-wheat dough, rolled into thin rounds and cooked on a hot griddle until soft, light and perfectly done.',
+    badge: 'Wholesome',
+    image: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=700&q=80'
+  },
 
-  // 7. Chinese
+  // 7. Chinese — full menu
   {
     id: 'ch1',
+    name: 'Veg Fried Rice',
+    price: '\u20b9159',
+    category: 'Chinese',
+    desc: 'Fragrant basmati rice wok-tossed with fresh vegetables, spring onions, garlic and aromatic seasonings for a perfectly balanced flavour.',
+    badge: 'Veg',
+    image: 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=700&q=80'
+  },
+  {
+    id: 'ch2',
+    name: 'Schezwan Veg Fried Rice',
+    price: '\u20b9169',
+    category: 'Chinese',
+    desc: 'Long-grain rice tossed with colourful vegetables, chilli-infused Schezwan sauce and aromatic spices for a deliciously spicy finish.',
+    badge: 'Spicy Veg',
+    image: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=700&q=80'
+  },
+  {
+    id: 'ch3',
+    name: 'Veg Noodles',
+    price: '\u20b9159',
+    category: 'Chinese',
+    desc: 'Springy noodles combined with freshly sliced vegetables, green onions and a blend of savoury sauces for a flavourful finish.',
+    badge: 'Veg',
+    image: 'https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?auto=format&fit=crop&w=700&q=80'
+  },
+  {
+    id: 'ch4',
+    name: 'Egg Fried Rice',
+    price: '\u20b9179',
+    category: 'Chinese',
+    desc: 'Freshly prepared rice tossed with fluffy eggs, spring onions, crushed pepper and aromatic garlic for a deliciously balanced taste.',
+    badge: 'Classic',
+    image: 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=700&q=80'
+  },
+  {
+    id: 'ch5',
+    name: 'Schezwan Egg Fried Rice',
+    price: '\u20b9189',
+    category: 'Chinese',
+    desc: 'Long-grain rice infused with spicy Schezwan flavours, tossed with fluffy eggs, spring onions and fresh vegetables for a bold taste.',
+    badge: 'Spicy',
+    image: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=700&q=80'
+  },
+  {
+    id: 'ch6',
     name: 'Chicken Fried Rice',
-    price: '₹189',
+    price: '\u20b9189',
     category: 'Chinese',
     desc: 'Tender chicken and perfectly cooked rice come together with crunchy vegetables, spring onions and signature sauces.',
     badge: 'Wok Tossed',
     image: 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=700&q=80'
   },
   {
-    id: 'ch2',
+    id: 'ch7',
     name: 'Schezwan Chicken Fried Rice',
-    price: '₹199',
+    price: '\u20b9199',
     category: 'Chinese',
     desc: 'Long-grain rice tossed with flavourful chicken, fresh spring onions, crushed garlic and spicy Schezwan sauce for an Indo-Chinese taste.',
     badge: 'Spicy Wok',
     image: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=700&q=80'
   },
+  {
+    id: 'ch8',
+    name: 'Chicken Noodles',
+    price: '\u20b9189',
+    category: 'Chinese',
+    desc: 'Springy noodles wok-tossed with tender chicken, fresh spring onions and a blend of savoury Indo-Chinese sauces.',
+    badge: 'Wok Tossed',
+    image: 'https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?auto=format&fit=crop&w=700&q=80'
+  },
+  {
+    id: 'ch9',
+    name: 'Schezwan Chicken Noodles',
+    price: '\u20b9199',
+    category: 'Chinese',
+    desc: 'Springy noodles tossed with spicy Schezwan sauce, tender chicken, fresh vegetables and spring onions for a fiery Indo-Chinese experience.',
+    badge: 'Spicy Wok',
+    image: 'https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?auto=format&fit=crop&w=700&q=80'
+  },
 
-  // 8. Juice
+  // 8. Juice — full menu
   {
     id: 'jc1',
-    name: 'Green Mint Mojito',
-    price: '₹89',
+    name: 'Lime Mint Soda',
+    price: '\u20b979',
     category: 'Juice',
-    desc: 'Freshly crushed mint and lime infused with a hint of sweetness, topped with chilled soda for a refreshing finish.',
-    badge: 'Fresh Fizz',
+    desc: 'Fresh lime juice blended with crushed mint leaves, chilled soda and a touch of sweetness for a refreshing citrus burst.',
+    badge: 'Refreshing',
     image: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=700&q=80'
   },
   {
     id: 'jc2',
-    name: 'Sunset Cooler',
-    price: '₹99',
+    name: 'Blue Mojito',
+    price: '\u20b989',
+    category: 'Juice',
+    desc: 'Fresh mint and lime infused with sweet blue syrup and sparkling soda, creating a vibrant drink with a crisp citrus finish.',
+    badge: 'Vibrant',
+    image: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=700&q=80'
+  },
+  {
+    id: 'jc3',
+    name: 'Green Mint Mojito',
+    price: '\u20b989',
+    category: 'Juice',
+    desc: 'Freshly crushed mint and lime infused with a hint of sweetness, topped with chilled soda for a refreshing finish.',
+    badge: 'Fresh Fizz',
+    image: '/dish-green-mint-mojito.jpg'
+  },
+  {
+    id: 'jc4',
+    name: 'Sunset',
+    price: '\u20b999',
     category: 'Juice',
     desc: 'Sweet, tangy and beautifully layered, this vibrant cooler brings together fruity flavours and refreshing citrus notes.',
-    badge: 'Signature Mocktail',
-    image: 'https://images.unsplash.com/photo-1536935338788-846bb9981813?auto=format&fit=crop&w=700&q=80'
+    badge: 'Signature',
+    image: '/dish-sunset.jpg'
   }
 ]
 
@@ -1084,7 +1309,7 @@ function App() {
         </div>
         <div className="story-chapters-grid reveal">
           <div className="story-chapters-visual">
-            <img src="https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=900&q=85" alt="Slow cooking at The Chennai Kitchen" />
+            <img src="/dish-mutton-biriyani.jpg" alt="Mutton Biriyani — The Chennai Kitchen" />
           </div>
           <div className="story-chapters-list">
             <article className="story-chapter-card">
