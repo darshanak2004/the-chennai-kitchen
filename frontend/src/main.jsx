@@ -5,15 +5,18 @@ import SpiceMap from './SpiceMap.jsx'
 import './style.css'
 
 const initialGallery = [
-  { id: 'g1', title: 'Mutton Biriyani (Jeeraka Samba)', image_url: '/dish-mutton-biriyani.jpg', category: 'Signature Dum Biryani' },
-  { id: 'g2', title: 'Grand Dining Hall', image_url: '/interior-dining-hall.jpg', category: 'Restaurant Ambience' },
-  { id: 'g3', title: 'Luxury Family Booths', image_url: '/interior-booths.jpg', category: 'Seating & Comfort' },
+  { id: 'g1', title: 'Mutton Biriyani (Jeeraka Samba)', image_url: '/dish-mutton-biriyani.jpg', category: 'Biryani' },
+  { id: 'g2', title: 'Curry Leaf Chicken', image_url: '/dish-curry-leaf-chicken.jpg', category: 'Starters' },
+  { id: 'g3', title: 'Chicken Pallipalayam', image_url: '/dish-chicken-pallipalayam.jpg', category: 'Starters' },
+  { id: 'g4', title: 'Mutton Kola Urundai', image_url: '/dish-mutton-kola-urundai.jpg', category: 'Starters' },
+  { id: 'g5', title: 'Mutton Fat Curry', image_url: '/dish-mutton-fat-curry.jpg', category: 'Gravy' },
+  { id: 'g6', title: 'Green Mint Mojito', image_url: '/dish-green-mint-mojito.jpg', category: 'Juice' },
+  { id: 'g7', title: 'Sunset', image_url: '/dish-sunset.jpg', category: 'Juice' },
 ]
-const SEAT_PHOTOS = [
-  { id: 's1', src: '/interior-dining-hall.jpg', label: 'Grand Dining Hall', desc: 'Air-conditioned luxury seating for families' },
-  { id: 's2', src: '/interior-booths.jpg', label: 'Luxury Family Booths', desc: 'Cozy booths with warm ambiance' },
-  { id: 's3', src: '/interior-reception.jpg', label: 'Welcome Reception', desc: 'Welcoming entrance & reception counter' },
-  { id: 's4', src: '/restaurant-exterior.jpg', label: 'Flagship Restaurant', desc: 'Ambattur Industrial Estate, Chennai' },
+const BEHIND_THE_FLAMES_ITEMS = [
+  { id: 'btf1', title: 'Mutton Biriyani (Jeeraka Samba)', image_url: '/dish-mutton-biriyani.jpg', category: 'Signature Dum Biryani' },
+  { id: 'btf2', title: 'Grand Dining Hall', image_url: '/interior-dining-hall.jpg', category: 'Restaurant Ambience' },
+  { id: 'btf3', title: 'Luxury Family Booths', image_url: '/interior-booths.jpg', category: 'Seating & Comfort' },
 ]
 const HASH = !!window.__HASH_ROUTER
 const ADDRESS = '35X9+VX5, Sai Nagar, Ambattur Industrial Estate, Chennai, Tamil Nadu 600058'
@@ -1099,7 +1102,8 @@ function AdminPage({
 
 function App() {
   const [gallery, setGallery] = useState(initialGallery)
-  const [activeSeatIdx, setActiveSeatIdx] = useState(0)
+  const [lightboxList, setLightboxList] = useState(initialGallery)
+
   const [heroMedia, setHeroMedia] = useState([])
   const [phone, setPhone] = useState(import.meta.env.VITE_WHATSAPP_PHONE || '919566577729')
   const [menuOpen, setMenuOpen] = useState(false)
@@ -1170,13 +1174,13 @@ function App() {
     if (page === 'home') setHeroStage(0)
   }, [route])
 
-  const stepLightbox = d => setLightbox(i => (i + d + gallery.length) % gallery.length)
+  const stepLightbox = d => setLightbox(i => (i + d + lightboxList.length) % lightboxList.length)
   useEffect(() => {
     if (lightbox < 0) return
     const onKey = e => { if (e.key === 'Escape') setLightbox(-1); if (e.key === 'ArrowRight') stepLightbox(1); if (e.key === 'ArrowLeft') stepLightbox(-1) }
     window.addEventListener('keydown', onKey); document.body.style.overflow = 'hidden'
     return () => { window.removeEventListener('keydown', onKey); document.body.style.overflow = '' }
-  }, [lightbox, gallery.length])
+  }, [lightbox, lightboxList.length])
 
   useEffect(() => {
     api('/content').then(data => {
@@ -1360,7 +1364,7 @@ function App() {
             </button>
           </div>
         </div>
-        <HorizontalSpecials gallery={gallery} onSelect={setLightbox} />
+        <HorizontalSpecials gallery={gallery} onSelect={idx => { setLightboxList(gallery); setLightbox(idx) }} />
         <MenuShowcase items={SIGNATURE_DISHES} onReserve={() => jumpTo('reserve')} />
         <div className="food-foot">
           <span>FRESHLY COOKED TO ORDER</span>
@@ -1376,7 +1380,7 @@ function App() {
           <p>A visual glimpse into our kitchen craft — hand-layered dum biryanis, hot iron skillets, and shared feasts.</p>
         </div>
         <div className="food-grid">
-          {gallery.map((item, i) => (
+          {BEHIND_THE_FLAMES_ITEMS.map((item, i) => (
             <article
               className={`food-card food-card-${i + 1} reveal`}
               style={{ '--d': `${i * 80}ms` }}
@@ -1384,8 +1388,8 @@ function App() {
               role="button"
               tabIndex={0}
               aria-label={`View ${item.title}`}
-              onClick={() => setLightbox(i)}
-              onKeyDown={e => e.key === 'Enter' && setLightbox(i)}
+              onClick={() => { setLightboxList(BEHIND_THE_FLAMES_ITEMS); setLightbox(i) }}
+              onKeyDown={e => e.key === 'Enter' && (setLightboxList(BEHIND_THE_FLAMES_ITEMS), setLightbox(i))}
             >
               {item.media_type === 'video' ? (
                 <video src={item.image_url} aria-label={item.title} muted autoPlay loop playsInline preload="metadata"/>
@@ -1443,27 +1447,11 @@ function App() {
       <section className="reserve-section" id="reserve">
         <div className="reserve-photo reveal">
           <img
-            src={SEAT_PHOTOS[activeSeatIdx].src}
-            alt={SEAT_PHOTOS[activeSeatIdx].label}
+            src="/interior-dining-hall.jpg"
+            alt="The Chennai Kitchen — Grand Dining Hall"
             loading="lazy"
-            key={SEAT_PHOTOS[activeSeatIdx].src}
           />
           <div className="photo-label"><span>THE GOOD SEATS</span><span>ARE WAITING</span></div>
-          <div className="reserve-interior-strip" role="tablist" aria-label="Restaurant interior views">
-            {SEAT_PHOTOS.map((seat, sIdx) => (
-              <button
-                key={seat.id}
-                type="button"
-                className={`reserve-seat-thumb ${sIdx === activeSeatIdx ? 'active' : ''}`}
-                onClick={() => setActiveSeatIdx(sIdx)}
-                aria-label={`View ${seat.label}`}
-                title={seat.desc}
-              >
-                <img src={seat.src} alt={seat.label} />
-                <span>{seat.label}</span>
-              </button>
-            ))}
-          </div>
         </div>
         <div className="reserve-content reveal">
           <span className="eyebrow"><span></span> PULL UP A CHAIR</span>
@@ -1646,7 +1634,7 @@ function App() {
 
     <a className="whatsapp-float" href={whatsappUrl()} target="_blank" rel="noreferrer" aria-label="Contact us on WhatsApp"><span className="wa-pulse"></span><WaIcon/><span>Chat with us</span></a>
 
-    {lightbox >= 0 && gallery[lightbox] && <div className="lightbox" role="dialog" aria-modal="true" onClick={e => { if (e.target === e.currentTarget) setLightbox(-1) }}><button className="lb-close" onClick={() => setLightbox(-1)} aria-label="Close"><X size={22}/></button><button className="lb-nav lb-prev" onClick={() => stepLightbox(-1)} aria-label="Previous"><ArrowRight size={22}/></button>{gallery[lightbox].media_type === 'video' ? <video key={lightbox} src={gallery[lightbox].image_url} controls autoPlay loop playsInline/> : <img key={lightbox} src={gallery[lightbox].image_url} alt={gallery[lightbox].title}/>}<button className="lb-nav lb-next" onClick={() => stepLightbox(1)} aria-label="Next"><ArrowRight size={22}/></button><p><span>{gallery[lightbox].category}</span>{gallery[lightbox].title}<em>{lightbox + 1} / {gallery.length}</em></p></div>}
+    {lightbox >= 0 && lightboxList[lightbox] && <div className="lightbox" role="dialog" aria-modal="true" onClick={e => { if (e.target === e.currentTarget) setLightbox(-1) }}><button className="lb-close" onClick={() => setLightbox(-1)} aria-label="Close"><X size={22}/></button><button className="lb-nav lb-prev" onClick={() => stepLightbox(-1)} aria-label="Previous"><ArrowRight size={22}/></button>{lightboxList[lightbox].media_type === 'video' ? <video key={lightbox} src={lightboxList[lightbox].image_url} controls autoPlay loop playsInline/> : <img key={lightbox} src={lightboxList[lightbox].image_url} alt={lightboxList[lightbox].title}/>}<button className="lb-nav lb-next" onClick={() => stepLightbox(1)} aria-label="Next"><ArrowRight size={22}/></button><p><span>{lightboxList[lightbox].category}</span>{lightboxList[lightbox].title}<em>{lightbox + 1} / {lightboxList.length}</em></p></div>}
     {menuCardOpen && (
       <div className="offer-backdrop" onClick={() => setMenuCardOpen(false)}>
         <div className="menu-card-pop" role="dialog" aria-modal="true" aria-label="The Chennai Kitchen Full Menu Card" onClick={e => e.stopPropagation()}>
