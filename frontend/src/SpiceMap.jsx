@@ -1,15 +1,15 @@
-import React, { useState, useRef } from 'react'
-import { MapPin, Navigation, ZoomIn, ZoomOut, Compass, Layers, Phone, Clock, ArrowUpRight, Check } from 'lucide-react'
+import React, { useState } from 'react'
+import { MapPin, Navigation, ZoomIn, ZoomOut, Compass, Layers, ArrowUpRight, Check } from 'lucide-react'
 
 export default function SpiceMap({
-  address = 'No.15, 1st Floor, Ambattur Industrial Estate, Bus Stand Complex, MTH Road, Chennai - 600058',
+  address = '35X9+VX5, Sai Nagar, Ambattur Industrial Estate, Chennai, Tamil Nadu 600058',
 }) {
   const [zoom, setZoom] = useState(1)
   const [activeWaypoint, setActiveWaypoint] = useState(null)
   const [viewMode, setViewMode] = useState('spice') // 'spice' or 'live'
   const [isCopied, setIsCopied] = useState(false)
 
-  const handleZoomIn = () => setZoom(z => Math.min(1.6, +(z + 0.15).toFixed(2)))
+  const handleZoomIn = () => setZoom(z => Math.min(1.5, +(z + 0.15).toFixed(2)))
   const handleZoomOut = () => setZoom(z => Math.max(0.9, +(z - 0.15).toFixed(2)))
   const handleReset = () => {
     setZoom(1)
@@ -22,8 +22,8 @@ export default function SpiceMap({
     setTimeout(() => setIsCopied(false), 2200)
   }
 
-  // Route path through MTH Road to The Chennai Kitchen at Ambattur Bus Stand Complex
-  const routePathD = 'M 885,255 L 720,265 Q 580,270 515,285 L 430,305 Q 385,318 360,332 L 348,340'
+  // Realistic route path from Padi Flyover (East) along MTH Road, turning directly into Sai Nagar at The Chennai Kitchen
+  const routePathD = 'M 885,245 L 710,255 Q 580,265 500,280 L 420,300 Q 375,312 355,325 L 342,342'
 
   return (
     <div className="spice-map-card">
@@ -32,9 +32,9 @@ export default function SpiceMap({
         <div className="spice-map-title-wrap">
           <div className="spice-pulse-indicator" aria-hidden="true"></div>
           <div>
-            <h3 className="spice-map-title">The Spice Route to Ambattur</h3>
+            <h3 className="spice-map-title">Route to The Chennai Kitchen</h3>
             <p className="spice-map-sub">
-              MTH Road · Fresh Country Spices Delivered Daily to Our Kitchen
+              Sai Nagar, Ambattur Industrial Estate · MTH Road (Near Bus Stand)
             </p>
           </div>
         </div>
@@ -47,7 +47,7 @@ export default function SpiceMap({
               className={`mode-btn ${viewMode === 'spice' ? 'active' : ''}`}
               onClick={() => setViewMode('spice')}
             >
-              <span className="dot turmeric"></span> Spice Route Map
+              <span className="dot turmeric"></span> Illustrated Route
             </button>
             <button
               role="tab"
@@ -78,7 +78,7 @@ export default function SpiceMap({
         {viewMode === 'live' ? (
           <div className="live-map-container">
             <iframe
-              title="Google Map of The Chennai Kitchen, Ambattur"
+              title="Google Map of The Chennai Kitchen, Sai Nagar, Ambattur Industrial Estate"
               src={`https://maps.google.com/maps?q=${encodeURIComponent(address)}&t=&z=16&ie=UTF8&iwloc=&output=embed`}
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
@@ -89,309 +89,302 @@ export default function SpiceMap({
             <svg
               viewBox="0 0 900 560"
               className="spice-map-svg"
-              aria-label="Interactive Spice Route Map of The Chennai Kitchen, Ambattur"
+              aria-label="Clear realistic route map to The Chennai Kitchen, Sai Nagar, Ambattur"
             >
               <defs>
-                {/* Spice Palette Gradients */}
-                <linearGradient id="creamTerrain" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#faf5eb" />
-                  <stop offset="50%" stopColor="#f5ede0" />
-                  <stop offset="100%" stopColor="#ece0cf" />
+                {/* Clean Realistic Cartographic Gradients */}
+                <linearGradient id="terrainBg" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#faf6ef" />
+                  <stop offset="50%" stopColor="#f5efe4" />
+                  <stop offset="100%" stopColor="#ebe1d3" />
                 </linearGradient>
 
                 <linearGradient id="lakeWater" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#cbe5dc" />
-                  <stop offset="100%" stopColor="#a8d0c2" />
+                  <stop offset="0%" stopColor="#cfe6de" />
+                  <stop offset="100%" stopColor="#b2d6ca" />
                 </linearGradient>
 
-                <linearGradient id="leafPark" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#dfede3" />
-                  <stop offset="100%" stopColor="#c5ded0" />
+                <linearGradient id="parkGreen" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#e3ede5" />
+                  <stop offset="100%" stopColor="#cfe2d4" />
                 </linearGradient>
 
-                <linearGradient id="chilliRoute" x1="0%" y1="0%" x2="100%" y2="0%">
+                <linearGradient id="primaryRoute" x1="0%" y1="0%" x2="100%" y2="0%">
                   <stop offset="0%" stopColor="#e5a93b" />
-                  <stop offset="45%" stopColor="#d33827" />
+                  <stop offset="40%" stopColor="#c53628" />
                   <stop offset="100%" stopColor="#982018" />
                 </linearGradient>
 
-                <filter id="mapShadow" x="-10%" y="-10%" width="120%" height="120%">
-                  <feDropShadow dx="0" dy="4" stdDeviation="6" floodColor="#3c131a" floodOpacity="0.18" />
+                <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="120%">
+                  <feDropShadow dx="0" dy="3" stdDeviation="5" floodColor="#2b1117" floodOpacity="0.14" />
                 </filter>
-                <filter id="pinGlow" x="-30%" y="-30%" width="160%" height="160%">
-                  <feDropShadow dx="0" dy="6" stdDeviation="10" floodColor="#b8261b" floodOpacity="0.38" />
+                <filter id="destGlow" x="-25%" y="-25%" width="150%" height="150%">
+                  <feDropShadow dx="0" dy="4" stdDeviation="8" floodColor="#982018" floodOpacity="0.32" />
                 </filter>
-
-                {/* Road Stroke Masks */}
-                <linearGradient id="routeGlow" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#f5c563" stopOpacity="0.7" />
-                  <stop offset="100%" stopColor="#b8261b" stopOpacity="0.5" />
-                </linearGradient>
               </defs>
 
-              {/* 1. Base Terrain Canvas (Warm Cream) */}
-              <rect width="900" height="560" fill="url(#creamTerrain)" />
+              {/* 1. Base Terrain Canvas */}
+              <rect width="900" height="560" fill="url(#terrainBg)" />
 
-              {/* Subtle Parchment Grid Lines */}
-              <g stroke="#e2d4c0" strokeWidth="0.6" strokeDasharray="4 8" opacity="0.6">
-                <line x1="0" y1="140" x2="900" y2="140" />
-                <line x1="0" y1="280" x2="900" y2="280" />
-                <line x1="0" y1="420" x2="900" y2="420" />
-                <line x1="225" y1="0" x2="225" y2="560" />
-                <line x1="450" y1="0" x2="450" y2="560" />
-                <line x1="675" y1="0" x2="675" y2="560" />
-              </g>
+              {/* Suburban & Industrial Zone Blocks (Realistic Zoning) */}
+              {/* Sai Nagar Commercial Zone */}
+              <rect x="300" y="320" width="130" height="90" rx="8" fill="#f2e8dc" stroke="#e0d1c0" strokeWidth="1" />
+              <text x="365" y="395" fill="#88695d" fontSize="9" fontWeight="700" letterSpacing="0.08em" textAnchor="middle">
+                SAI NAGAR
+              </text>
 
-              {/* 2. Natural Features (Deep Leaf Green & Calm Water) */}
-              {/* Ambattur Eri (Lake) */}
+              {/* Ambattur Industrial Estate South Zone */}
+              <rect x="460" y="330" width="220" height="190" rx="8" fill="#f0e6da" stroke="#dfd2c1" strokeWidth="1" />
+              <text x="570" y="420" fill="#7d6155" fontSize="10" fontWeight="700" letterSpacing="0.08em" textAnchor="middle">
+                AMBATTUR INDUSTRIAL ESTATE
+              </text>
+              <text x="570" y="435" fill="#9e8478" fontSize="8" letterSpacing="0.05em" textAnchor="middle">
+                (SIDCO Manufacturing & Tech Zone)
+              </text>
+
+              {/* North Residential Layout (Ram Nagar / Varadarajapuram) */}
+              <rect x="260" y="90" width="230" height="140" rx="6" fill="#f5ede2" stroke="#e4d7c8" strokeWidth="1" />
+              <text x="375" y="155" fill="#8c7368" fontSize="8.5" fontWeight="600" letterSpacing="0.06em" textAnchor="middle">
+                AMBATTUR OLD TOWN (OT)
+              </text>
+
+              {/* 2. Natural Features (Ambattur Lake & Green Belts) */}
               <path
-                d="M 50,45 Q 120,30 210,60 Q 280,85 260,150 Q 240,210 160,205 Q 80,200 40,155 Q 15,100 50,45 Z"
+                d="M 40,40 Q 110,25 190,50 Q 250,70 230,130 Q 210,185 140,180 Q 70,175 35,135 Q 15,90 40,40 Z"
                 fill="url(#lakeWater)"
-                stroke="#8fbfae"
-                strokeWidth="1.5"
-                opacity="0.95"
+                stroke="#97c5b6"
+                strokeWidth="1.2"
               />
-              <text x="135" y="125" fill="#316753" fontSize="12" fontWeight="600" letterSpacing="0.08em" textAnchor="middle" opacity="0.85">
+              <text x="120" y="110" fill="#2d6452" fontSize="11" fontWeight="700" letterSpacing="0.07em" textAnchor="middle">
                 AMBATTUR ERI
               </text>
-              <text x="135" y="140" fill="#4d7c6b" fontSize="9" letterSpacing="0.06em" textAnchor="middle" opacity="0.75">
-                (Freshwater Lake)
-              </text>
-
-              {/* Green Parks / Industrial Greenbelts */}
-              <path
-                d="M 640,60 Q 720,45 820,70 Q 860,110 820,150 Q 750,170 660,135 Q 610,100 640,60 Z"
-                fill="url(#leafPark)"
-                stroke="#b0d4be"
-                strokeWidth="1"
-              />
-              <text x="735" y="110" fill="#2d6040" fontSize="10" fontWeight="600" letterSpacing="0.06em" textAnchor="middle" opacity="0.75">
-                AMBATTUR PARK
+              <text x="120" y="125" fill="#4a7c6c" fontSize="8.5" letterSpacing="0.05em" textAnchor="middle">
+                (Lake Wetland)
               </text>
 
               <path
-                d="M 550,420 Q 640,400 710,430 Q 730,490 670,525 Q 580,530 540,490 Q 520,445 550,420 Z"
-                fill="url(#leafPark)"
-                stroke="#b0d4be"
+                d="M 680,60 Q 760,45 840,65 Q 870,110 830,145 Q 770,160 690,130 Q 650,95 680,60 Z"
+                fill="url(#parkGreen)"
+                stroke="#bad8c5"
                 strokeWidth="1"
               />
-              <text x="630" y="475" fill="#2d6040" fontSize="10" fontWeight="600" letterSpacing="0.06em" textAnchor="middle" opacity="0.75">
-                ESTATE GREENBELT
+              <text x="760" y="105" fill="#316345" fontSize="9.5" fontWeight="600" letterSpacing="0.05em" textAnchor="middle">
+                ESTATE ECO PARK
               </text>
 
-              {/* 3. Secondary & Local City Roads (Warm Cream / Tan) */}
-              <g stroke="#dfd0bd" strokeLinecap="round" strokeLinejoin="round">
-                {/* North Residential & Commercial Grid */}
-                <path d="M 280,60 L 280,270" strokeWidth="5" />
-                <path d="M 410,50 L 410,290" strokeWidth="6" />
-                <path d="M 480,70 L 480,285" strokeWidth="5" />
-                <path d="M 620,50 L 620,270" strokeWidth="5" />
-                <path d="M 740,60 L 740,265" strokeWidth="5" />
-                <path d="M 280,120 L 880,120" strokeWidth="4" />
-                <path d="M 330,195 L 880,195" strokeWidth="4.5" />
+              {/* 3. Secondary City Road Grid (Crisp Realistic Street Hierarchy) */}
+              <g stroke="#dfd2c0" strokeLinecap="round" strokeLinejoin="round">
+                {/* Secondary Cross Streets */}
+                <path d="M 260,60 L 260,280" strokeWidth="4.5" />
+                <path d="M 390,60 L 390,295" strokeWidth="5.5" />
+                <path d="M 450,70 L 450,285" strokeWidth="4.5" />
+                <path d="M 610,50 L 610,270" strokeWidth="5" />
+                <path d="M 720,60 L 720,260" strokeWidth="5" />
 
-                {/* South Industrial Estate Grid */}
-                <path d="M 120,380 L 120,540" strokeWidth="5" />
-                <path d="M 240,360 L 240,540" strokeWidth="6" />
-                <path d="M 400,345 L 400,540" strokeWidth="5" />
-                <path d="M 640,310 L 640,540" strokeWidth="5" />
-                <path d="M 760,290 L 760,540" strokeWidth="6" />
-                <path d="M 80,450 L 880,450" strokeWidth="4.5" />
-                <path d="M 100,515 L 880,515" strokeWidth="4.5" />
+                {/* Industrial Estate Grid */}
+                <path d="M 120,380 L 120,535" strokeWidth="5" />
+                <path d="M 230,360 L 230,535" strokeWidth="5" />
+                <path d="M 342,342 L 342,535" strokeWidth="5" />
+                <path d="M 630,300 L 630,535" strokeWidth="5" />
+                <path d="M 740,280 L 740,535" strokeWidth="5.5" />
+                <path d="M 80,440 L 880,440" strokeWidth="4" />
+                <path d="M 100,505 L 880,505" strokeWidth="4" />
               </g>
 
-              {/* Railway Line (Chennai Central - Arakkonam) */}
-              <g opacity="0.85">
-                <path d="M 240,75 L 890,75" stroke="#786558" strokeWidth="3" />
-                <path d="M 240,75 L 890,75" stroke="#ffffff" strokeWidth="1.5" strokeDasharray="6 6" />
-                <rect x="345" y="62" width="70" height="24" rx="4" fill="#ffffff" stroke="#786558" strokeWidth="1" filter="url(#mapShadow)" />
-                <text x="380" y="77" fill="#422e23" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" textAnchor="middle">
-                  🚆 Ambattur Rly Stn
+              {/* Railway Line & Station */}
+              <g opacity="0.88">
+                <path d="M 220,70 L 890,70" stroke="#716055" strokeWidth="3" />
+                <path d="M 220,70 L 890,70" stroke="#ffffff" strokeWidth="1.5" strokeDasharray="6 6" />
+                <rect x="330" y="58" width="85" height="23" rx="4" fill="#ffffff" stroke="#716055" strokeWidth="1" filter="url(#cardShadow)" />
+                <text x="372" y="73" fill="#3a271f" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" textAnchor="middle">
+                  🚆 Ambattur Station
                 </text>
               </g>
 
-              {/* 4. Major Arterial Highways (Turmeric Gold) */}
+              {/* 4. Major Arterial Roads */}
               {/* Ambattur Industrial Estate 3rd Main Road */}
-              <path d="M 520,285 L 520,540" stroke="#f0b842" strokeWidth="9" strokeLinecap="round" />
-              <path d="M 520,285 L 520,540" stroke="#fcf6eb" strokeWidth="2" strokeDasharray="8 8" />
-              <text x="532" y="440" fill="#714b13" fontSize="9" fontWeight="700" letterSpacing="0.07em" transform="rotate(90 532 440)">
-                INDUSTRIAL ESTATE ROAD
-              </text>
+              <path d="M 505,280 L 505,535" stroke="#e8b146" strokeWidth="8" strokeLinecap="round" />
+              <path d="M 505,280 L 505,535" stroke="#ffffff" strokeWidth="1.8" strokeDasharray="8 8" />
+              <g transform="translate(517, 430) rotate(90)">
+                <text fill="#684511" fontSize="8.5" fontWeight="700" letterSpacing="0.06em">
+                  ESTATE 3RD MAIN ROAD
+                </text>
+              </g>
 
               {/* Chennai Bypass / Padi Flyover Connector */}
-              <path d="M 840,40 L 840,540" stroke="#eab13b" strokeWidth="11" strokeLinecap="round" />
-              <text x="852" y="160" fill="#6d480d" fontSize="9" fontWeight="700" letterSpacing="0.08em" transform="rotate(90 852 160)">
-                CHENNAI BYPASS / PADI FLYOVER →
-              </text>
+              <path d="M 845,35 L 845,535" stroke="#e0a635" strokeWidth="10" strokeLinecap="round" />
+              <g transform="translate(857, 180) rotate(90)">
+                <text fill="#664109" fontSize="9" fontWeight="700" letterSpacing="0.07em">
+                  CHENNAI BYPASS / PADI FLYOVER →
+                </text>
+              </g>
 
-              {/* MTH Road (Madras Thiruvallur High Road) — Base Road Layer */}
+              {/* MTH Road (Madras Thiruvallur High Road / NH 716) */}
               <path
-                d="M 20,380 L 180,360 L 330,340 Q 420,320 520,285 L 720,265 L 890,255"
-                stroke="#e5a93b"
+                d="M 20,380 L 170,360 L 320,340 Q 410,320 500,280 L 710,255 L 890,245"
+                stroke="#dfa338"
                 strokeWidth="13"
                 strokeLinecap="round"
                 strokeLinejoin="round"
               />
               <path
-                d="M 20,380 L 180,360 L 330,340 Q 420,320 520,285 L 720,265 L 890,255"
-                stroke="#fff8ee"
+                d="M 20,380 L 170,360 L 320,340 Q 410,320 500,280 L 710,255 L 890,245"
+                stroke="#ffffff"
                 strokeWidth="2.5"
                 strokeDasharray="10 10"
                 strokeLinecap="round"
                 strokeLinejoin="round"
               />
-              {/* MTH Road Label */}
-              <g transform="translate(620, 252)">
-                <rect x="-95" y="-13" width="190" height="18" rx="9" fill="#fff9ef" stroke="#d89b28" strokeWidth="1" filter="url(#mapShadow)" />
-                <text x="0" y="0" fill="#7d4e0e" fontSize="9.5" fontWeight="700" letterSpacing="0.08em" textAnchor="middle">
-                  MTH ROAD (CTH ROAD)
+              {/* MTH Road High-Contrast Shield Badge */}
+              <g transform="translate(630, 242)">
+                <rect x="-85" y="-12" width="170" height="18" rx="9" fill="#ffffff" stroke="#c98e26" strokeWidth="1" filter="url(#cardShadow)" />
+                <text x="0" y="1" fill="#663f0d" fontSize="9.5" fontWeight="700" letterSpacing="0.07em" textAnchor="middle">
+                  MTH ROAD (NH 716)
                 </text>
               </g>
 
               {/* Ambattur OT Bus Stand Complex Outline */}
-              <g transform="translate(305, 310)">
-                <rect x="0" y="0" width="85" height="52" rx="7" fill="#fffaf1" stroke="#d5a034" strokeWidth="1.5" strokeDasharray="3 3" />
-                <text x="42" y="18" fill="#8a5313" fontSize="8" fontWeight="700" textAnchor="middle" letterSpacing="0.03em">
+              <g transform="translate(295, 305)">
+                <rect x="0" y="0" width="80" height="46" rx="6" fill="#ffffff" stroke="#d5a034" strokeWidth="1.2" strokeDasharray="3 3" />
+                <text x="40" y="16" fill="#78470a" fontSize="7.5" fontWeight="700" textAnchor="middle">
                   BUS STAND
                 </text>
-                <text x="42" y="28" fill="#8a5313" fontSize="7.5" fontWeight="600" textAnchor="middle">
+                <text x="40" y="26" fill="#78470a" fontSize="7" fontWeight="600" textAnchor="middle">
                   COMPLEX
                 </text>
-                <circle cx="16" cy="40" r="3" fill="#2d6040" />
-                <circle cx="28" cy="40" r="3" fill="#2d6040" />
-                <circle cx="40" cy="40" r="3" fill="#2d6040" />
-                <text x="56" y="42" fill="#5c4639" fontSize="7">Bays 1-8</text>
+                <circle cx="15" cy="36" r="2.5" fill="#2d6040" />
+                <circle cx="26" cy="36" r="2.5" fill="#2d6040" />
+                <circle cx="37" cy="36" r="2.5" fill="#2d6040" />
+                <text x="50" y="38" fill="#6e574c" fontSize="6.5">Bays</text>
               </g>
 
-              {/* 5. Highlighted Spice Delivery Route (Chilli Red & Turmeric Gold) */}
+              {/* Sai Nagar Street Connector */}
+              <path d="M 320,340 L 342,342 L 350,380" stroke="#f0c265" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" />
+
+              {/* 5. Highlighted Direct Route */}
               {/* Route Ambient Glow */}
               <path
                 d={routePathD}
                 fill="none"
-                stroke="url(#routeGlow)"
-                strokeWidth="14"
+                stroke="#fce7a2"
+                strokeWidth="13"
                 strokeLinecap="round"
                 strokeLinejoin="round"
+                opacity="0.75"
               />
               {/* Route Core Line */}
               <path
                 id="spiceDeliveryRoutePath"
                 d={routePathD}
                 fill="none"
-                stroke="url(#chilliRoute)"
-                strokeWidth="5.5"
+                stroke="url(#primaryRoute)"
+                strokeWidth="5"
                 strokeLinecap="round"
                 strokeLinejoin="round"
               />
-              {/* Animated Directional Arrows / Dash Flow */}
+              {/* Directional Dash Flow */}
               <path
                 d={routePathD}
                 fill="none"
-                stroke="#fff8ee"
-                strokeWidth="2.5"
-                strokeDasharray="8 14"
+                stroke="#ffffff"
+                strokeWidth="2"
+                strokeDasharray="7 12"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 className="route-dash-flow"
               />
 
               {/* 6. Subtle Spice Waypoint Markers along the Journey */}
-              {/* Waypoint 1: Padi Entry (Cumin Seeds) */}
+              {/* Waypoint 1: Padi Junction (Cumin) */}
               <g
                 className="spice-waypoint"
-                transform="translate(745, 240)"
+                transform="translate(735, 230)"
                 onClick={() => setActiveWaypoint(activeWaypoint === 'cumin' ? null : 'cumin')}
                 style={{ cursor: 'pointer' }}
               >
-                <circle cx="0" cy="0" r="14" fill="#ffffff" stroke="#d49424" strokeWidth="1.5" filter="url(#mapShadow)" />
-                {/* 3 cumin seeds */}
-                <ellipse cx="-4" cy="-2" rx="4" ry="1.8" fill="#a46d25" transform="rotate(-30 -4 -2)" />
-                <ellipse cx="3" cy="-1" rx="4" ry="1.8" fill="#7e5218" transform="rotate(25 3 -1)" />
-                <ellipse cx="0" cy="4" rx="4" ry="1.8" fill="#b87b2b" transform="rotate(75 0 4)" />
-                <rect x="-38" y="-30" width="76" height="15" rx="7.5" fill="#fff8ec" stroke="#d49424" strokeWidth="0.8" />
-                <text x="0" y="-20" fill="#78470a" fontSize="7.5" fontWeight="700" letterSpacing="0.04em" textAnchor="middle">
-                  ✦ CUMIN SEEDS
+                <circle cx="0" cy="0" r="13" fill="#ffffff" stroke="#c88b22" strokeWidth="1.5" filter="url(#cardShadow)" />
+                <ellipse cx="-3" cy="-2" rx="3.5" ry="1.6" fill="#8d5b1d" transform="rotate(-30 -3 -2)" />
+                <ellipse cx="3" cy="-1" rx="3.5" ry="1.6" fill="#6a4413" transform="rotate(25 3 -1)" />
+                <ellipse cx="0" cy="3.5" rx="3.5" ry="1.6" fill="#a46b24" transform="rotate(75 0 3.5)" />
+                <rect x="-34" y="-27" width="68" height="14" rx="7" fill="#ffffff" stroke="#c88b22" strokeWidth="0.8" />
+                <text x="0" y="-18" fill="#6a3e08" fontSize="7" fontWeight="700" letterSpacing="0.04em" textAnchor="middle">
+                  CUMIN SEEDS
                 </text>
               </g>
 
-              {/* Waypoint 2: Estate Junction (Curry Leaves) */}
+              {/* Waypoint 2: Estate Road Junction (Curry Leaves) */}
               <g
                 className="spice-waypoint"
-                transform="translate(525, 260)"
+                transform="translate(510, 255)"
                 onClick={() => setActiveWaypoint(activeWaypoint === 'leaf' ? null : 'leaf')}
                 style={{ cursor: 'pointer' }}
               >
-                <circle cx="0" cy="0" r="14" fill="#ffffff" stroke="#2a603c" strokeWidth="1.5" filter="url(#mapShadow)" />
-                {/* Fresh curry leaf */}
-                <path d="M -7,6 Q 0,-3 7,-6 Q 3,3 -7,6 Z" fill="#2d6a42" stroke="#1b4329" strokeWidth="0.5" />
-                <line x1="-6" y1="5" x2="6" y2="-5" stroke="#a3d9b5" strokeWidth="0.7" />
-                <rect x="-44" y="-30" width="88" height="15" rx="7.5" fill="#f0f7f2" stroke="#2d6a42" strokeWidth="0.8" />
-                <text x="0" y="-20" fill="#1b4d2e" fontSize="7.5" fontWeight="700" letterSpacing="0.04em" textAnchor="middle">
-                  ✦ CURRY LEAVES
+                <circle cx="0" cy="0" r="13" fill="#ffffff" stroke="#245a35" strokeWidth="1.5" filter="url(#cardShadow)" />
+                <path d="M -6,5 Q 0,-3 6,-5 Q 3,3 -6,5 Z" fill="#2d6a42" stroke="#1b4329" strokeWidth="0.5" />
+                <line x1="-5" y1="4" x2="5" y2="-4" stroke="#a3d9b5" strokeWidth="0.6" />
+                <rect x="-40" y="-27" width="80" height="14" rx="7" fill="#ffffff" stroke="#245a35" strokeWidth="0.8" />
+                <text x="0" y="-18" fill="#184a2b" fontSize="7" fontWeight="700" letterSpacing="0.04em" textAnchor="middle">
+                  CURRY LEAVES
                 </text>
               </g>
 
-              {/* Waypoint 3: OT Junction (Black Peppercorns) */}
+              {/* Waypoint 3: OT Junction (Black Pepper) */}
               <g
                 className="spice-waypoint"
-                transform="translate(425, 290)"
+                transform="translate(415, 280)"
                 onClick={() => setActiveWaypoint(activeWaypoint === 'pepper' ? null : 'pepper')}
                 style={{ cursor: 'pointer' }}
               >
-                <circle cx="0" cy="0" r="14" fill="#ffffff" stroke="#8d1f2d" strokeWidth="1.5" filter="url(#mapShadow)" />
-                {/* 4 black peppercorns */}
-                <circle cx="-3" cy="-3" r="3" fill="#30181d" />
-                <circle cx="4" cy="-2" r="2.6" fill="#4d242c" />
-                <circle cx="0" cy="4" r="2.8" fill="#241115" />
-                <circle cx="-2" cy="-4" r="0.8" fill="#f5eee7" opacity="0.6" />
-                <rect x="-42" y="-30" width="84" height="15" rx="7.5" fill="#fff5f5" stroke="#982018" strokeWidth="0.8" />
-                <text x="0" y="-20" fill="#6a151b" fontSize="7.5" fontWeight="700" letterSpacing="0.04em" textAnchor="middle">
-                  ✦ BLACK PEPPER
+                <circle cx="0" cy="0" r="13" fill="#ffffff" stroke="#7e1724" strokeWidth="1.5" filter="url(#cardShadow)" />
+                <circle cx="-3" cy="-3" r="2.8" fill="#2c1519" />
+                <circle cx="3.5" cy="-2" r="2.4" fill="#4a2128" />
+                <circle cx="0" cy="3.5" r="2.6" fill="#1f0d11" />
+                <circle cx="-2" cy="-4" r="0.7" fill="#f5eee7" opacity="0.6" />
+                <rect x="-38" y="-27" width="76" height="14" rx="7" fill="#ffffff" stroke="#7e1724" strokeWidth="0.8" />
+                <text x="0" y="-18" fill="#58101a" fontSize="7" fontWeight="700" letterSpacing="0.04em" textAnchor="middle">
+                  BLACK PEPPER
                 </text>
               </g>
 
               {/* 7. Animated Delivery Vehicle Carrying Spice Sacks */}
               <g className="spice-delivery-truck">
-                {/* Vehicle SVG Object */}
-                <g transform="translate(-25, -14)">
-                  {/* Delivery Auto / Van Body in Turmeric Gold & Chilli Red */}
+                <g transform="translate(-24, -14)">
                   {/* Cargo Bed with Jute Spice Sacks */}
-                  <rect x="0" y="6" width="22" height="13" rx="2" fill="#4a1c22" stroke="#2a0d12" strokeWidth="0.8" />
+                  <rect x="0" y="6" width="22" height="13" rx="2" fill="#3c161c" stroke="#220b0e" strokeWidth="0.8" />
 
-                  {/* 3 Plump Burlap Spice Sacks stacked in cargo bed */}
-                  {/* Sack 1 (Turmeric Gold Sack) */}
-                  <ellipse cx="6" cy="7" rx="5" ry="4.5" fill="#e5a93b" stroke="#7e5414" strokeWidth="0.6" />
-                  <ellipse cx="6" cy="4.5" rx="2" ry="1.2" fill="#f9d77e" />
+                  {/* 3 Spice Sacks */}
+                  {/* Sack 1 (Turmeric) */}
+                  <ellipse cx="6" cy="7" rx="5" ry="4.5" fill="#e5a93b" stroke="#6f4810" strokeWidth="0.6" />
+                  <ellipse cx="6" cy="4.5" rx="2" ry="1.2" fill="#fce498" />
 
-                  {/* Sack 2 (Chilli Red Sack with chillies) */}
-                  <ellipse cx="14" cy="7" rx="5" ry="4.5" fill="#b8261b" stroke="#63130c" strokeWidth="0.6" />
+                  {/* Sack 2 (Chilli) */}
+                  <ellipse cx="14" cy="7" rx="5" ry="4.5" fill="#b8261b" stroke="#5b110b" strokeWidth="0.6" />
                   <path d="M 13,3 Q 16,1 17,4" stroke="#e52d1f" strokeWidth="1.2" fill="none" />
 
-                  {/* Sack 3 (Cumin/Coriander Brown Sack on top) */}
-                  <ellipse cx="10" cy="3" rx="4.5" ry="3.5" fill="#9d7342" stroke="#503719" strokeWidth="0.6" />
+                  {/* Sack 3 (Cumin/Coriander) */}
+                  <ellipse cx="10" cy="3" rx="4.5" ry="3.5" fill="#9d7342" stroke="#483115" strokeWidth="0.6" />
 
                   {/* Driver Cab */}
-                  <path d="M 21,5 L 34,5 L 38,12 L 38,19 L 21,19 Z" fill="#b8261b" stroke="#68120c" strokeWidth="0.8" />
-                  {/* Windshield */}
-                  <path d="M 28,6 L 33,6 L 36,12 L 28,12 Z" fill="#e6f4ff" stroke="#4a1c22" strokeWidth="0.6" />
+                  <path d="M 21,5 L 34,5 L 38,12 L 38,19 L 21,19 Z" fill="#b8261b" stroke="#5b110b" strokeWidth="0.8" />
+                  <path d="M 28,6 L 33,6 L 36,12 L 28,12 Z" fill="#e6f4ff" stroke="#3c161c" strokeWidth="0.6" />
+
                   {/* Golden Headlight */}
                   <circle cx="38" cy="14" r="1.8" fill="#fde047" />
-                  <polygon points="39,13 49,10 49,18 39,15" fill="#fde047" opacity="0.35" />
+                  <polygon points="39,13 48,10 48,18 39,15" fill="#fde047" opacity="0.3" />
 
                   {/* Wheels */}
-                  <circle cx="7" cy="19" r="3.6" fill="#1b0b0f" stroke="#715d55" strokeWidth="1" />
-                  <circle cx="7" cy="19" r="1.2" fill="#f5eee7" />
-                  <circle cx="32" cy="19" r="3.6" fill="#1b0b0f" stroke="#715d55" strokeWidth="1" />
-                  <circle cx="32" cy="19" r="1.2" fill="#f5eee7" />
+                  <circle cx="7" cy="19" r="3.6" fill="#1b0b0f" stroke="#68554d" strokeWidth="1" />
+                  <circle cx="7" cy="19" r="1.2" fill="#ffffff" />
+                  <circle cx="32" cy="19" r="3.6" fill="#1b0b0f" stroke="#68554d" strokeWidth="1" />
+                  <circle cx="32" cy="19" r="1.2" fill="#ffffff" />
 
-                  {/* Floating Spice Tag above Truck */}
-                  <rect x="2" y="-12" width="40" height="12" rx="4" fill="#ffffff" stroke="#b8261b" strokeWidth="0.8" filter="url(#mapShadow)" />
+                  {/* Floating Tag */}
+                  <rect x="2" y="-12" width="40" height="12" rx="4" fill="#ffffff" stroke="#b8261b" strokeWidth="0.8" filter="url(#cardShadow)" />
                   <text x="22" y="-3.5" fill="#982018" fontSize="7" fontWeight="800" textAnchor="middle" letterSpacing="0.03em">
                     SPICE VAN 🚚
                   </text>
                 </g>
 
-                {/* SVG Motion Path Animation */}
                 <animateMotion
                   path={routePathD}
                   dur="14s"
@@ -402,61 +395,58 @@ export default function SpiceMap({
                 />
               </g>
 
-              {/* 8. The Destination Restaurant Beacon (The Chennai Kitchen) */}
-              <g transform="translate(348, 335)" filter="url(#pinGlow)">
-                {/* Outer Pulsing Golden Ripple */}
-                <circle cx="0" cy="0" r="32" fill="#e5a93b" opacity="0.22" className="beacon-ripple-outer" />
-                <circle cx="0" cy="0" r="22" fill="#b8261b" opacity="0.25" className="beacon-ripple-inner" />
+              {/* 8. Destination Restaurant Pin (Sai Nagar, Ambattur Industrial Estate) */}
+              <g transform="translate(342, 342)" filter="url(#destGlow)">
+                <circle cx="0" cy="0" r="30" fill="#e5a93b" opacity="0.22" className="beacon-ripple-outer" />
+                <circle cx="0" cy="0" r="20" fill="#b8261b" opacity="0.28" className="beacon-ripple-inner" />
 
-                {/* Main Restaurant Destination Pin */}
+                {/* Main Destination Pin */}
                 <path
                   d="M 0,-42 C -18,-42 -22,-24 0,0 C 22,-24 18,-42 0,-42 Z"
-                  fill="url(#chilliRoute)"
+                  fill="url(#primaryRoute)"
                   stroke="#ffffff"
                   strokeWidth="2.5"
                 />
                 <circle cx="0" cy="-24" r="12" fill="#ffffff" />
-                {/* Traditional Dum Pot / Cooking Icon */}
                 <circle cx="0" cy="-24" r="9" fill="#982018" />
                 <text x="0" y="-20.5" fill="#f6ce7b" fontSize="9" fontWeight="900" textAnchor="middle">
                   🍲
                 </text>
 
-                {/* Restaurant Destination Card Popup */}
-                <g transform="translate(-115, -112)" filter="url(#mapShadow)">
-                  <rect x="0" y="0" width="230" height="62" rx="10" fill="#ffffff" stroke="#b8261b" strokeWidth="1.8" />
-                  {/* Gold Top Accent Line */}
+                {/* Destination Info Card */}
+                <g transform="translate(-115, -114)" filter="url(#cardShadow)">
+                  <rect x="0" y="0" width="230" height="64" rx="10" fill="#ffffff" stroke="#b8261b" strokeWidth="1.8" />
                   <rect x="0" y="0" width="230" height="4" rx="2" fill="#e5a93b" />
 
-                  <text x="14" y="22" fill="#982018" fontSize="12" fontWeight="800" letterSpacing="0.04em">
+                  <text x="14" y="22" fill="#982018" fontSize="12" fontWeight="800" letterSpacing="0.03em">
                     THE CHENNAI KITCHEN
                   </text>
-                  <text x="14" y="37" fill="#4d352b" fontSize="9" fontWeight="600">
-                    No.15, 1st Floor, Bus Stand Complex
+                  <text x="14" y="38" fill="#3b261d" fontSize="9" fontWeight="700">
+                    35X9+VX5, Sai Nagar
                   </text>
-                  <text x="14" y="49" fill="#755a4e" fontSize="8">
-                    MTH Road, Ambattur · Grand Opening 15 Nov
+                  <text x="14" y="50" fill="#6d5449" fontSize="8">
+                    Ambattur Industrial Estate, Chennai 600058
                   </text>
 
-                  {/* Star Rating Badge */}
+                  {/* Rating Badge */}
                   <rect x="185" y="12" width="34" height="17" rx="8.5" fill="#fdf4df" stroke="#d5a034" strokeWidth="0.8" />
-                  <text x="202" y="24" fill="#8d560c" fontSize="8" fontWeight="800" textAnchor="middle">
+                  <text x="202" y="24" fill="#7d4b07" fontSize="8" fontWeight="800" textAnchor="middle">
                     ★ 4.9
                   </text>
                 </g>
               </g>
 
-              {/* Decorative Corner Spices */}
-              <g transform="translate(35, 520)" opacity="0.6">
-                <text fill="#68473a" fontSize="8.5" fontWeight="600" letterSpacing="0.08em">
-                  📍 AMBATTUR · 13° 06' N, 80° 09' E
+              {/* Exact Plus Code Footer Mark on Map */}
+              <g transform="translate(35, 525)" opacity="0.75">
+                <text fill="#68473a" fontSize="9" fontWeight="700" letterSpacing="0.06em">
+                  📍 35X9+VX5 · SAI NAGAR, AMBATTUR INDUSTRIAL ESTATE
                 </text>
               </g>
             </svg>
           </div>
         )}
 
-        {/* Floating Familiar Map Controls (Top Right) */}
+        {/* Familiar Map Navigation Controls */}
         <div className="spice-map-controls" role="toolbar" aria-label="Map navigation controls">
           <button
             className="ctrl-btn"
@@ -479,7 +469,7 @@ export default function SpiceMap({
           <button
             className="ctrl-btn"
             onClick={handleReset}
-            aria-label="Reset map view"
+            aria-label="Recenter on The Chennai Kitchen"
             title="Recenter on The Chennai Kitchen"
             disabled={viewMode === 'live'}
           >
@@ -492,13 +482,13 @@ export default function SpiceMap({
           <div className="waypoint-tooltip">
             {activeWaypoint === 'cumin' && (
               <div>
-                <strong>Padi Junction: Cumin & Mustard Hub</strong>
-                <p>Whole country cumin (jeera) hand-selected from spice mandis and ground each dawn.</p>
+                <strong>Padi Junction: Cumin & Mustard</strong>
+                <p>Whole country cumin (jeera) hand-selected from spice mandis and ground fresh at dawn.</p>
               </div>
             )}
             {activeWaypoint === 'leaf' && (
               <div>
-                <strong>Estate Green: Fresh Curry Leaves</strong>
+                <strong>Estate Junction: Fresh Curry Leaves</strong>
                 <p>Aromatic kariveppilai delivered fresh every morning from local farm orchards.</p>
               </div>
             )}
@@ -513,31 +503,27 @@ export default function SpiceMap({
         )}
       </div>
 
-      {/* Bottom Information & Legend Strip */}
+      {/* Clean Bottom Location Strip (Removed color-naming labels) */}
       <div className="spice-map-footer">
-        <div className="spice-legend">
-          <span className="legend-item">
-            <span className="legend-swatch chilli"></span>
-            <span>Chilli Red Route</span>
+        <div className="spice-location-badges">
+          <span className="loc-badge">
+            <span className="loc-dot"></span>
+            <span>MTH Road Highway</span>
           </span>
-          <span className="legend-item">
-            <span className="legend-swatch turmeric"></span>
-            <span>Turmeric MTH Road</span>
+          <span className="loc-badge">
+            <span className="loc-dot green"></span>
+            <span>Sai Nagar Entrance</span>
           </span>
-          <span className="legend-item">
-            <span className="legend-swatch green"></span>
-            <span>Fresh Herb Greens</span>
-          </span>
-          <span className="legend-item">
-            <span className="legend-swatch truck"></span>
-            <span>Daily Spice Van</span>
+          <span className="loc-badge">
+            <span className="loc-dot gold"></span>
+            <span>Near OT Bus Stand</span>
           </span>
         </div>
 
         <div className="spice-quick-actions">
           <button className="copy-addr-btn" onClick={copyAddress} title="Copy exact address">
             {isCopied ? <Check size={13} className="text-green" /> : <MapPin size={13} />}
-            <span>{isCopied ? 'Address Copied!' : 'Copy Address'}</span>
+            <span>{isCopied ? 'Address Copied!' : 'Copy Exact Address'}</span>
           </button>
         </div>
       </div>

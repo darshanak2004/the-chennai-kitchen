@@ -5,16 +5,18 @@ import SpiceMap from './SpiceMap.jsx'
 import './style.css'
 
 const initialGallery = [
-  { id: 'g1', title: 'Mutton Biriyani (Jeeraka Samba)', image_url: '/dish-mutton-biriyani.jpg', category: 'Biryani' },
-  { id: 'g2', title: 'Curry Leaf Chicken', image_url: '/dish-curry-leaf-chicken.jpg', category: 'Starters' },
-  { id: 'g3', title: 'Chicken Pallipalayam', image_url: '/dish-chicken-pallipalayam.jpg', category: 'Starters' },
-  { id: 'g4', title: 'Mutton Kola Urundai', image_url: '/dish-mutton-kola-urundai.jpg', category: 'Starters' },
-  { id: 'g5', title: 'Mutton Fat Curry', image_url: '/dish-mutton-fat-curry.jpg', category: 'Gravy' },
-  { id: 'g6', title: 'Green Mint Mojito', image_url: '/dish-green-mint-mojito.jpg', category: 'Juice' },
-  { id: 'g7', title: 'Sunset', image_url: '/dish-sunset.jpg', category: 'Juice' },
+  { id: 'g1', title: 'Mutton Biriyani (Jeeraka Samba)', image_url: '/dish-mutton-biriyani.jpg', category: 'Signature Dum Biryani' },
+  { id: 'g2', title: 'Grand Dining Hall', image_url: '/interior-dining-hall.jpg', category: 'Restaurant Ambience' },
+  { id: 'g3', title: 'Luxury Family Booths', image_url: '/interior-booths.jpg', category: 'Seating & Comfort' },
+]
+const SEAT_PHOTOS = [
+  { id: 's1', src: '/interior-dining-hall.jpg', label: 'Grand Dining Hall', desc: 'Air-conditioned luxury seating for families' },
+  { id: 's2', src: '/interior-booths.jpg', label: 'Luxury Family Booths', desc: 'Cozy booths with warm ambiance' },
+  { id: 's3', src: '/interior-reception.jpg', label: 'Welcome Reception', desc: 'Welcoming entrance & reception counter' },
+  { id: 's4', src: '/restaurant-exterior.jpg', label: 'Flagship Restaurant', desc: 'Ambattur Industrial Estate, Chennai' },
 ]
 const HASH = !!window.__HASH_ROUTER
-const ADDRESS = 'Bus stop, Madras Thiruvallur High Rd, OT, Ambattur, Chennai, Tamil Nadu 600058'
+const ADDRESS = '35X9+VX5, Sai Nagar, Ambattur Industrial Estate, Chennai, Tamil Nadu 600058'
 const POSTER = '/poster.jpg'
 const PAGES = ['home', 'about', 'menu', 'gallery', 'contact', 'admin']
 const TITLES = { home: 'A taste of home', about: 'About us', menu: 'Our Menu & Specials', gallery: 'Gallery', contact: 'Reserve a table & contact', admin: 'Admin' }
@@ -59,7 +61,7 @@ const reviews = [
     location: 'Ambattur, Chennai',
     rating: 5,
     dish: 'Dum Chicken Biryani',
-    date: '3 days ago',
+    date: 'Opening Day',
     comment: 'The fragrance as soon as the dum handi opened was unreal! Perfectly cooked basmati rice where every single grain carries the aroma of whole spices. Tasted just like a festive wedding feast at home.',
   },
   {
@@ -68,7 +70,7 @@ const reviews = [
     location: 'Anna Nagar',
     rating: 5,
     dish: 'Golden Parotta & Salna',
-    date: '1 week ago',
+    date: 'Yesterday',
     comment: 'Hands down the flakiest parotta in Chennai. We ordered the special chicken biryani and parotta with mutton gravy. The staff was incredibly welcoming and attentive to our kids.',
   },
   {
@@ -77,7 +79,7 @@ const reviews = [
     location: 'Mogappair West',
     rating: 5,
     dish: 'Mutton Chukka & House Biryani',
-    date: '2 weeks ago',
+    date: '2 days ago',
     comment: 'Authentic flavours cooked with authentic patience — no artificial colours or heavy greasy masalas. The mutton was fork-tender. The Chennai Kitchen has easily become our weekend regular.',
   },
   {
@@ -86,7 +88,7 @@ const reviews = [
     location: 'Kilpauk, Chennai',
     rating: 5,
     dish: 'Special Non-Veg Platter',
-    date: 'A month ago',
+    date: 'Opening Week',
     comment: 'Celebrated our family get-together here. The ambience is warm and cozy with tasteful South Indian touches, and the food arrived piping hot. Everyone from grandparents to grandchildren loved it!',
   },
 ]
@@ -1097,6 +1099,7 @@ function AdminPage({
 
 function App() {
   const [gallery, setGallery] = useState(initialGallery)
+  const [activeSeatIdx, setActiveSeatIdx] = useState(0)
   const [heroMedia, setHeroMedia] = useState([])
   const [phone, setPhone] = useState(import.meta.env.VITE_WHATSAPP_PHONE || '919566577729')
   const [menuOpen, setMenuOpen] = useState(false)
@@ -1177,7 +1180,7 @@ function App() {
 
   useEffect(() => {
     api('/content').then(data => {
-      if (data.gallery?.length) setGallery(data.gallery)
+      if (data.gallery?.length && !data.gallery.some(g => g.image_url?.includes('unsplash.com'))) setGallery(data.gallery)
       if (data.heroMedia) setHeroMedia(data.heroMedia)
       if (data.whatsappPhone) setPhone(data.whatsappPhone)
     }).catch(() => {})
@@ -1277,7 +1280,7 @@ function App() {
           <p>Bring your appetite, bring your people. Hand-roasted country spices, authentic woodfire dum biryanis, and warm South Indian hospitality await you in Ambattur.</p>
           <div className="visit-details">
             <span><MapPin size={17}/><span>Ambattur, Chennai<br/><small>{ADDRESS}</small></span></span>
-            <span><Clock3 size={17}/><span>Grand opening<br/><small>Sunday, 15 November 2026</small></span></span>
+            <span><Clock3 size={17}/><span>Opening Hours<br/><small>Mon – Sun: 11:30 AM – 11:00 PM</small></span></span>
             <span><Phone size={17}/><span>Call us<br/><small><a href="tel:+919894464472">98944 64472</a> · <a href="tel:+919047470444">90474 70444</a></small></span></span>
           </div>
           <button className="text-link" onClick={() => window.open(`https://maps.google.com/?q=${encodeURIComponent(ADDRESS)}`, '_blank', 'noopener')}>
@@ -1439,8 +1442,28 @@ function App() {
   const reserveSection = (
       <section className="reserve-section" id="reserve">
         <div className="reserve-photo reveal">
-          <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1300&q=85" alt="Warm restaurant dining room" loading="lazy"/>
+          <img
+            src={SEAT_PHOTOS[activeSeatIdx].src}
+            alt={SEAT_PHOTOS[activeSeatIdx].label}
+            loading="lazy"
+            key={SEAT_PHOTOS[activeSeatIdx].src}
+          />
           <div className="photo-label"><span>THE GOOD SEATS</span><span>ARE WAITING</span></div>
+          <div className="reserve-interior-strip" role="tablist" aria-label="Restaurant interior views">
+            {SEAT_PHOTOS.map((seat, sIdx) => (
+              <button
+                key={seat.id}
+                type="button"
+                className={`reserve-seat-thumb ${sIdx === activeSeatIdx ? 'active' : ''}`}
+                onClick={() => setActiveSeatIdx(sIdx)}
+                aria-label={`View ${seat.label}`}
+                title={seat.desc}
+              >
+                <img src={seat.src} alt={seat.label} />
+                <span>{seat.label}</span>
+              </button>
+            ))}
+          </div>
         </div>
         <div className="reserve-content reveal">
           <span className="eyebrow"><span></span> PULL UP A CHAIR</span>
@@ -1600,7 +1623,7 @@ function App() {
         </div>
         <div className="footer-info-col">
           <span className="footer-col-title">Visit Us</span>
-          <p className="footer-address-text">No.15, 1st Floor, Ambattur Industrial Estate,<br/>Bus Stand Complex, MTH Road, Chennai 600058</p>
+          <p className="footer-address-text">35X9+VX5, Sai Nagar, Ambattur Industrial Estate,<br/>MTH Road (Near Bus Stand), Chennai, Tamil Nadu 600058</p>
         </div>
         <div className="footer-links-col">
           <span className="footer-col-title">Connect</span>

@@ -104,11 +104,9 @@ function getContent() {
 }
 const bust = () => { cache = { at: 0, data: cache.data, inflight: null } }
 const defaultGallery = [
-  ['House special chicken biryani', 'https://images.unsplash.com/photo-1633945274405-b6c8069047b0?auto=format&fit=crop&w=1300&q=85', 'Biryani'],
-  ['A table set for sharing', 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=1100&q=85', 'From the kitchen'],
-  ['Golden, flaky parotta', 'https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?auto=format&fit=crop&w=1100&q=85', 'South Indian'],
-  ['Slow-cooked, full of flavour', 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=1100&q=85', 'From the kitchen'],
-  ['A little something sweet', 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=1100&q=85', 'Something sweet'],
+  ['Mutton Biriyani (Jeeraka Samba)', '/dish-mutton-biriyani.jpg', 'Signature Dum Biryani'],
+  ['Grand Dining Hall', '/interior-dining-hall.jpg', 'Restaurant Ambience'],
+  ['Luxury Family Booths', '/interior-booths.jpg', 'Seating & Comfort'],
 ]
 // First run only: put the starter gallery into the database so the admin can edit or delete every photo.
 async function seedDefaults() {
