@@ -2043,3 +2043,15 @@ html, body, #root {
 @media (max-width: 768px) {
   .hero-track { height: 100svh !important; }
 }
+
+/* Story section — seamless background matching intro-section */
+.story-section-dark {
+  background: var(--cream);
+  color: var(--wine);
+  padding: 0 10% 60px;
+}
+@media (max-width: 680px) {
+  .story-section-dark {
+    padding: 0 6% 48px;
+  }
+}

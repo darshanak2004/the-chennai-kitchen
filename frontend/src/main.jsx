@@ -1330,7 +1330,7 @@ function App() {
       </section>
   )
   const storyChaptersSection = (
-      <section className="intro-section" style={{ paddingTop: '0' }}>
+      <section className="story-section-dark" style={{ paddingTop: '0' }}>
         <div className="story-chapters-grid reveal">
           <div className="story-chapters-visual">
             <img src="/dish-mutton-biriyani.jpg" alt="Mutton Biriyani — The Chennai Kitchen" />
@@ -1603,7 +1603,7 @@ function App() {
       {page === 'about' && <>{introSection}{storyChaptersSection}{quoteSection}{reviewsSection}</>}
       {page === 'menu' && <>{menuSection}</>}
       {page === 'gallery' && <>{gallerySection}</>}
-      {page === 'contact' && <>{visitSection}{reserveSection}{socialSection}{faqSection}</>}
+      {page === 'contact' && <>{reserveSection}{socialSection}{faqSection}</>}
     </main>
 
     <footer className="footer">
