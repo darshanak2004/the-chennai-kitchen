@@ -105,8 +105,12 @@ function getContent() {
 const bust = () => { cache = { at: 0, data: cache.data, inflight: null } }
 const defaultGallery = [
   ['Mutton Biriyani (Jeeraka Samba)', '/dish-mutton-biriyani.jpg', 'Signature Dum Biryani'],
-  ['Grand Dining Hall', '/interior-dining-hall.jpg', 'Restaurant Ambience'],
-  ['Luxury Family Booths', '/interior-booths.jpg', 'Seating & Comfort'],
+  ['Mutton Fat Kulambu', '/dish-mutton-fat-curry.jpg', 'House Special Gravy'],
+  ['Mutton Kola Urundai', '/dish-mutton-kola-urundai.jpg', 'Crispy Starter'],
+  ['Curry Leaf Chicken', '/dish-curry-leaf-chicken.jpg', 'Village Style Starter'],
+  ['Chicken Pallipalayam', '/dish-chicken-pallipalayam.jpg', 'Kongunadu Special'],
+  ['Green Mint Mojito', '/dish-green-mint-mojito.jpg', 'Chilled Cooler'],
+  ['Sunset Mojito', '/dish-sunset.jpg', 'Signature Cooler'],
 ]
 // First run only: put the starter gallery into the database so the admin can edit or delete every photo.
 async function seedDefaults() {

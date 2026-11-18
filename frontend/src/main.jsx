@@ -5,13 +5,13 @@ import SpiceMap from './SpiceMap.jsx'
 import './style.css'
 
 const initialGallery = [
-  { id: 'g1', title: 'Mutton Biriyani (Jeeraka Samba)', image_url: '/dish-mutton-biriyani.jpg', category: 'Biryani' },
-  { id: 'g2', title: 'Curry Leaf Chicken', image_url: '/dish-curry-leaf-chicken.jpg', category: 'Starters' },
-  { id: 'g3', title: 'Chicken Pallipalayam', image_url: '/dish-chicken-pallipalayam.jpg', category: 'Starters' },
-  { id: 'g4', title: 'Mutton Kola Urundai', image_url: '/dish-mutton-kola-urundai.jpg', category: 'Starters' },
-  { id: 'g5', title: 'Mutton Fat Curry', image_url: '/dish-mutton-fat-curry.jpg', category: 'Gravy' },
-  { id: 'g6', title: 'Green Mint Mojito', image_url: '/dish-green-mint-mojito.jpg', category: 'Juice' },
-  { id: 'g7', title: 'Sunset', image_url: '/dish-sunset.jpg', category: 'Juice' },
+  { id: 'g1', title: 'Mutton Biriyani (Jeeraka Samba)', image_url: '/dish-mutton-biriyani.jpg', category: 'Signature Dum Biryani' },
+  { id: 'g2', title: 'Mutton Fat Kulambu', image_url: '/dish-mutton-fat-curry.jpg', category: 'House Special Gravy' },
+  { id: 'g3', title: 'Mutton Kola Urundai', image_url: '/dish-mutton-kola-urundai.jpg', category: 'Crispy Starter' },
+  { id: 'g4', title: 'Curry Leaf Chicken', image_url: '/dish-curry-leaf-chicken.jpg', category: 'Village Style Starter' },
+  { id: 'g5', title: 'Chicken Pallipalayam', image_url: '/dish-chicken-pallipalayam.jpg', category: 'Kongunadu Special' },
+  { id: 'g6', title: 'Green Mint Mojito', image_url: '/dish-green-mint-mojito.jpg', category: 'Chilled Cooler' },
+  { id: 'g7', title: 'Sunset Mojito', image_url: '/dish-sunset.jpg', category: 'Signature Cooler' },
 ]
 const BEHIND_THE_FLAMES_ITEMS = [
   { id: 'btf1', title: 'Mutton Biriyani (Jeeraka Samba)', image_url: '/dish-mutton-biriyani.jpg', category: 'Signature Dum Biryani' },
@@ -1190,7 +1190,7 @@ function App() {
 
   useEffect(() => {
     api('/content').then(data => {
-      if (data.gallery?.length && !data.gallery.some(g => g.image_url?.includes('unsplash.com'))) setGallery(data.gallery)
+      if (data.gallery?.length >= 7 && !data.gallery.some(g => g.image_url?.includes('unsplash.com'))) setGallery(data.gallery)
       if (data.heroMedia) setHeroMedia(data.heroMedia)
       if (data.whatsappPhone) setPhone(data.whatsappPhone)
     }).catch(() => {})
