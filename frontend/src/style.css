@@ -1801,7 +1801,7 @@
    Comprehensive Mobile View Optimization (Whole Website)
    ==================================================== */
 html, body, #root {
-  overflow-x: hidden;
+  overflow-x: clip;
   max-width: 100vw;
   width: 100%;
 }
@@ -1815,7 +1815,7 @@ html, body, #root {
 @media (max-width: 680px) {
   /* Global viewport & container resets */
   html, body {
-    overflow-x: hidden !important;
+    overflow-x: clip !important;
     position: relative;
     width: 100%;
   }
@@ -2059,7 +2059,7 @@ html, body, #root {
 
 /* --- Hero Section & Track Fit (Full Scroll Animation, Zero Blank Space) --- */
 .hero-track {
-  height: 220vh !important;
+  height: 200svh !important;
   position: relative !important;
 }
 .hero {
@@ -2081,12 +2081,12 @@ html, body, #root {
 }
 @media (max-width: 680px) {
   .hero-track {
-    height: 200svh !important;
+    height: 190svh !important;
   }
   .hero {
-    top: 64px !important;
-    height: calc(100svh - 64px) !important;
-    min-height: calc(100svh - 64px) !important;
+    top: 60px !important;
+    height: calc(100svh - 60px) !important;
+    min-height: calc(100svh - 60px) !important;
   }
 }
 
