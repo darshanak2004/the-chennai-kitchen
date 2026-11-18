@@ -1131,13 +1131,7 @@ function App() {
 
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 1300)
-    const stageTimer = setInterval(() => {
-      setHeroStage(s => (s + 1) % heroStages.length)
-    }, 6000)
-    return () => {
-      clearTimeout(timer)
-      clearInterval(stageTimer)
-    }
+    return () => clearTimeout(timer)
   }, [])
 
   useEffect(() => {

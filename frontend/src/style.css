@@ -2057,27 +2057,36 @@ html, body, #root {
 }
 
 
-/* --- Hero Section & Track Fit (Zero blank space) --- */
+/* --- Hero Section & Track Fit (Full Scroll Animation, Zero Blank Space) --- */
 .hero-track {
-  height: calc(100vh - 78px) !important;
-  min-height: 580px !important;
-  max-height: 840px !important;
+  height: 220vh !important;
   position: relative !important;
-  overflow: hidden !important;
 }
 .hero {
-  height: 100% !important;
-  min-height: 100% !important;
-  max-height: 100% !important;
-  position: relative !important;
-  top: 0 !important;
+  position: sticky !important;
+  top: 78px !important;
+  height: calc(100vh - 78px) !important;
+  min-height: calc(100vh - 78px) !important;
+  max-height: none !important;
+  width: 100% !important;
   overflow: hidden !important;
+  background: #17070b;
+}
+.hero-canvas {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
 }
 @media (max-width: 680px) {
   .hero-track {
+    height: 200svh !important;
+  }
+  .hero {
+    top: 64px !important;
     height: calc(100svh - 64px) !important;
-    min-height: 520px !important;
-    max-height: none !important;
+    min-height: calc(100svh - 64px) !important;
   }
 }
 
