@@ -16,7 +16,13 @@ const initialGallery = [
 const BEHIND_THE_FLAMES_ITEMS = [
   { id: 'btf1', title: 'Mutton Biriyani (Jeeraka Samba)', image_url: '/dish-mutton-biriyani.jpg', category: 'Signature Dum Biryani' },
   { id: 'btf2', title: 'Grand Dining Hall', image_url: '/interior-dining-hall.jpg', category: 'Restaurant Ambience' },
-  { id: 'btf3', title: 'Luxury Family Booths', image_url: '/interior-booths.jpg', category: 'Seating & Comfort' },
+  { id: 'btf3', title: 'Curry Leaf Chicken', image_url: '/dish-curry-leaf-chicken.jpg', category: 'From Our Kitchen' },
+  { id: 'btf4', title: 'Luxury Family Booths', image_url: '/interior-booths.jpg', category: 'Seating & Comfort' },
+  { id: 'btf5', title: 'Chicken Pallipalayam', image_url: '/dish-chicken-pallipalayam.jpg', category: 'Starters' },
+  { id: 'btf6', title: 'Welcome Reception', image_url: '/interior-reception.jpg', category: 'Restaurant Ambience' },
+  { id: 'btf7', title: 'Mutton Kola Urundai', image_url: '/dish-mutton-kola-urundai.jpg', category: 'Starters' },
+  { id: 'btf8', title: 'The Chennai Kitchenn — Flagship', image_url: '/restaurant-exterior.jpg', category: 'Our Restaurant' },
+  { id: 'btf9', title: 'Mutton Fat Curry', image_url: '/dish-mutton-fat-curry.jpg', category: 'Gravy' },
 ]
 const HASH = !!window.__HASH_ROUTER
 const ADDRESS = '35X9+VX5, Sai Nagar, Ambattur Industrial Estate, Chennai, Tamil Nadu 600058'
@@ -1447,8 +1453,8 @@ function App() {
       <section className="reserve-section" id="reserve">
         <div className="reserve-photo reveal">
           <img
-            src="/interior-dining-hall.jpg"
-            alt="The Chennai Kitchen — Grand Dining Hall"
+            src="/restaurant-exterior.jpg"
+            alt="The Chennai Kitchenn — Ambattur Industrial Estate, Chennai"
             loading="lazy"
           />
           <div className="photo-label"><span>THE GOOD SEATS</span><span>ARE WAITING</span></div>
@@ -1618,7 +1624,12 @@ function App() {
           <div className="footer-links">
             <a href={whatsappUrl()} target="_blank" rel="noreferrer">WhatsApp us <ArrowUpRight size={14}/></a>
             <a href="tel:+919894464472">Call 98944 64472</a>
-            <a href="https://instagram.com/thechennaikitchen" target="_blank" rel="noreferrer">Instagram <Instagram size={14}/></a>
+          </div>
+          <div className="footer-social-icons">
+            <a href="https://instagram.com/thechennaikitchen" target="_blank" rel="noreferrer" aria-label="Instagram"><Instagram size={20}/></a>
+            <a href="https://youtube.com/@thechennaikitchen" target="_blank" rel="noreferrer" aria-label="YouTube"><Youtube size={20}/></a>
+            <a href="https://facebook.com/thechennaikitchen" target="_blank" rel="noreferrer" aria-label="Facebook"><Facebook size={20}/></a>
+            <a href="https://x.com/thechennaikitchen" target="_blank" rel="noreferrer" aria-label="X (Twitter)"><XIcon size={20}/></a>
           </div>
         </div>
       </div>

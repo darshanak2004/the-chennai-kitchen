@@ -437,7 +437,7 @@
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
 
 :root{--crimson:#982018;--terra:#b84808}
-.hero-track{height:215svh}
+.hero-track{height:120svh}
 .scroll-progress{position:fixed;top:0;left:0;right:0;height:3px;z-index:60;transform-origin:left;transform:scaleX(var(--sp,0));background:linear-gradient(90deg,var(--crimson),var(--gold))}
 .site-header{transition:none}.scrolled .site-header{height:78px}
 .reveal{opacity:0;transform:translateY(34px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1);transition-delay:var(--d,0ms)}
@@ -2004,4 +2004,42 @@ html, body, #root {
     padding: 10px 14px !important;
     font-size: 11px !important;
   }
+}
+
+
+/* Footer social icons */
+.footer-social-icons {
+  display: flex;
+  gap: 14px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+.footer-social-icons a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(245,238,231,0.2);
+  color: var(--cream);
+  transition: background 0.25s, border-color 0.25s, transform 0.25s;
+}
+.footer-social-icons a:hover {
+  background: var(--crimson);
+  border-color: var(--crimson);
+  transform: translateY(-3px);
+}
+
+/* Behind the flames — 3-col grid for 9 items */
+.gallery-showcase-section .food-grid {
+  grid-template-columns: repeat(3, 1fr) !important;
+}
+.gallery-showcase-section .food-card {
+  aspect-ratio: 4/3 !important;
+}
+
+/* Hero track reduced to remove blank space */
+@media (max-width: 768px) {
+  .hero-track { height: 100svh !important; }
 }
