@@ -2055,3 +2055,87 @@ html, body, #root {
     padding: 0 6% 48px;
   }
 }
+
+
+/* --- Hero Section & Track Fit (Zero blank space) --- */
+.hero-track {
+  height: calc(100vh - 78px) !important;
+  min-height: 580px !important;
+  max-height: 840px !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+.hero {
+  height: 100% !important;
+  min-height: 100% !important;
+  max-height: 100% !important;
+  position: relative !important;
+  top: 0 !important;
+  overflow: hidden !important;
+}
+@media (max-width: 680px) {
+  .hero-track {
+    height: calc(100svh - 64px) !important;
+    min-height: 520px !important;
+    max-height: none !important;
+  }
+}
+
+/* --- Reserve / Booking Section (Centered Form Only) --- */
+.reserve-section {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  grid-template-columns: 1fr !important;
+  padding: 64px 6% 80px !important;
+  background: var(--wine) !important;
+}
+.reserve-photo {
+  display: none !important;
+}
+.reserve-content {
+  max-width: 660px !important;
+  width: 100% !important;
+  margin: 0 auto !important;
+  padding: 44px 48px !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(223, 185, 104, 0.22) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45) !important;
+}
+.reserve-content h2 {
+  margin-top: 10px !important;
+  margin-bottom: 8px !important;
+}
+.reserve-intro {
+  margin-bottom: 26px !important;
+}
+@media (max-width: 680px) {
+  .reserve-section {
+    padding: 36px 4% 48px !important;
+  }
+  .reserve-content {
+    padding: 28px 20px !important;
+  }
+}
+
+/* --- About & Story Section (Seamless, No Dark Line) --- */
+.intro-section {
+  background: var(--cream) !important;
+  color: var(--wine) !important;
+  padding: 40px 10% 50px !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+.branch-hallmarks-grid {
+  margin-bottom: 0 !important;
+}
+.story-chapters-grid {
+  margin-top: 40px !important;
+}
+@media (max-width: 680px) {
+  .intro-section {
+    padding: 28px 6% 40px !important;
+  }
+}

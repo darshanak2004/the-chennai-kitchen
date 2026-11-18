@@ -1131,7 +1131,13 @@ function App() {
 
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 1300)
-    return () => clearTimeout(timer)
+    const stageTimer = setInterval(() => {
+      setHeroStage(s => (s + 1) % heroStages.length)
+    }, 6000)
+    return () => {
+      clearTimeout(timer)
+      clearInterval(stageTimer)
+    }
   }, [])
 
   useEffect(() => {
@@ -1327,32 +1333,30 @@ function App() {
             <p>Spices roasted and marinades prepared each morning with zero artificial colors.</p>
           </div>
         </div>
-      </section>
-  )
-  const storyChaptersSection = (
-      <section className="story-section-dark" style={{ paddingTop: '0' }}>
-        <div className="story-chapters-grid reveal">
-          <div className="story-chapters-visual">
-            <img src="/dish-mutton-biriyani.jpg" alt="Mutton Biriyani — The Chennai Kitchen" />
+        {page === 'about' && (
+          <div className="story-chapters-grid reveal" style={{ marginTop: '48px', paddingTop: '8px' }}>
+            <div className="story-chapters-visual">
+              <img src="/dish-mutton-biriyani.jpg" alt="Mutton Biriyani — The Chennai Kitchen" />
+            </div>
+            <div className="story-chapters-list">
+              <article className="story-chapter-card">
+                <span className="story-chapter-num">CHAPTER 01</span>
+                <h3>The Morning Roast</h3>
+                <p>Whole star anise, stone flower, cinnamon barks, and green cardamom are hand-roasted and ground at dawn to create our signature masala base.</p>
+              </article>
+              <article className="story-chapter-card">
+                <span className="story-chapter-num">CHAPTER 02</span>
+                <h3>The Clay Dum Seal</h3>
+                <p>Fragrant seeraga samba rice and marinated tender meat are layered in heavy copper handis, sealed with fresh wheat dough, and simmered on gentle charcoal embers.</p>
+              </article>
+              <article className="story-chapter-card">
+                <span className="story-chapter-num">CHAPTER 03</span>
+                <h3>The Shared Feast</h3>
+                <p>Every handi is broken open right before serving, sending a cloud of fragrant spice steam across the room, poured onto clean banana leaves for family and friends.</p>
+              </article>
+            </div>
           </div>
-          <div className="story-chapters-list">
-            <article className="story-chapter-card">
-              <span className="story-chapter-num">CHAPTER 01</span>
-              <h3>The Morning Roast</h3>
-              <p>Whole star anise, stone flower, cinnamon barks, and green cardamom are hand-roasted and ground at dawn to create our signature masala base.</p>
-            </article>
-            <article className="story-chapter-card">
-              <span className="story-chapter-num">CHAPTER 02</span>
-              <h3>The Clay Dum Seal</h3>
-              <p>Fragrant seeraga samba rice and marinated tender meat are layered in heavy copper handis, sealed with fresh wheat dough, and simmered on gentle charcoal embers.</p>
-            </article>
-            <article className="story-chapter-card">
-              <span className="story-chapter-num">CHAPTER 03</span>
-              <h3>The Shared Feast</h3>
-              <p>Every handi is broken open right before serving, sending a cloud of fragrant spice steam across the room, poured onto clean banana leaves for family and friends.</p>
-            </article>
-          </div>
-        </div>
+        )}
       </section>
   )
   const menuSection = (
@@ -1451,14 +1455,6 @@ function App() {
   )
   const reserveSection = (
       <section className="reserve-section" id="reserve">
-        <div className="reserve-photo reveal">
-          <img
-            src="/restaurant-exterior.jpg"
-            alt="The Chennai Kitchenn — Ambattur Industrial Estate, Chennai"
-            loading="lazy"
-          />
-          <div className="photo-label"><span>THE GOOD SEATS</span><span>ARE WAITING</span></div>
-        </div>
         <div className="reserve-content reveal">
           <span className="eyebrow"><span></span> PULL UP A CHAIR</span>
           <h2>Save a place<br/><em>for you.</em></h2>
@@ -1600,7 +1596,7 @@ function App() {
 
     <main key={page} className="page page-transition">
       {page === 'home' && <>{heroSection}{visitSection}{introSection}{menuSection}{gallerySection}{reviewsSection}{reserveSection}</>}
-      {page === 'about' && <>{introSection}{storyChaptersSection}{quoteSection}{reviewsSection}</>}
+      {page === 'about' && <>{introSection}{quoteSection}{reviewsSection}</>}
       {page === 'menu' && <>{menuSection}</>}
       {page === 'gallery' && <>{gallerySection}</>}
       {page === 'contact' && <>{reserveSection}{socialSection}{faqSection}</>}
