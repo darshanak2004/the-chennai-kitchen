@@ -2031,12 +2031,23 @@ html, body, #root {
   transform: translateY(-3px);
 }
 
-/* Behind the flames — 3-col grid for 9 items */
+/* Behind the flames — balanced grid for 8 items */
 .gallery-showcase-section .food-grid {
-  grid-template-columns: repeat(3, 1fr) !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 16px !important;
 }
 .gallery-showcase-section .food-card {
   aspect-ratio: 4/3 !important;
+}
+@media (max-width: 1080px) {
+  .gallery-showcase-section .food-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+@media (max-width: 680px) {
+  .gallery-showcase-section .food-grid {
+    grid-template-columns: 1fr !important;
+  }
 }
 
 /* Hero track reduced to remove blank space */

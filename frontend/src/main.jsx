@@ -4,9 +4,9 @@ import { ArrowDown, ArrowRight, ArrowUpRight, Award, CalendarDays, Check, ChefHa
 import './style.css'
 
 const initialGallery = [
-  { id: 'g1', title: 'Mutton Biriyani (Jeeraka Samba)', image_url: '/dish-mutton-biriyani-new.jpg', category: 'Signature Dum Biryani' },
+  { id: 'g1', title: 'Mutton Biriyani (Seeraga Samba)', image_url: '/dish-mutton-biriyani-new.jpg', category: 'Signature Dum Biryani' },
   { id: 'g2', title: 'Mutton Kozhupu Kuzhambu', image_url: '/dish-mutton-kozhupu-kuzhambu.jpg', category: 'House Special Gravy' },
-  { id: 'g3', title: 'Mutton Kola Urundai', image_url: '/dish-mutton-kola-urundai.jpg', category: 'Crispy Starter' },
+  { id: 'g3', title: 'Mutton Kola Urundai', image_url: '/dish-mutton-kola-urundai-new.jpg', category: 'Crispy Starter' },
   { id: 'g4', title: 'Curry Leaf Chicken', image_url: '/dish-curry-leaf-chicken-new.jpg', category: 'Village Style Starter' },
   { id: 'g5', title: 'Chicken Pallipalayam', image_url: '/dish-chicken-pallipalayam-new.jpg', category: 'Kongunadu Special' },
   { id: 'g6', title: 'Sunset', image_url: '/dish-sunset-new.jpg', category: 'Signature Cooler' },
@@ -21,7 +21,6 @@ const BEHIND_THE_FLAMES_ITEMS = [
   { id: 'btf6', title: 'Spacious Family Seating', image_url: '/interior-ambience-3.jpg', category: 'Ambience & Comfort' },
   { id: 'btf7', title: 'Chicken Pallipalayam', image_url: '/dish-chicken-pallipalayam-new.jpg', category: 'Kongunadu Special' },
   { id: 'btf8', title: 'Warm Heritage Decor & Mural', image_url: '/interior-ambience-4.jpg', category: 'Interior Craft' },
-  { id: 'btf9', title: 'The Chennai Kitchenn — Flagship', image_url: '/restaurant-exterior.jpg', category: 'Our Restaurant' },
 ]
 const HASH = !!window.__HASH_ROUTER
 const ADDRESS = '35X9+VX5, Sai Nagar, Ambattur Industrial Estate, Chennai, Tamil Nadu 600058'
@@ -252,7 +251,7 @@ const SIGNATURE_DISHES = [
     category: 'Starters',
     desc: 'A traditional South Indian delicacy made with spiced minced mutton, fresh curry leaves and aromatic seasonings, fried until golden.',
     badge: 'Traditional',
-    image: '/dish-mutton-kola-urundai.jpg'
+    image: '/dish-mutton-kola-urundai-new.jpg'
   },
 
   // 4. Gravy — full menu

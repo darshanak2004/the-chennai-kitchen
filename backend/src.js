@@ -106,7 +106,7 @@ const bust = () => { cache = { at: 0, data: cache.data, inflight: null } }
 const defaultGallery = [
   ['Mutton Biriyani (Jeeraka Samba)', '/dish-mutton-biriyani-new.jpg', 'Signature Dum Biryani'],
   ['Mutton Kozhupu Kuzhambu', '/dish-mutton-kozhupu-kuzhambu.jpg', 'House Special Gravy'],
-  ['Mutton Kola Urundai', '/dish-mutton-kola-urundai.jpg', 'Crispy Starter'],
+  ['Mutton Kola Urundai', '/dish-mutton-kola-urundai-new.jpg', 'Crispy Starter'],
   ['Curry Leaf Chicken', '/dish-curry-leaf-chicken-new.jpg', 'Village Style Starter'],
   ['Chicken Pallipalayam', '/dish-chicken-pallipalayam-new.jpg', 'Kongunadu Special'],
   ['Sunset', '/dish-sunset-new.jpg', 'Signature Cooler'],
