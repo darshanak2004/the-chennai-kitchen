@@ -1,31 +1,31 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import { ArrowDown, ArrowRight, ArrowUpRight, Award, CalendarDays, Check, ChefHat, ChevronDown, ChevronLeft, Clock3, Facebook, Instagram, MapPin, Menu, Phone, Minus, Plus, Sparkles, Star, Utensils, X, Youtube } from 'lucide-react'
-import SpiceMap from './SpiceMap.jsx'
 import './style.css'
 
 const initialGallery = [
-  { id: 'g1', title: 'Mutton Biriyani (Jeeraka Samba)', image_url: '/dish-mutton-biriyani.jpg', category: 'Signature Dum Biryani' },
-  { id: 'g2', title: 'Mutton Fat Kulambu', image_url: '/dish-mutton-fat-curry.jpg', category: 'House Special Gravy' },
+  { id: 'g1', title: 'Mutton Biriyani (Jeeraka Samba)', image_url: '/dish-mutton-biriyani-new.jpg', category: 'Signature Dum Biryani' },
+  { id: 'g2', title: 'Mutton Kozhupu Kuzhambu', image_url: '/dish-mutton-kozhupu-kuzhambu.jpg', category: 'House Special Gravy' },
   { id: 'g3', title: 'Mutton Kola Urundai', image_url: '/dish-mutton-kola-urundai.jpg', category: 'Crispy Starter' },
-  { id: 'g4', title: 'Curry Leaf Chicken', image_url: '/dish-curry-leaf-chicken.jpg', category: 'Village Style Starter' },
-  { id: 'g5', title: 'Chicken Pallipalayam', image_url: '/dish-chicken-pallipalayam.jpg', category: 'Kongunadu Special' },
-  { id: 'g6', title: 'Green Mint Mojito', image_url: '/dish-green-mint-mojito.jpg', category: 'Chilled Cooler' },
-  { id: 'g7', title: 'Sunset Mojito', image_url: '/dish-sunset.jpg', category: 'Signature Cooler' },
+  { id: 'g4', title: 'Curry Leaf Chicken', image_url: '/dish-curry-leaf-chicken-new.jpg', category: 'Village Style Starter' },
+  { id: 'g5', title: 'Chicken Pallipalayam', image_url: '/dish-chicken-pallipalayam-new.jpg', category: 'Kongunadu Special' },
+  { id: 'g6', title: 'Sunset', image_url: '/dish-sunset-new.jpg', category: 'Signature Cooler' },
+  { id: 'g7', title: 'Green Mint Mojito', image_url: '/dish-green-mint-mojito-new.jpg', category: 'Chilled Cooler' },
 ]
 const BEHIND_THE_FLAMES_ITEMS = [
-  { id: 'btf1', title: 'Mutton Biriyani (Jeeraka Samba)', image_url: '/dish-mutton-biriyani.jpg', category: 'Signature Dum Biryani' },
-  { id: 'btf2', title: 'Grand Dining Hall', image_url: '/interior-dining-hall.jpg', category: 'Restaurant Ambience' },
-  { id: 'btf3', title: 'Curry Leaf Chicken', image_url: '/dish-curry-leaf-chicken.jpg', category: 'From Our Kitchen' },
-  { id: 'btf4', title: 'Luxury Family Booths', image_url: '/interior-booths.jpg', category: 'Seating & Comfort' },
-  { id: 'btf5', title: 'Chicken Pallipalayam', image_url: '/dish-chicken-pallipalayam.jpg', category: 'Starters' },
-  { id: 'btf6', title: 'Welcome Reception', image_url: '/interior-reception.jpg', category: 'Restaurant Ambience' },
-  { id: 'btf7', title: 'Mutton Kola Urundai', image_url: '/dish-mutton-kola-urundai.jpg', category: 'Starters' },
-  { id: 'btf8', title: 'The Chennai Kitchenn — Flagship', image_url: '/restaurant-exterior.jpg', category: 'Our Restaurant' },
-  { id: 'btf9', title: 'Mutton Fat Curry', image_url: '/dish-mutton-fat-curry.jpg', category: 'Gravy' },
+  { id: 'btf1', title: 'Mutton Biriyani (Jeeraka Samba)', image_url: '/dish-mutton-biriyani-new.jpg', category: 'Signature Dum Biryani' },
+  { id: 'btf2', title: 'Grand Dining Hall & Booths', image_url: '/interior-ambience-1.jpg', category: 'Restaurant Ambience' },
+  { id: 'btf3', title: 'Mutton Kozhupu Kuzhambu', image_url: '/dish-mutton-kozhupu-kuzhambu.jpg', category: 'House Special Gravy' },
+  { id: 'btf4', title: 'Service Counter & Ambience', image_url: '/interior-ambience-2.jpg', category: 'Hospitality' },
+  { id: 'btf5', title: 'Curry Leaf Chicken', image_url: '/dish-curry-leaf-chicken-new.jpg', category: 'From Our Kitchen' },
+  { id: 'btf6', title: 'Spacious Family Seating', image_url: '/interior-ambience-3.jpg', category: 'Ambience & Comfort' },
+  { id: 'btf7', title: 'Chicken Pallipalayam', image_url: '/dish-chicken-pallipalayam-new.jpg', category: 'Kongunadu Special' },
+  { id: 'btf8', title: 'Warm Heritage Decor & Mural', image_url: '/interior-ambience-4.jpg', category: 'Interior Craft' },
+  { id: 'btf9', title: 'The Chennai Kitchenn — Flagship', image_url: '/restaurant-exterior.jpg', category: 'Our Restaurant' },
 ]
 const HASH = !!window.__HASH_ROUTER
 const ADDRESS = '35X9+VX5, Sai Nagar, Ambattur Industrial Estate, Chennai, Tamil Nadu 600058'
+const MAP_LINK = 'https://maps.app.goo.gl/5iT5QwruCUdtScrf7'
 const POSTER = '/poster.jpg'
 const PAGES = ['home', 'about', 'menu', 'gallery', 'contact', 'admin']
 const TITLES = { home: 'A taste of home', about: 'About us', menu: 'Our Menu & Specials', gallery: 'Gallery', contact: 'Reserve a table & contact', admin: 'Admin' }
@@ -89,7 +89,7 @@ const reviews = [
     rating: 5,
     dish: 'Mutton Chukka & House Biryani',
     date: '2 days ago',
-    comment: 'Authentic flavours cooked with authentic patience — no artificial colours or heavy greasy masalas. The mutton was fork-tender. The Chennai Kitchen has easily become our weekend regular.',
+    comment: 'Authentic flavours cooked with authentic patience — no artificial colours or heavy greasy masalas. The mutton was fork-tender. The Chennai Kitchenn has easily become our weekend regular.',
   },
   {
     id: 'r4',
@@ -140,7 +140,7 @@ const SIGNATURE_DISHES = [
     category: 'Biryani',
     desc: 'Traditional authentic chicken biriyani with tender chicken pieces layered with Basmati rice, fresh and aromatic seasonings.',
     badge: 'House Special',
-    image: '/dish-mutton-biriyani.jpg'
+    image: '/dish-mutton-biriyani-new.jpg'
   },
   {
     id: 'b4',
@@ -225,7 +225,7 @@ const SIGNATURE_DISHES = [
     category: 'Starters',
     desc: 'Juicy chicken tossed in a traditional pallipalayam masala with roasted chillies and golden shallots.',
     badge: 'South Indian',
-    image: '/dish-chicken-pallipalayam.jpg'
+    image: '/dish-chicken-pallipalayam-new.jpg'
   },
   {
     id: 's5',
@@ -234,7 +234,7 @@ const SIGNATURE_DISHES = [
     category: 'Starters',
     desc: 'Juicy chicken pan roasted with the rich blend of spices and freshly picked curry leaves, delivering an aromatic and flavourful experience.',
     badge: 'Dry / Gravy',
-    image: '/dish-curry-leaf-chicken.jpg'
+    image: '/dish-curry-leaf-chicken-new.jpg'
   },
   {
     id: 's6',
@@ -285,12 +285,12 @@ const SIGNATURE_DISHES = [
   },
   {
     id: 'g4',
-    name: 'Mutton Fat Curry',
+    name: 'Mutton Kozhupu Kuzhambu',
     price: '\u20b9190',
     category: 'Gravy',
-    desc: 'Rich and flavourful mutton curry prepared with tender mutton fat, traditional spices and aromatic herbs (Mutton Kolupu Kuzhambu).',
+    desc: 'Rich and flavourful traditional mutton curry simmered with tender mutton fat, aromatic hand-ground spices and curry leaves (Mutton Kozhupu Kuzhambu).',
     badge: 'House Special',
-    image: '/dish-mutton-fat-curry.jpg'
+    image: '/dish-mutton-kozhupu-kuzhambu.jpg'
   },
 
   // 5. Soup — full menu
@@ -487,7 +487,7 @@ const SIGNATURE_DISHES = [
     category: 'Juice',
     desc: 'Freshly crushed mint and lime infused with a hint of sweetness, topped with chilled soda for a refreshing finish.',
     badge: 'Fresh Fizz',
-    image: '/dish-green-mint-mojito.jpg'
+    image: '/dish-green-mint-mojito-new.jpg'
   },
   {
     id: 'jc4',
@@ -496,7 +496,7 @@ const SIGNATURE_DISHES = [
     category: 'Juice',
     desc: 'Sweet, tangy and beautifully layered, this vibrant cooler brings together fruity flavours and refreshing citrus notes.',
     badge: 'Signature',
-    image: '/dish-sunset.jpg'
+    image: '/dish-sunset-new.jpg'
   }
 ]
 
@@ -844,8 +844,8 @@ function AdminPage({
   return (
     <div className="admin-page">
       <header className="admin-page-header">
-        <a className="brand" href="/" onClick={e => { e.preventDefault(); go('home') }} aria-label="The Chennai Kitchen home">
-          <img className="brand-logo" src="/logo.jpg" alt="The Chennai Kitchen — Authentic non-veg cuisine" />
+        <a className="brand" href="/" onClick={e => { e.preventDefault(); go('home') }} aria-label="The Chennai Kitchenn home">
+          <img className="brand-logo" src="/logo.jpg" alt="The Chennai Kitchenn — Authentic non-veg cuisine" />
           <span className="brand-text">The Chennai Kitchenn <i>Admin Studio</i></span>
         </a>
         <nav className="admin-page-nav">
@@ -1198,12 +1198,12 @@ function App() {
 
   const goTo = id => { setMenuOpen(false); go({ home: 'home', story: 'about', menu: 'menu', gallery: 'gallery', reserve: 'contact', visit: 'home' }[id] || 'home') }
   const jumpTo = id => { if (page === 'home') document.getElementById({ story: 'story', menu: 'menu', gallery: 'gallery', reserve: 'reserve' }[id])?.scrollIntoView({ behavior: 'smooth' }); else goTo(id) }
-  const whatsappUrl = (message = 'Hello The Chennai Kitchen! I have a question.') => phone ? `https://wa.me/${phone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}` : `https://wa.me/?text=${encodeURIComponent(message)}`
+  const whatsappUrl = (message = 'Hello The Chennai Kitchenn! I have a question.') => phone ? `https://wa.me/${phone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}` : `https://wa.me/?text=${encodeURIComponent(message)}`
   const updateForm = e => setForm({ ...form, [e.target.name]: e.target.value })
 
   const submitBooking = async e => {
     e.preventDefault(); setBookingState('sending')
-    const message = `Hello The Chennai Kitchen! I'd like to reserve a table.\n\nName: ${form.name}\nDate: ${form.date}\nTime: ${form.time}\nGuests: ${form.members}${form.note ? `\nSpecial note: ${form.note}` : ''}`
+    const message = `Hello The Chennai Kitchenn! I'd like to reserve a table.\n\nName: ${form.name}\nDate: ${form.date}\nTime: ${form.time}\nGuests: ${form.members}${form.note ? `\nSpecial note: ${form.note}` : ''}`
     const wa = window.open('', '_blank')
     try {
       await api('/reservations', { method: 'POST', body: JSON.stringify(form) })
@@ -1293,18 +1293,35 @@ function App() {
             <span><Clock3 size={17}/><span>Opening Hours<br/><small>Mon – Sun: 11:30 AM – 11:00 PM</small></span></span>
             <span><Phone size={17}/><span>Call us<br/><small><a href="tel:+919894464472">98944 64472</a> · <a href="tel:+919047470444">90474 70444</a></small></span></span>
           </div>
-          <button className="text-link" onClick={() => window.open(`https://maps.google.com/?q=${encodeURIComponent(ADDRESS)}`, '_blank', 'noopener')}>
+          <button className="text-link" onClick={() => window.open(MAP_LINK, '_blank', 'noopener')}>
             Open in Google Maps <ArrowUpRight size={16}/>
           </button>
         </div>
         <div className="visit-map-container reveal">
-          <SpiceMap address={ADDRESS} />
+          <div className="live-map-card">
+            <iframe
+              title="The Chennai Kitchenn Live Map"
+              src="https://maps.google.com/maps?q=The+Chennai+Kitchenn,+Sai+Nagar,+Ambattur+Industrial+Estate,+Chennai,+Tamil+Nadu+600058&t=&z=16&ie=UTF8&iwloc=&output=embed"
+              width="100%"
+              height="100%"
+              style={{ border: 0, minHeight: '420px', width: '100%', borderRadius: '16px', display: 'block' }}
+              allowFullScreen=""
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+            <div className="live-map-bar">
+              <span className="live-map-label"><MapPin size={15}/> Sai Nagar, Ambattur Industrial Estate, Chennai</span>
+              <a href={MAP_LINK} target="_blank" rel="noreferrer" className="live-map-btn">
+                Open in Maps <ArrowUpRight size={14}/>
+              </a>
+            </div>
+          </div>
         </div>
       </section>
   )
   const marqueeSection = <PressMarquee />
   const introSection = (
-      <section className="intro-section" id="story"><div className="intro-copy reveal"><h2>Good food brings<br/><em>us together.</em></h2><div className="intro-text"><p>At The Chennai Kitchen, we believe the best meals are never rushed. They begin with familiar spices, the slow perfume of a pot on dum, and the people you love gathered around the table.</p><p>Rooted in the flavours of South India and made for sharing, every plate carries a little warmth from our kitchen to yours.</p><button className="text-link" onClick={() => jumpTo('menu')}>Explore our signature menu <ArrowRight size={16}/></button></div></div>
+      <section className="intro-section" id="story"><div className="intro-copy reveal"><h2>Good food brings<br/><em>us together.</em></h2><div className="intro-text"><p>At The Chennai Kitchenn, we believe the best meals are never rushed. They begin with familiar spices, the slow perfume of a pot on dum, and the people you love gathered around the table.</p><p>Rooted in the flavours of South India and made for sharing, every plate carries a little warmth from our kitchen to yours.</p><button className="text-link" onClick={() => jumpTo('menu')}>Explore our signature menu <ArrowRight size={16}/></button></div></div>
         <div className="branch-hallmarks-grid reveal">
           <div className="hallmark-card">
             <div className="hallmark-icon-wrap"><ChefHat size={22}/></div>
@@ -1330,7 +1347,7 @@ function App() {
         {page === 'about' && (
           <div className="story-chapters-grid reveal" style={{ marginTop: '48px', paddingTop: '8px' }}>
             <div className="story-chapters-visual">
-              <img src="/dish-mutton-biriyani.jpg" alt="Mutton Biriyani — The Chennai Kitchen" />
+              <img src="/dish-mutton-biriyani.jpg" alt="Mutton Biriyani — The Chennai Kitchenn" />
             </div>
             <div className="story-chapters-list">
               <article className="story-chapter-card">
@@ -1474,7 +1491,7 @@ function App() {
                 <div className="table-stamp">
                   <span className="stamp-stars">★ ★ ★</span>
                   <span className="stamp-text">TABLE BOOKED</span>
-                  <span className="stamp-brand">The Chennai Kitchen</span>
+                  <span className="stamp-brand">The Chennai Kitchenn</span>
                   <span className="stamp-status">CONFIRMED</span>
                 </div>
               </div>
@@ -1483,7 +1500,7 @@ function App() {
                 A table for <strong>{form.members} {form.members === '1' ? 'guest' : 'guests'}</strong> has been saved for <strong>{form.date}</strong> at <strong>{form.time}</strong>.
               </p>
               <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
-                <a className="gold-button" href={whatsappUrl(`Hello The Chennai Kitchen! My booking for ${form.name} on ${form.date} at ${form.time} is placed.`)} target="_blank" rel="noreferrer">
+                <a className="gold-button" href={whatsappUrl(`Hello The Chennai Kitchenn! My booking for ${form.name} on ${form.date} at ${form.time} is placed.`)} target="_blank" rel="noreferrer">
                   Open in WhatsApp <ArrowUpRight size={16}/>
                 </a>
                 <button className="outline-button" onClick={() => { setBookingState(''); setForm({ name: '', date: '', time: '', members: '2', note: '' }) }}>
@@ -1573,7 +1590,7 @@ function App() {
             <circle className="plate-base" cx="50" cy="50" r="42" />
             <circle className="plate-glow" cx="50" cy="50" r="42" />
           </svg>
-          <img className="loader-logo" src="/logo.jpg" alt="The Chennai Kitchen" />
+          <img className="loader-logo" src="/logo.jpg" alt="The Chennai Kitchenn" />
         </div>
         <h2 className="loader-brand">The Chennai Kitchenn</h2>
         <div className="loader-bar-wrap"><div className="loader-bar-fill"></div></div>
@@ -1582,7 +1599,7 @@ function App() {
     </div>
     <div className="scroll-progress" aria-hidden="true"></div>
     <div className="site-top-wrap">
-      <header className="site-header"><a className="brand" href={HASH ? '#home' : '/'} onClick={e => { e.preventDefault(); goTo('home') }} aria-label="The Chennai Kitchen home"><img className="brand-logo" src="/logo.jpg" alt="The Chennai Kitchen — Authentic non-veg cuisine"/><span className="brand-text">The Chennai Kitchenn</span></a>
+      <header className="site-header"><a className="brand" href={HASH ? '#home' : '/'} onClick={e => { e.preventDefault(); goTo('home') }} aria-label="The Chennai Kitchenn home"><img className="brand-logo" src="/logo.jpg" alt="The Chennai Kitchenn — Authentic non-veg cuisine"/><span className="brand-text">The Chennai Kitchenn</span></a>
         <nav className={menuOpen ? 'main-nav open' : 'main-nav'}>{[['home', 'Home'], ['about', 'About'], ['menu', 'Menu'], ['gallery', 'Gallery'], ['contact', 'Contact']].map(([r, label]) => <button key={r} className={page === r ? 'active' : ''} onClick={() => { goTo(r === 'about' ? 'story' : r === 'contact' ? 'reserve' : r); setMenuOpen(false) }}>{label}</button>)}<button className="nav-book-btn" onClick={() => { goTo('reserve'); setMenuOpen(false) }}>Book a table ↗</button></nav>
         <button ref={reserveBtnRef} className="header-reserve" onClick={() => goTo('reserve')}>Book a table <ArrowUpRight size={15}/></button><button className="mobile-menu" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">{menuOpen ? <X/> : <Menu/>}</button>
       </header>
@@ -1599,8 +1616,8 @@ function App() {
     <footer className="footer">
       <div className="footer-main">
         <div className="footer-brand-wrap">
-          <a className="footer-brand-link" href={HASH ? '#home' : '/'} onClick={e => { e.preventDefault(); goTo('home') }} aria-label="The Chennai Kitchen home">
-            <img className="footer-logo-img" src="/logo.jpg" alt="The Chennai Kitchen — Authentic non-veg cuisine"/>
+          <a className="footer-brand-link" href={HASH ? '#home' : '/'} onClick={e => { e.preventDefault(); goTo('home') }} aria-label="The Chennai Kitchenn home">
+            <img className="footer-logo-img" src="/logo.jpg" alt="The Chennai Kitchenn — Authentic non-veg cuisine"/>
             <span className="footer-brand-name">The Chennai Kitchenn</span>
           </a>
           <p className="footer-tagline">Familiar flavours.<br/>A seat saved for you.</p>
@@ -1624,7 +1641,7 @@ function App() {
         </div>
       </div>
       <div className="footer-bottom">
-        <span>© 2026 THE CHENNAI KITCHEN</span>
+        <span>© 2026 THE CHENNAI KITCHENN</span>
         <span>MADE WITH A LITTLE EXTRA GHEE</span>
         <div className="footer-bottom-actions">
           <button className="footer-admin-btn" onClick={() => go('admin')}>Admin sign in</button>
@@ -1638,7 +1655,7 @@ function App() {
     {lightbox >= 0 && lightboxList[lightbox] && <div className="lightbox" role="dialog" aria-modal="true" onClick={e => { if (e.target === e.currentTarget) setLightbox(-1) }}><button className="lb-close" onClick={() => setLightbox(-1)} aria-label="Close"><X size={22}/></button><button className="lb-nav lb-prev" onClick={() => stepLightbox(-1)} aria-label="Previous"><ArrowRight size={22}/></button>{lightboxList[lightbox].media_type === 'video' ? <video key={lightbox} src={lightboxList[lightbox].image_url} controls autoPlay loop playsInline/> : <img key={lightbox} src={lightboxList[lightbox].image_url} alt={lightboxList[lightbox].title}/>}<button className="lb-nav lb-next" onClick={() => stepLightbox(1)} aria-label="Next"><ArrowRight size={22}/></button><p><span>{lightboxList[lightbox].category}</span>{lightboxList[lightbox].title}<em>{lightbox + 1} / {lightboxList.length}</em></p></div>}
     {menuCardOpen && (
       <div className="offer-backdrop" onClick={() => setMenuCardOpen(false)}>
-        <div className="menu-card-pop" role="dialog" aria-modal="true" aria-label="The Chennai Kitchen Full Menu Card" onClick={e => e.stopPropagation()}>
+        <div className="menu-card-pop" role="dialog" aria-modal="true" aria-label="The Chennai Kitchenn Full Menu Card" onClick={e => e.stopPropagation()}>
           <button className="poster-close" onClick={() => setMenuCardOpen(false)} aria-label="Close menu card"><X size={20}/></button>
           <div className="menu-card-pages-nav">
             <button className={menuCardPage === 0 ? 'active' : ''} onClick={() => setMenuCardPage(0)}>
@@ -1649,7 +1666,7 @@ function App() {
             </button>
           </div>
           <div className="menu-card-img-container">
-            <img src={menuCardPage === 0 ? '/menu-page1.jpg' : '/menu-page2.jpg'} alt={`The Chennai Kitchen Complete Menu Card Side ${menuCardPage + 1}`} />
+            <img src={menuCardPage === 0 ? '/menu-page1.jpg' : '/menu-page2.jpg'} alt={`The Chennai Kitchenn Complete Menu Card Side ${menuCardPage + 1}`} />
           </div>
         </div>
       </div>

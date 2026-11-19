@@ -104,13 +104,13 @@ function getContent() {
 }
 const bust = () => { cache = { at: 0, data: cache.data, inflight: null } }
 const defaultGallery = [
-  ['Mutton Biriyani (Jeeraka Samba)', '/dish-mutton-biriyani.jpg', 'Signature Dum Biryani'],
-  ['Mutton Fat Kulambu', '/dish-mutton-fat-curry.jpg', 'House Special Gravy'],
+  ['Mutton Biriyani (Jeeraka Samba)', '/dish-mutton-biriyani-new.jpg', 'Signature Dum Biryani'],
+  ['Mutton Kozhupu Kuzhambu', '/dish-mutton-kozhupu-kuzhambu.jpg', 'House Special Gravy'],
   ['Mutton Kola Urundai', '/dish-mutton-kola-urundai.jpg', 'Crispy Starter'],
-  ['Curry Leaf Chicken', '/dish-curry-leaf-chicken.jpg', 'Village Style Starter'],
-  ['Chicken Pallipalayam', '/dish-chicken-pallipalayam.jpg', 'Kongunadu Special'],
-  ['Green Mint Mojito', '/dish-green-mint-mojito.jpg', 'Chilled Cooler'],
-  ['Sunset Mojito', '/dish-sunset.jpg', 'Signature Cooler'],
+  ['Curry Leaf Chicken', '/dish-curry-leaf-chicken-new.jpg', 'Village Style Starter'],
+  ['Chicken Pallipalayam', '/dish-chicken-pallipalayam-new.jpg', 'Kongunadu Special'],
+  ['Sunset', '/dish-sunset-new.jpg', 'Signature Cooler'],
+  ['Green Mint Mojito', '/dish-green-mint-mojito-new.jpg', 'Chilled Cooler'],
 ]
 // First run only: put the starter gallery into the database so the admin can edit or delete every photo.
 async function seedDefaults() {
@@ -243,7 +243,7 @@ const start = async () => {
     try { await initializeDb(); console.log('Neon schema is ready.') }
     catch (err) { console.error('Could not initialize database:', err.message); process.exit(1) }
   }
-  app.listen(port, () => console.log(`The Chennai Kitchen API listening on port ${port}`))
+  app.listen(port, () => console.log(`The Chennai Kitchenn API listening on port ${port}`))
 }
 
 // Only start the HTTP server when run directly (local dev), not when imported by Vercel serverless
