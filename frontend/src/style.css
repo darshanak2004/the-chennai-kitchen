@@ -878,7 +878,7 @@
 }
 .horizontal-spec-img-wrap {
   width: 100%;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 3 / 2;
   height: auto;
   overflow: hidden;
   position: relative;
@@ -888,7 +888,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center top;
+  object-position: center center;
   transition: transform 0.5s ease;
   display: block;
 }

@@ -1346,7 +1346,7 @@ function App() {
         {page === 'about' && (
           <div className="story-chapters-grid reveal" style={{ marginTop: '48px', paddingTop: '8px' }}>
             <div className="story-chapters-visual">
-              <img src="/dish-mutton-biriyani.jpg" alt="Mutton Biriyani — The Chennai Kitchenn" />
+              <img src="/dish-mutton-biriyani-about.jpg" alt="Mutton Biriyani — The Chennai Kitchenn" />
             </div>
             <div className="story-chapters-list">
               <article className="story-chapter-card">
